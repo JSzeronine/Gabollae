@@ -1,3 +1,5 @@
-@function getPx(){
-    @return 25px;
+@function getPx( $target ){
+    @return $target + px;
 }
+
+

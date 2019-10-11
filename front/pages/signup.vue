@@ -1,5 +1,5 @@
 <template>
-    <div class="signup">
+    <div class="mybox">
         {{ hello }}
     </div>
 </template>
@@ -16,8 +16,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .signup{
-        font-size: getPx();
-        font-family: "Nanum Gothic";
-    }
 </style>

@@ -1,6 +1,10 @@
-<template lang="">
-    <div class="profile">
-        {{ hello }}
+<template>
+    <div>
+        <div class="mybox">
+            {{ hello }}
+        </div>
+
+
     </div>
 </template>
 
@@ -15,8 +19,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .profile{
-        font-size: getPx();
-        font-family: "Nanum Gothic";
-    }
+
 </style>

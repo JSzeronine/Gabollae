@@ -13,6 +13,7 @@ module.exports = {
     },
 
     css : [
-        "@/assets/scss/reset.scss"
+        "@/assets/scss/reset.scss",
+        "@/assets/scss/main.scss",
     ],
 }

@@ -1,6 +1,5 @@
 
 module.exports = {
-
     modules : [
         '@nuxtjs/style-resources'
     ],
@@ -14,6 +13,6 @@ module.exports = {
 
     css : [
         "@/assets/scss/reset.scss",
-        "@/assets/scss/main.scss",
+        "@/assets/scss/layout.scss",
     ],
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="wrap">
         <Header/>
         <nuxt />
     </div>
@@ -16,5 +16,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    
 </style>

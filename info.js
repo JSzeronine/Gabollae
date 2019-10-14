@@ -82,3 +82,13 @@ export default {
     }
 }
 </script> */
+
+// export default class Find{
+//     constructor(){
+
+//     }
+
+//     static get( $parent, $className ){
+//         return $parent.querySelectorAll( $className );
+//     }
+// }

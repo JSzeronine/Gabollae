@@ -1,5 +1,9 @@
 
 module.exports = {
+    plugins : [
+        { src : "~/plugins/swiper.js", ssr : false }
+    ],
+
     modules : [
         '@nuxtjs/style-resources'
     ],
@@ -14,5 +18,6 @@ module.exports = {
     css : [
         "@/assets/scss/reset.scss",
         "@/assets/scss/layout.scss",
+        "swiper/dist/css/swiper.css"
     ],
 }

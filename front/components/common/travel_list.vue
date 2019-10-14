@@ -10,7 +10,7 @@
 
             <div class="list-bx">
                 <ul>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -30,7 +30,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -50,7 +50,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -70,7 +70,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -90,7 +90,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -110,7 +110,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -130,7 +130,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -150,7 +150,7 @@
                             <li><router-link to="">#주문진</router-link></li>
                         </ul>
                     </li>
-                    <li>
+                    <li @mouseenter="mouseOver" @mouseleave="mouseOut">
                         <router-link to="">
                             <div class="img-bx">
                                 <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
@@ -177,10 +177,29 @@
 </template>
 
 <script>
+import Find from "@/plugins/find.js";
+import TweenMax from "gsap";
+
 export default {
     data(){
         return{
 
+        }
+    },
+
+    methods : {
+        mouseOver( $e ){
+            let item = $e.target;
+            let map = Find.get( item, ".photo_map" );
+
+            TweenMax.to( map, 0.3, { y:-200, ease:Cubic.easeInOut });
+        },
+
+        mouseOut( $e ){
+            let item = $e.target;
+            let map = Find.get( item, ".photo_map" );
+
+            TweenMax.to( map, 0.3, { y:0, ease:Cubic.easeInOut });
         }
     }
 }

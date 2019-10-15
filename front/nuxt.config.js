@@ -1,8 +1,19 @@
 
 module.exports = {
+    build : {
+        vendor : [
+            "gsap",
+            "vue2-google-maps",
+            "exif-js"
+        ]
+    },
+
     plugins : [
-        { src : "~/plugins/swiper.js", ssr : false }
+        { src : "~/plugins/swiper.js", ssr : false },
+        { src : "~/plugins/google-maps", ssr : false }
     ],
+
+    transpile: [/^vue2-google-maps($|\/)/],
 
     modules : [
         '@nuxtjs/style-resources'

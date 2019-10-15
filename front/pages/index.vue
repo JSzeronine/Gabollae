@@ -11,7 +11,7 @@
                 :center="{lat:10, lng:10}"
                 :zoom="12"
                 map-type-id="terrain"
-                style="width:50%; height:100%"
+                style="width:100%; height:100%"
                 >
                 <gmap-info-window :position="{lat:10, lng:10}">
                     차 막혀!!
@@ -88,6 +88,6 @@ export default {
 <style lang="scss" scoped>
     .map-container{
         width: 100%;
-        height: 300px;
+        height: 500px;
     }
 </style>

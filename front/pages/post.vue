@@ -2,7 +2,7 @@
     <div class="post">
         <div class="post-content">
             <div class="map-container">
-                <GmapMap ref="mapRef" :center="mapPosition" :zoom="14" style="width:100%; height:500px">
+                <GmapMap ref="mapRef" :center="mapPosition" :zoom="14" style="width:100%; height:800px">
                     <!-- <gmap-info-window :position="mapPosition">
                         커피 마셨어요~!
                     </gmap-info-window> -->
@@ -10,6 +10,9 @@
                     <div v-for="( marker, index ) in markers" :key="index">
                         <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
                     </div>
+
+                    <gmap-polyline v-bind:path.sync="mapPosition" v-bind:options="{ strokeColor:'#008000'}"></gmap-polyline>
+                    <!-- <gmap-polyline :path.sync="mapPosition" :options="{ strokeColor : 'rgba( 0, 0, 0, 0.2 )'}"></gmap-polyline> -->
                 </GmapMap>
             </div>
 
@@ -24,7 +27,7 @@
         </div>
 
         <div>
-            <button style="width:200px; height:50px;" @click="onImageUpload">버튼</button>
+            <button style="width:200px; height:50px; font-size:20px;" @click="onImageUpload">이미지 업로드</button>
             <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
         </div>
 
@@ -60,7 +63,7 @@ export default {
 
             images : [],
             markers : [],
-            map : null
+            map : null,
         }
     },
 
@@ -179,11 +182,11 @@ export default {
 
 <style lang="scss" scoped>
     .post-content{ overflow: hidden; margin-bottom: 50px;
-        .map-container{ float: left; width: 50%; height: 500px; 
+        .map-container{ float: left; width: 50%; height: 800px; 
 
         }
 
-        .write-bx{ float: left; width: 50%; height: 500px;
+        .write-bx{ float: left; width: 50%; height: 800px;
             .img-container{
                 width: 100%; height: 100%; display: inline-block;
             }

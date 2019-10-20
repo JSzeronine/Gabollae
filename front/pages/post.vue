@@ -11,7 +11,7 @@
                         <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
                     </div>
 
-                    <gmap-polyline v-bind:path.sync="mapPosition" v-bind:options="{ strokeColor:'#008000'}"></gmap-polyline>
+                    <!-- <gmap-polyline v-bind:path.sync="mapPosition" v-bind:options="{ strokeColor:'#008000'}"></gmap-polyline> -->
                     <!-- <gmap-polyline :path.sync="mapPosition" :options="{ strokeColor : 'rgba( 0, 0, 0, 0.2 )'}"></gmap-polyline> -->
                 </GmapMap>
             </div>

@@ -2,7 +2,7 @@
     <div class="post">
         <div class="post-content">
             <div class="map-container">
-                <GmapMap ref="mapRef" :center="mapPosition" :zoom="14" style="width:100%; height:800px">
+                <GmapMap ref="mapRef" :center="mapPosition" :zoom="14" style="width:100%; height:500px">
                     <!-- <gmap-info-window :position="mapPosition">
                         커피 마셨어요~!
                     </gmap-info-window> -->
@@ -11,8 +11,7 @@
                         <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
                     </div>
 
-                    <!-- <gmap-polyline v-bind:path.sync="mapPosition" v-bind:options="{ strokeColor:'#008000'}"></gmap-polyline> -->
-                    <!-- <gmap-polyline :path.sync="mapPosition" :options="{ strokeColor : 'rgba( 0, 0, 0, 0.2 )'}"></gmap-polyline> -->
+                    <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
                 </GmapMap>
             </div>
 
@@ -137,12 +136,14 @@ export default {
                         newList[ $index ] = img;
 
                         if( count >= list.length ){
-                            console.log( "load complete" );
+                            
                             newList.forEach(( $tag ) => {
                                 $tag.classList.add( "swiper-slide" );
                                 vm.$refs.imgContainer.appendChild( $tag );
                                 vm.postSwiper.update();
                             });
+
+                            vm.onComplete();
                         }
 
                     }, { 
@@ -150,23 +151,56 @@ export default {
                     });
                 });
             }
+        },
 
-            // var flightPlanCoordinates = [
-            //     {lat: 37.772, lng: -122.214},
-            //     {lat: 21.291, lng: -157.821},
-            //     {lat: -18.142, lng: 178.431},
-            //     {lat: -27.467, lng: 153.027}
-            // ];
+        onComplete(){
+            let vm = this;
+            function calculateAndDisplayRoute( start, destination) {
+                let service = new google.maps.DirectionsService({
+                    suppressMarkers: false
+                });
 
-            // var flightPath = new google.maps.Polyline({
-            //     path: flightPlanCoordinates,
-            //     geodesic: true,
-            //     strokeColor: '#FF0000',
-            //     strokeOpacity: 1.0,
-            //     strokeWeight: 2
-            // });
+                let display = new google.maps.DirectionsRenderer;
 
-            // flightPath.setMap(map);
+                display.setMap( vm.$refs.mapRef.$mapObject );
+
+                // BICYCLING: "BICYCLING"
+                // DRIVING: "DRIVING"
+                // TRANSIT: "TRANSIT"
+                // TWO_WHEELER: "TWO_WHEELER"
+                // WALKING: "WALKING"
+
+                service.route({
+                    origin: start,
+                    destination: destination,
+                    travelMode: google.maps.DirectionsTravelMode.TRANSIT,
+                    transitOptions : {
+                        modes : [ "BUS" ],
+                        routingPreference: 'FEWER_TRANSFERS'
+                    },
+
+                    optimizeWaypoints: false,
+                    provideRouteAlternatives: false,
+                    avoidFerries: true,
+                    avoidHighways: true,
+                    avoidTolls: true,
+                    }, function(response, status) {
+                    if (status === 'OK') {
+                        display.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            }
+
+            let i = 0;
+            let len = this.markers.length - 1;
+
+            for( i; i<len; i++ )
+            {
+                // calculateAndDisplayRoute( service, display, this.markers[ i ], this.markers[ i + 1 ]);
+                calculateAndDisplayRoute( this.markers[ i ], this.markers[ i + 1 ]);
+            }
         },
 
         onSlide(){
@@ -184,11 +218,11 @@ export default {
 
 <style lang="scss" scoped>
     .post-content{ overflow: hidden; margin-bottom: 50px;
-        .map-container{ float: left; width: 50%; height: 800px; 
+        .map-container{ float: left; width: 50%; height: 500px; 
 
         }
 
-        .write-bx{ float: left; width: 50%; height: 800px;
+        .write-bx{ float: left; width: 50%; height: 500px;
             .img-container{
                 width: 100%; height: 100%; display: inline-block;
             }

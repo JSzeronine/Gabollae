@@ -2,14 +2,14 @@
     <div class="post">
         <div class="post-content">
             <div class="map-container">
-                <GmapMap ref="mapRef" :center="mapPosition" :zoom="14" style="width:100%; height:500px">
+                <GmapMap ref="mapRef" :center="mapPosition" :zoom="16" style="width:100%; height:500px">
                     <!-- <gmap-info-window :position="mapPosition">
                         커피 마셨어요~!
                     </gmap-info-window> -->
 
-                    <div v-for="( marker, index ) in markers" :key="index">
+                    <!-- <div v-for="( marker, index ) in markers" :key="index">
                         <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                    </div>
+                    </div> -->
 
                     <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
                 </GmapMap>
@@ -18,7 +18,11 @@
             <div class="write-bx">
                 <div class="img-container">
                     <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
-                        <div ref="imgContainer" class="swiper-wrapper"></div>
+                        <div ref="imgContainer" class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index">
+                                <img :src="image" alt="">
+                            </div>
+                        </div>
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -50,6 +54,9 @@ export default {
         return{
             postSwiperOption : {
                 loop : true,
+                slidesPerView: 2,
+                spaceBetween: 0,
+                centeredSlides: true,
                 pagination : {
                     el : ".swiper-pagination"
                 }
@@ -63,6 +70,7 @@ export default {
             images : [],
             markers : [],
             map : null,
+            markersList : [],
         }
     },
 
@@ -107,8 +115,8 @@ export default {
     },
 
     methods : {
-        markerClick( $index, $e ){
-            this.swiper.slideTo( $index );
+        markerClick( $e ){
+            // this.swiper.slideTo( $index );
         },
 
         onImageUpload( $e ){
@@ -124,7 +132,7 @@ export default {
 
                 Find.getMapPosition( input, ( $data ) => {
                     vm.markers = vm.markers.concat( $data );
-                    vm.mapPosition = $data[ $data.length - 1 ];
+                    vm.mapPosition = $data[ 0 ];
                 });
 
                 let list = Array.prototype.slice.call( input.files );
@@ -138,18 +146,42 @@ export default {
                         if( count >= list.length ){
                             
                             newList.forEach(( $tag ) => {
-                                $tag.classList.add( "swiper-slide" );
-                                vm.$refs.imgContainer.appendChild( $tag );
+                                vm.images.push( $tag.toDataURL() );
                                 vm.postSwiper.update();
                             });
 
-                            vm.onComplete();
+                            // vm.onComplete();
+                            vm.dragMapComplete();
                         }
 
                     }, { 
+                        // maxWidth:896,
+                        maxHeight : 500,
                         orientation : true 
                     });
                 });
+            }
+        },
+
+        dragMapComplete(){
+
+            let vm = this;
+
+            let i = 0;
+            let len = this.markers.length;
+            let position;
+            let marker;
+
+            for( i; i<len; i++ )
+            {
+                position = this.markers[ i ];
+                marker = new google.maps.Marker({
+                    position : new google.maps.LatLng( position.lat, position.lng ),
+                    map : vm.map
+                });
+
+                marker.addListener( "click", vm.markerClick );
+                this.markersList.push( marker );
             }
         },
 
@@ -212,25 +244,30 @@ export default {
             this.map.panTo( this.markers[ $index ]);
         }
     }
-
 }
 </script>
 
 <style lang="scss" scoped>
-    .post-content{ overflow: hidden; margin-bottom: 50px;
-        .map-container{ float: left; width: 50%; height: 500px; 
+    .post{ width: 1280px; margin: 0 auto;
+        .post-content{ overflow: hidden; margin-bottom: 50px;
+            .map-container{ float: left; width: 30%; height: 500px; }
 
-        }
-
-        .write-bx{ float: left; width: 50%; height: 500px;
-            .img-container{
-                width: 100%; height: 100%; display: inline-block;
+            .write-bx{ float: left; width: 70%; height: 500px;
+                .img-container{ width: 100%; height: 100%; display: inline-block;
+                    .swiper-wrapper{
+                        .swiper-slide{
+                        }
+                    }
+                }
             }
         }
+
+        .img-list-bx{ width: 300px; 
+            img{ width: 100%; }
+        }
+
+        canvas{ opacity:0.1; }
     }
 
-    .img-list-bx{ width: 300px; 
-        img{ width: 100%; }
-    }
 
 </style>

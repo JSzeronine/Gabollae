@@ -1,26 +1,30 @@
 <template>
     <div class="post">
         <div class="post-content">
-            <div class="map-container">
-                <GmapMap ref="mapRef" :center="mapPosition" :zoom="16" style="width:100%; height:500px">
-                    <!-- <gmap-info-window :position="mapPosition">
-                        커피 마셨어요~!
-                    </gmap-info-window> -->
+            <div class="map-content">
+                <div class="map-container">
+                    <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:300px">
+                        <!-- <gmap-info-window :position="mapPosition">
+                            커피 마셨어요~!
+                        </gmap-info-window> -->
 
-                    <!-- <div v-for="( marker, index ) in markers" :key="index">
-                        <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                    </div> -->
+                        <!-- <div v-for="( marker, index ) in markers" :key="index">
+                            <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
+                        </div> -->
 
-                    <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
-                </GmapMap>
+                        <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
+                    </GmapMap>
+                </div>
+
             </div>
 
             <div class="write-bx">
                 <div class="img-container">
                     <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                         <div ref="imgContainer" class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index">
-                                <img :src="image" alt="">
+                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ backgroundImage : 'url(' + image + ')' }">
+                                <!-- <img :src="image" alt=""> -->
+                                <!-- <div :style="{ 'backgroundImage' : 'url(' + image + ')' }"></div> -->
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
@@ -52,11 +56,12 @@ export default {
 
     data(){
         return{
+            icon : require( '@/assets/images/icon/emoji_8.gif' ),
             postSwiperOption : {
-                loop : true,
-                slidesPerView: 2,
-                spaceBetween: 0,
-                centeredSlides: true,
+                // slidesPerView: 3,
+                spaceBetween: 10,
+                centeredSlides : true,
+                // spaceBetween: 30,
                 pagination : {
                     el : ".swiper-pagination"
                 }
@@ -115,8 +120,16 @@ export default {
     },
 
     methods : {
-        markerClick( $e ){
-            // this.swiper.slideTo( $index );
+        markerClick( $index ){
+            this.swiper.slideTo( $index );
+            this.map.panTo( this.markers[ $index ]);
+
+            this.markersList.forEach(( $item ) => {
+                $item.setAnimation( null );
+            })
+
+            let marker = this.markersList[ $index ];
+            marker.setAnimation( google.maps.Animation.BOUNCE );
         },
 
         onImageUpload( $e ){
@@ -167,21 +180,26 @@ export default {
 
             let vm = this;
 
-            let i = 0;
             let len = this.markers.length;
             let position;
             let marker;
 
-            for( i; i<len; i++ )
+            for( let i = 0; i<len; i++ )
             {
                 position = this.markers[ i ];
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
-                    map : vm.map
+                    map : vm.map,
+                    // label : "가",
+                    icon : vm.icon
                 });
 
-                marker.addListener( "click", vm.markerClick );
                 this.markersList.push( marker );
+                marker.addListener( "click", function( $e ){
+                    console.log( i );
+
+                    vm.markerClick( i );
+                });
             }
         },
 
@@ -237,25 +255,26 @@ export default {
 
         onSlide(){
             let index = this.postSwiper.activeIndex;
-            this.showMoveMap( index );
+            this.markerClick( index );
         },
-
-        showMoveMap( $index ){
-            this.map.panTo( this.markers[ $index ]);
-        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .post{ width: 1280px; margin: 0 auto;
+    .post{ width: 100%; max-width: 1024px; margin: 0 auto;
         .post-content{ overflow: hidden; margin-bottom: 50px;
-            .map-container{ float: left; width: 30%; height: 500px; }
+            .map-content{ border: 1px solid #999; margin-bottom: 10px;
+                .map-container{ height: 300px; }
+            }
 
-            .write-bx{ float: left; width: 70%; height: 500px;
+            .write-bx{ height: 445px;
                 .img-container{ width: 100%; height: 100%; display: inline-block;
-                    .swiper-wrapper{
-                        .swiper-slide{
+                    .swiper-container{ height: 100%;
+                        .swiper-wrapper{
+                            .swiper-slide{ background-color: #000; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
+                                // img{ width: auto; height: 100%; }
+                            }
                         }
                     }
                 }
@@ -265,8 +284,6 @@ export default {
         .img-list-bx{ width: 300px; 
             img{ width: 100%; }
         }
-
-        canvas{ opacity:0.1; }
     }
 
 

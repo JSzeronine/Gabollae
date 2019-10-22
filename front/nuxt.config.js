@@ -31,4 +31,14 @@ module.exports = {
         "@/assets/scss/layout.scss",
         "swiper/dist/css/swiper.css"
     ],
+
+    head: {
+        title: '가볼래',
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+            { name: 'keywords', content: 'keyword 1, keyword 2'},
+            { hid: 'description', name: 'description', content: 'This is the generic description.'}
+        ],
+    },
 }

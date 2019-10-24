@@ -162,12 +162,15 @@ export default {
             this.swiper.slideTo( $index );
             this.map.panTo( this.markers[ $index ]);
 
-            this.markersList.forEach(( $item ) => {
-                $item.setAnimation( null );
-            })
+            this.markersList.forEach(( $item, $i ) => {
+                if( $index == $i ){
+                    $item.setAnimation( google.maps.Animation.BOUNCE );
+                }else{
+                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                }
+            });
 
-            let marker = this.markersList[ $index ];
-            marker.setAnimation( google.maps.Animation.BOUNCE );
+            // let marker = this.markersList[ $index ];
         },
 
         onImageUpload( $e ){
@@ -235,7 +238,8 @@ export default {
                     position : new google.maps.LatLng( position.lat, position.lng ),
                     map : vm.map,
                     // label : "가",
-                    icon : vm.icon[ i ]
+                    icon : vm.icon[ i ],
+                    title : "메롱"
                 });
 
                 this.markersList.push( marker );
@@ -311,10 +315,10 @@ export default {
 
         .post-content{ overflow: hidden; margin-bottom: 50px; font-size: 0;
             .map-content{ width: 28%; float: left; 
-                .map-container{ height: 500px; overflow: hidden; border-radius: 50px; border:2px solid #e1e1e1; }
+                .map-container{ height: 500px; overflow: hidden; border-radius: 50px; border:2px solid yellow; }
             }
 
-            .write-bx{ float: left; width: 70%; margin-right: 2%; overflow: hidden; border-radius: 50px; border:2px solid #e1e1e1; 
+            .write-bx{ float: left; width: 70%; margin-right: 2%; overflow: hidden; border-radius: 50px; border:2px solid yellow; 
                 .img-container{ width: 100%; height: 100%; display: inline-block;
                     .swiper-container{ height: 100%;
                         .swiper-wrapper{

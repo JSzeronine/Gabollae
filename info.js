@@ -1,6 +1,7 @@
 
 
 
+
 // npm i vue nuxt
 
 // npm i -D node-sass sass-loader @nuxtjs/style-resources

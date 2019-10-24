@@ -1,27 +1,11 @@
 <template>
     <div class="post">
+        <div class="post-title">
+            <input type="text" placeholder="제목을 입력해주세요.">
+        </div>
+
         <div class="post-content">
-            <div class="map-content">
-                <div class="map-container">
-                    <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:300px">
-                        <!-- <gmap-info-window :position="mapPosition">
-                            커피 마셨어요~!
-                        </gmap-info-window> -->
-
-                        <!-- <div v-for="( marker, index ) in markers" :key="index">
-                            <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                        </div> -->
-
-                        <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
-                    </GmapMap>
-                </div>
-            </div>
-
             <div class="write-bx">
-                <div class="post-title">
-                    <input type="text" placeholder="제목을 입력해주세요.">
-                </div>
-
                 <div class="img-container">
                     <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                         <div ref="imgContainer" class="swiper-wrapper">
@@ -34,18 +18,34 @@
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <button style="width:200px; height:50px; font-size:20px;" @click="onImageUpload">이미지 업로드</button>
-                    <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
+            <div class="map-content">
+                <div class="map-container">
+                    <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
+                        <!-- <gmap-info-window :position="mapPosition">
+                            커피 마셨어요~!
+                        </gmap-info-window> -->
+
+                        <!-- <div v-for="( marker, index ) in markers" :key="index">
+                            <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
+                        </div> -->
+
+                        <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
+                    </GmapMap>
                 </div>
+            </div>
+        </div>
 
-                <div class="post-description">
+        <div>
+            <button style="width:200px; height:50px; font-size:20px;" @click="onImageUpload">이미지 업로드</button>
+            <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
+        </div>
+
+        <div class="post-description">
 <pre>
 내용을 입력해주세요.
 </pre>
-                </div>
-            </div>
         </div>
 
         <!-- <div class="img-list-bx">
@@ -213,7 +213,7 @@ export default {
 
                     }, { 
                         // maxWidth:896,
-                        maxHeight : 500,
+                        maxHeight : 600,
                         orientation : true 
                     });
                 });
@@ -305,15 +305,15 @@ export default {
 
 <style lang="scss" scoped>
     .post{ width: 100%; max-width: 1280px; margin: 0 auto;
-        .post-content{ overflow: hidden; margin-bottom: 50px;
-            .map-content{ border: 1px solid #999; margin-bottom: 10px;
-                .map-container{ height: 300px; }
+        .post-title{ border: 1px solid black; padding: 10px; font-size: 20px; color: #999; margin-bottom: 10px; }
+
+        .post-content{ overflow: hidden; margin-bottom: 50px; font-size: 0;
+            .map-content{ width: 28%; float: left;
+                .map-container{ height: 500px; }
             }
 
-            .write-bx{ 
-                .post-title{ border: 1px solid black; padding: 10px; font-size: 20px; color: #999; }
-
-                .img-container{ width: 100%; height: 100%; display: inline-block; height: 500px;
+            .write-bx{ float: left; width: 70%; margin-right: 2%;
+                .img-container{ width: 100%; height: 100%; display: inline-block;
                     .swiper-container{ height: 100%;
                         .swiper-wrapper{
                             .swiper-slide{ display: inline-block; background-color: #000; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;

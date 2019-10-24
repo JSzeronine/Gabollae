@@ -1,57 +1,66 @@
 <template>
     <div class="post">
-        <div class="post-title">
-            <input type="text" placeholder="제목을 입력해주세요.">
-        </div>
+        <div class="post-bx">
+            <div class="post-img-map-content">
+                <div class="img-content">
+                    <div class="img-container">
+                        <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
+                            <div ref="imgContainer" class="swiper-wrapper">
+                                <!-- <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ color:'#fff', fontSize : 18, width:image.w + 'px', backgroundImage : 'url(' + image.src + ')' }"> -->
+                                <div class="swiper-slide" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                    <img :src="image.src" alt="">
+                                </div>
 
-        <div class="post-content">
-            <div class="write-bx">
-                <div class="img-container">
-                    <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
-                        <div ref="imgContainer" class="swiper-wrapper">
-                            <!-- <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ color:'#fff', fontSize : 18, width:image.w + 'px', backgroundImage : 'url(' + image.src + ')' }"> -->
-                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
-                                <img :src="image.src" alt="">
-                                <!-- <div :style="{ 'backgroundImage' : 'url(' + image + ')' }"></div> -->
+                                <div class="swiper-slide" :style="{ width:'300px' }">
+                                    <div class="upload-bx">
+                                        <div class="upload-title">
+                                            이미지를 <br />
+                                            추가해 주세요.
+                                        </div>
+
+                                        <div class="btn-upload-bx">
+                                            <a class="btn-upload" href="javascript:;" @click="onImageUpload">+</a>
+                                            <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="swiper-pagination"></div>
                         </div>
-                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-container">
+                        <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
+                            <!-- <gmap-info-window :position="mapPosition">
+                                커피 마셨어요~!
+                            </gmap-info-window> -->
+
+                            <!-- <div v-for="( marker, index ) in markers" :key="index">
+                                <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
+                            </div> -->
+
+                            <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
+                        </GmapMap>
                     </div>
                 </div>
             </div>
 
-            <div class="map-content">
-                <div class="map-container">
-                    <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
-                        <!-- <gmap-info-window :position="mapPosition">
-                            커피 마셨어요~!
-                        </gmap-info-window> -->
+            <div class="post-content">
+                <div class="post-title">
+                    <input type="text" placeholder="제목을 입력해주세요.">
+                </div>
 
-                        <!-- <div v-for="( marker, index ) in markers" :key="index">
-                            <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                        </div> -->
-
-                        <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
-                    </GmapMap>
+                <div class="post-description">
+                    <textarea name="" id="" cols="30" rows="10"></textarea>
                 </div>
             </div>
+
+            <!-- <div class="img-list-bx">
+                <img ref="imgmap" src="@/assets/images/maps/IMG_0100.JPG" alt="">
+            </div> -->
         </div>
-
-        <div>
-            <button style="width:200px; height:50px; font-size:20px;" @click="onImageUpload">이미지 업로드</button>
-            <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
-        </div>
-
-        <div class="post-description">
-<pre>
-내용을 입력해주세요.
-</pre>
-        </div>
-
-        <!-- <div class="img-list-bx">
-            <img ref="imgmap" src="@/assets/images/maps/IMG_0100.JPG" alt="">
-        </div> -->
-
     </div>
 </template>
 
@@ -59,7 +68,6 @@
 import EXIF from "exif-js";
 import Find from "@/plugins/find";
 import loadImage from "blueimp-load-image";
-
 
 export default {
     components : {
@@ -100,14 +108,7 @@ export default {
             },
 
             images : [
-                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
-                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
+                // { src : require( "@/assets/images/maps3/IMG_0134.JPG" ), w:450 },
             ],
 
             markers : [],
@@ -160,6 +161,8 @@ export default {
     methods : {
         markerClick( $index ){
             this.swiper.slideTo( $index );
+            if( this.markers[ $index ] === undefined ) return;
+
             this.map.panTo( this.markers[ $index ]);
 
             this.markersList.forEach(( $item, $i ) => {
@@ -207,6 +210,8 @@ export default {
                                     w : $tag.width
                                 });
 
+                                console.log( $tag.width );
+
                                 vm.postSwiper.update();
                             });
 
@@ -224,22 +229,20 @@ export default {
         },
 
         dragMapComplete(){
-
             let vm = this;
-
             let len = this.markers.length;
             let position;
             let marker;
-
             for( let i = 0; i<len; i++ )
             {
                 position = this.markers[ i ];
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
                     map : vm.map,
+                    // icon : vm.icon[ i ],
+                    // label : "" + i
                     // label : "가",
-                    icon : vm.icon[ i ],
-                    title : "메롱"
+                    // title : "메롱"
                 });
 
                 this.markersList.push( marker );
@@ -303,45 +306,61 @@ export default {
             let index = this.postSwiper.activeIndex;
             this.markerClick( index );
         },
+
+        swiperSlideClick( $index ){
+            console.log( $index );
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .post{ width: 100%; max-width: 1280px; margin: 0 auto;
-        .post-title{ border-bottom: 1px solid #e1e1e1; padding: 10px; font-size: 20px; color: #e1e1e1; margin-bottom: 10px; 
-            input::placeholder{ color: #e1e1e1; }
-        }
+    .post{ padding-top: 20px; background-color: #f9f9f9;
+        .post-bx{ width: 100%; max-width: 1280px; margin: 0 auto; 
+            .post-img-map-content{ overflow: hidden; margin-bottom: 10px; font-size: 0;
+                .img-content{ float: left; width: getPer( 780 ); margin-right: getPer( 20 ); height:500px; overflow: hidden; background-color: #fff;
+                    .img-container{ width: 100%; height: 100%; 
+                        .swiper-container{ height: 100%;
+                            .swiper-wrapper{
+                                .swiper-slide{ display: inline-block; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
+                                    img{ width: 100%; }
+                                    
+                                    .upload-bx{ width: 100%; height: 100%; text-align: center; padding-top: 194px; border: 1px solid #e1e1e1;
+                                        .upload-title{ text-align: center; font-size: 13px; color: #0d0d0d; margin-bottom: 10px; line-height: 18px; }
 
-        .post-content{ overflow: hidden; margin-bottom: 50px; font-size: 0;
-            .map-content{ width: 28%; float: left; 
-                .map-container{ height: 500px; overflow: hidden; border-radius: 50px; border:2px solid yellow; }
-            }
-
-            .write-bx{ float: left; width: 70%; margin-right: 2%; overflow: hidden; border-radius: 50px; border:2px solid yellow; 
-                .img-container{ width: 100%; height: 100%; display: inline-block;
-                    .swiper-container{ height: 100%;
-                        .swiper-wrapper{
-                            .swiper-slide{ display: inline-block; background-color: #000; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
-                                // img{ width: auto; height: 100%; }
+                                        .btn-upload-bx{ 
+                                            .btn-upload{ display: inline-block; padding: 12px 18px; border: 1px solid #0d0d0d;
+                                                font-size: 15px; color: #0d0d0d; font-weight: bold; 
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                
-                .post-description{
-                    pre{
-                        height: 300px;
-                        font-size: 10px;
-                        color: #000;
-                        border: 1px solid black;
-                    }
+
+                .map-content{ width: getPer( 480 ); float: left; 
+                    .map-container{ height: 500px; overflow: hidden; }
                 }
             }
-        }
 
-        .img-list-bx{ width: 300px; 
-            img{ width: 100%; }
+            .post-content{
+                .post-title{ border-bottom: 1px solid #d3d3d3; padding: 10px; font-size: 16px; color: #0d0d0d; margin-bottom: 10px; 
+                    input::placeholder{ color: #0d0d0d; }
+                }
+
+                .post-description{
+                    textarea{
+                        width: 100%; border: 1px solid #d3d3d3; padding: 10px; font-size: 13px;
+                        background-color: transparent;
+                    }
+                }
+
+                .img-list-bx{ width: 300px; 
+                    img{ width: 100%; }
+                }
+            }
         }
     }
 

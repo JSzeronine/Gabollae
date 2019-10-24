@@ -1,3 +1,4 @@
-@function getPx( $target ){
-    @return $target + px;
+
+@function getPer( $target, $container : 1280 ){
+    @return ( $target / $container ) * 100%;
 }

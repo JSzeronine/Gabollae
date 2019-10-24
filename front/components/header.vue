@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .header{
+    .header{ border-bottom: 1px solid #ccc;
         .header-content{ padding: 20px; overflow: hidden;
             .logo-bx{ float: left;
                 .btn-hamburger{ position: relative; top: 5px; margin-right: 10px; }

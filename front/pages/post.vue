@@ -1,30 +1,38 @@
 <template>
     <div class="post">
+        <div class="post-title">
+            <input type="text" placeholder="제목을 입력해주세요.">
+        </div>
+
         <div class="post-content">
-            <div class="map-container">
-                <GmapMap ref="mapRef" :center="mapPosition" :zoom="16" style="width:100%; height:500px">
-                    <!-- <gmap-info-window :position="mapPosition">
-                        커피 마셨어요~!
-                    </gmap-info-window> -->
-
-                    <!-- <div v-for="( marker, index ) in markers" :key="index">
-                        <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                    </div> -->
-
-                    <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
-                </GmapMap>
-            </div>
-
             <div class="write-bx">
                 <div class="img-container">
                     <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                         <div ref="imgContainer" class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index">
-                                <img :src="image" alt="">
+                            <!-- <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ color:'#fff', fontSize : 18, width:image.w + 'px', backgroundImage : 'url(' + image.src + ')' }"> -->
+                            <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <img :src="image.src" alt="">
+                                <!-- <div :style="{ 'backgroundImage' : 'url(' + image + ')' }"></div> -->
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
+                </div>
+            </div>
+
+            <div class="map-content">
+                <div class="map-container">
+                    <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
+                        <!-- <gmap-info-window :position="mapPosition">
+                            커피 마셨어요~!
+                        </gmap-info-window> -->
+
+                        <!-- <div v-for="( marker, index ) in markers" :key="index">
+                            <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
+                        </div> -->
+
+                        <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
+                    </GmapMap>
                 </div>
             </div>
         </div>
@@ -34,9 +42,15 @@
             <input ref="imageInput" type="file" multiple hidden @change="onChangeImages">
         </div>
 
-        <div class="img-list-bx">
-            <img ref="imgmap" src="@/assets/images/maps/IMG_0100.JPG" alt="">
+        <div class="post-description">
+<pre>
+내용을 입력해주세요.
+</pre>
         </div>
+
+        <!-- <div class="img-list-bx">
+            <img ref="imgmap" src="@/assets/images/maps/IMG_0100.JPG" alt="">
+        </div> -->
 
     </div>
 </template>
@@ -45,6 +59,8 @@
 import EXIF from "exif-js";
 import Find from "@/plugins/find";
 import loadImage from "blueimp-load-image";
+
+
 export default {
     components : {
 
@@ -52,11 +68,27 @@ export default {
 
     data(){
         return{
+            icon : [
+                require( '@/assets/images/icon/1_01.gif' ),
+                require( '@/assets/images/icon/1_02.gif' ),
+                require( '@/assets/images/icon/1_03.gif' ),
+                require( '@/assets/images/icon/1_04.gif' ),
+                require( '@/assets/images/icon/1_05.gif' ),
+                require( '@/assets/images/icon/1_06.gif' ),
+                require( '@/assets/images/icon/1_07.gif' ),
+                require( '@/assets/images/icon/1_08.gif' ),
+                require( '@/assets/images/icon/1_46.gif' ),
+                require( '@/assets/images/icon/1_47.gif' ),
+                require( '@/assets/images/icon/1_48.gif' ),
+                require( '@/assets/images/icon/1_49.gif' ),
+                require( '@/assets/images/icon/1_50.gif' ),
+            ],
+
             postSwiperOption : {
-                loop : true,
-                slidesPerView: 2,
-                spaceBetween: 0,
-                centeredSlides: true,
+                slidesPerView: "auto",
+                spaceBetween: 10,
+                centeredSlides : true,
+                // spaceBetween: 30,
                 pagination : {
                     el : ".swiper-pagination"
                 }
@@ -67,7 +99,17 @@ export default {
                 lng : 0
             },
 
-            images : [],
+            images : [
+                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0134.JPG" ),
+                // require( "@/assets/images/maps3/IMG_0207.JPG" ),
+            ],
+
             markers : [],
             map : null,
             markersList : [],
@@ -85,38 +127,50 @@ export default {
         window.onload = () => {
             this.$refs.mapRef.$mapPromise.then((map) => {
                 let imgTag = vm.$refs.imgmap;
-                EXIF.getData( imgTag, function(){
-                    let data = EXIF.getAllTags( this );
+                // EXIF.getData( imgTag, function(){
+                //     let data = EXIF.getAllTags( this );
 
-                    console.log( data );
+                //     console.log( data );
 
-                    var latDegree = data.GPSLatitude[0].numerator;
-                    var latMinute = data.GPSLatitude[1].numerator;
-                    var latSecond = data.GPSLatitude[2].numerator * 0.01;
-                    var latDirection = data.GPSLatitudeRef;
+                //     var latDegree = data.GPSLatitude[0].numerator;
+                //     var latMinute = data.GPSLatitude[1].numerator;
+                //     var latSecond = data.GPSLatitude[2].numerator * 0.01;
+                //     var latDirection = data.GPSLatitudeRef;
 
-                    let lat = Find.ConvertDMSToDD( latDegree, latMinute, latSecond, latDirection );
+                //     let lat = Find.ConvertDMSToDD( latDegree, latMinute, latSecond, latDirection );
 
-                    var lonDegree = data.GPSLongitude[0].numerator;
-                    var lonMinute = data.GPSLongitude[1].numerator;
-                    var lonSecond = data.GPSLongitude[2].numerator * 0.01;
-                    var lonDirection = data.GPSLongitudeRef;
+                //     var lonDegree = data.GPSLongitude[0].numerator;
+                //     var lonMinute = data.GPSLongitude[1].numerator;
+                //     var lonSecond = data.GPSLongitude[2].numerator * 0.01;
+                //     var lonDirection = data.GPSLongitudeRef;
 
-                    let lng = Find.ConvertDMSToDD( lonDegree, lonMinute, lonSecond, lonDirection );
+                //     let lng = Find.ConvertDMSToDD( lonDegree, lonMinute, lonSecond, lonDirection );
 
-                    vm.mapPosition.lat = lat;
-                    vm.mapPosition.lng = lng;
+                //     vm.mapPosition.lat = lat;
+                //     vm.mapPosition.lng = lng;
 
-                    map.panTo({ lat, lng });
-                    vm.map = map;
-                });
+                //     map.panTo({ lat, lng });
+                // });
+
+                vm.map = map;
             });
         }
     },
 
     methods : {
-        markerClick( $e ){
-            // this.swiper.slideTo( $index );
+        markerClick( $index ){
+            this.swiper.slideTo( $index );
+            this.map.panTo( this.markers[ $index ]);
+
+            this.markersList.forEach(( $item, $i ) => {
+                if( $index == $i ){
+                    $item.setAnimation( google.maps.Animation.BOUNCE );
+                }else{
+                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                }
+            });
+
+            // let marker = this.markersList[ $index ];
         },
 
         onImageUpload( $e ){
@@ -146,7 +200,13 @@ export default {
                         if( count >= list.length ){
                             
                             newList.forEach(( $tag ) => {
-                                vm.images.push( $tag.toDataURL() );
+                                // vm.images.push( $tag.toDataURL() );
+
+                                vm.images.push({
+                                    src : $tag.toDataURL(),
+                                    w : $tag.width
+                                });
+
                                 vm.postSwiper.update();
                             });
 
@@ -156,7 +216,7 @@ export default {
 
                     }, { 
                         // maxWidth:896,
-                        maxHeight : 500,
+                        maxHeight : 600,
                         orientation : true 
                     });
                 });
@@ -167,21 +227,25 @@ export default {
 
             let vm = this;
 
-            let i = 0;
             let len = this.markers.length;
             let position;
             let marker;
 
-            for( i; i<len; i++ )
+            for( let i = 0; i<len; i++ )
             {
                 position = this.markers[ i ];
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
-                    map : vm.map
+                    map : vm.map,
+                    // label : "가",
+                    icon : vm.icon[ i ],
+                    title : "메롱"
                 });
 
-                marker.addListener( "click", vm.markerClick );
                 this.markersList.push( marker );
+                marker.addListener( "click", function( $e ){
+                    vm.markerClick( i );
+                });
             }
         },
 
@@ -217,11 +281,11 @@ export default {
                     avoidHighways: true,
                     avoidTolls: true,
                     }, function(response, status) {
-                    if (status === 'OK') {
-                        display.setDirections(response);
-                    } else {
-                        window.alert('Directions request failed due to ' + status);
-                    }
+                        if (status === 'OK') {
+                            display.setDirections(response);
+                        } else {
+                            window.alert('Directions request failed due to ' + status);
+                        }
                 });
             }
 
@@ -237,26 +301,40 @@ export default {
 
         onSlide(){
             let index = this.postSwiper.activeIndex;
-            this.showMoveMap( index );
+            this.markerClick( index );
         },
-
-        showMoveMap( $index ){
-            this.map.panTo( this.markers[ $index ]);
-        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .post{ width: 1280px; margin: 0 auto;
-        .post-content{ overflow: hidden; margin-bottom: 50px;
-            .map-container{ float: left; width: 30%; height: 500px; }
+    .post{ width: 100%; max-width: 1280px; margin: 0 auto;
+        .post-title{ border-bottom: 1px solid #e1e1e1; padding: 10px; font-size: 20px; color: #e1e1e1; margin-bottom: 10px; 
+            input::placeholder{ color: #e1e1e1; }
+        }
 
-            .write-bx{ float: left; width: 70%; height: 500px;
+        .post-content{ overflow: hidden; margin-bottom: 50px; font-size: 0;
+            .map-content{ width: 28%; float: left; 
+                .map-container{ height: 500px; overflow: hidden; border-radius: 50px; border:2px solid yellow; }
+            }
+
+            .write-bx{ float: left; width: 70%; margin-right: 2%; overflow: hidden; border-radius: 50px; border:2px solid yellow; 
                 .img-container{ width: 100%; height: 100%; display: inline-block;
-                    .swiper-wrapper{
-                        .swiper-slide{
+                    .swiper-container{ height: 100%;
+                        .swiper-wrapper{
+                            .swiper-slide{ display: inline-block; background-color: #000; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
+                                // img{ width: auto; height: 100%; }
+                            }
                         }
+                    }
+                }
+                
+                .post-description{
+                    pre{
+                        height: 300px;
+                        font-size: 10px;
+                        color: #000;
+                        border: 1px solid black;
                     }
                 }
             }
@@ -265,8 +343,6 @@ export default {
         .img-list-bx{ width: 300px; 
             img{ width: 100%; }
         }
-
-        canvas{ opacity:0.1; }
     }
 
 

@@ -305,14 +305,16 @@ export default {
 
 <style lang="scss" scoped>
     .post{ width: 100%; max-width: 1280px; margin: 0 auto;
-        .post-title{ border: 1px solid black; padding: 10px; font-size: 20px; color: #999; margin-bottom: 10px; }
+        .post-title{ border-bottom: 1px solid #e1e1e1; padding: 10px; font-size: 20px; color: #e1e1e1; margin-bottom: 10px; 
+            input::placeholder{ color: #e1e1e1; }
+        }
 
         .post-content{ overflow: hidden; margin-bottom: 50px; font-size: 0;
-            .map-content{ width: 28%; float: left;
-                .map-container{ height: 500px; }
+            .map-content{ width: 28%; float: left; 
+                .map-container{ height: 500px; overflow: hidden; border-radius: 50px; border:2px solid #e1e1e1; }
             }
 
-            .write-bx{ float: left; width: 70%; margin-right: 2%;
+            .write-bx{ float: left; width: 70%; margin-right: 2%; overflow: hidden; border-radius: 50px; border:2px solid #e1e1e1; 
                 .img-container{ width: 100%; height: 100%; display: inline-block;
                     .swiper-container{ height: 100%;
                         .swiper-wrapper{

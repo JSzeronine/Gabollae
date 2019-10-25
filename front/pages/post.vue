@@ -228,20 +228,23 @@ export default {
 
             let input = $e.target;
             let vm = this;
-            let fileReader = new FileReader();
 
             if( input.files && input.files[ 0 ] ){
 
-                Find.getMapPosition( input, ( $data ) => {
-                    vm.markers = vm.markers.concat( $data );
-                    vm.mapPosition = $data[ 0 ];
+                console.log( "호출" );
+
+                Find.getMapPosition( input, ( $position ) => {
+                    vm.markers = vm.markers.concat( $position );
+                    vm.mapPosition = $position[ 0 ];
                 });
 
                 let list = Array.prototype.slice.call( input.files );
                 let newList = [];
                 let count = 0;
                 list.forEach(( $item, $index ) => {
-                    loadImage( $item, function( img ){
+                    loadImage( $item, function( img, $data ){
+                        vm.description = JSON.stringify( $data.exif[ 2 ] );
+                        
                         count++;
                         newList[ $index ] = img;
 
@@ -255,8 +258,6 @@ export default {
                                     w : $tag.width,
                                     emoticon : ""
                                 });
-
-                                console.log( $tag.width );
 
                                 vm.postSwiper.update();
                             });

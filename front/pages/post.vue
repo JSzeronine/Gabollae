@@ -7,7 +7,10 @@
                         <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
                                 <!-- <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ color:'#fff', fontSize : 18, width:image.w + 'px', backgroundImage : 'url(' + image.src + ')' }"> -->
-                                <div class="swiper-slide" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                    <div v-if="image.emoticon" class="option-bx">
+                                        <img :src="image.emoticon" alt="">
+                                    </div>
                                     <img :src="image.src" alt="">
                                 </div>
 
@@ -25,14 +28,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="swiper-pagination"></div>
+                            <!-- <div class="swiper-pagination"></div> -->
                         </div>
                     </div>
                 </div>
 
                 <div class="map-content">
                     <div class="map-container">
-                        <GmapMap ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
+                        <GmapMap class="gmap-container" ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
                             <!-- <gmap-info-window :position="mapPosition">
                                 커피 마셨어요~!
                             </gmap-info-window> -->
@@ -48,12 +51,40 @@
             </div>
 
             <div class="post-content">
-                <div class="post-title">
-                    <input type="text" placeholder="제목을 입력해주세요.">
+                <div class="post-write-bx">
+                    <div class="post-title">
+                        <input type="text" v-model="title" placeholder="제목을 입력해주세요.">
+                    </div>
+
+                    <div class="post-description">
+                        <textarea v-model="description" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
+                    </div>
                 </div>
 
-                <div class="post-description">
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                <div class="map-option">
+                    <div class="map-option-emoticon">
+                        <div class="map-option__title">
+                            <p>이모티콘</p>
+                        </div>
+
+                        <ul class="map-option__emoticon">
+                            <li class="map-option__emoticon-list" v-for="( emoticon, index ) in icon" :key="index">
+                                <a href="javascript:;" @click="emoticonClick( index )">
+                                    <img :src="emoticon" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="map-option-message">
+                        <div class="map-option__title">
+                            <p>메세지</p>
+                        </div>
+
+                        <div class="map-option__message">
+                            <input type="text" v-model="message" placeholder="메세지를 입력해주세요.">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -76,6 +107,9 @@ export default {
 
     data(){
         return{
+            title : "",
+            description : "",
+            message : "",
             icon : [
                 require( '@/assets/images/icon/1_01.gif' ),
                 require( '@/assets/images/icon/1_02.gif' ),
@@ -114,6 +148,8 @@ export default {
             markers : [],
             map : null,
             markersList : [],
+            isMapLoad : false,
+            slideIndex : 0,
         }
     },
 
@@ -126,6 +162,7 @@ export default {
     mounted(){
         let vm = this;
         window.onload = () => {
+
             this.$refs.mapRef.$mapPromise.then((map) => {
                 let imgTag = vm.$refs.imgmap;
                 // EXIF.getData( imgTag, function(){
@@ -154,12 +191,15 @@ export default {
                 // });
 
                 vm.map = map;
+                vm.isMapLoad = true;
             });
         }
     },
 
     methods : {
         markerClick( $index ){
+            this.slideIndex = $index;
+
             this.swiper.slideTo( $index );
             if( this.markers[ $index ] === undefined ) return;
 
@@ -181,6 +221,11 @@ export default {
         },
 
         onChangeImages( $e ){
+            if( !this.isMapLoad ){
+                alert( "구글 맵이 로드중입니다." );
+                return;
+            }
+
             let input = $e.target;
             let vm = this;
             let fileReader = new FileReader();
@@ -207,7 +252,8 @@ export default {
 
                                 vm.images.push({
                                     src : $tag.toDataURL(),
-                                    w : $tag.width
+                                    w : $tag.width,
+                                    emoticon : ""
                                 });
 
                                 console.log( $tag.width );
@@ -221,7 +267,7 @@ export default {
 
                     }, { 
                         // maxWidth:896,
-                        maxHeight : 600,
+                        maxHeight : 500,
                         orientation : true 
                     });
                 });
@@ -308,13 +354,19 @@ export default {
         },
 
         swiperSlideClick( $index ){
-            console.log( $index );
+            this.markerClick( $index );
+        },
+
+        emoticonClick( $index ){
+            let emoticon = this.icon[ $index ];
+            this.images[ this.slideIndex ].emoticon = emoticon;
+            this.markersList[ this.slideIndex ].setIcon( emoticon );
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .post{ padding-top: 20px; background-color: #f9f9f9;
         .post-bx{ width: 100%; max-width: 1280px; margin: 0 auto; 
             .post-img-map-content{ overflow: hidden; margin-bottom: 10px; font-size: 0;
@@ -323,6 +375,13 @@ export default {
                         .swiper-container{ height: 100%;
                             .swiper-wrapper{
                                 .swiper-slide{ display: inline-block; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
+                                    &.image-view-list{ border-radius: 15px; overflow: hidden; position: relative;
+                                        .option-bx{ position: absolute; right: 0; top: 0; padding-right: 10px; padding-top: 10px;
+                                            img{ padding: 2px; display: inline-block; margin-right: 5px; margin-bottom: 5px; border: 1px solid #0d0d0d; background-color: #fff;
+                                            }
+                                        }
+                                    }
+
                                     img{ width: 100%; }
                                     
                                     .upload-bx{ width: 100%; height: 100%; text-align: center; padding-top: 194px; border: 1px solid #e1e1e1;
@@ -340,21 +399,46 @@ export default {
                     }
                 }
 
-                .map-content{ width: getPer( 480 ); float: left; 
-                    .map-container{ height: 500px; overflow: hidden; }
+                .map-content{ width: getPer( 480 ); float: left;
+                    .map-container{ width: 100%; height: 500px;
+                        .vue-map-container{ width: 100%; height: 100%; display: block;
+                            .vue-map{ width: 100%; height: 100%; }
+                        }
+                    }
                 }
             }
 
-            .post-content{
-                .post-title{ border-bottom: 1px solid #d3d3d3; padding: 10px; font-size: 16px; color: #0d0d0d; margin-bottom: 10px; 
-                    input::placeholder{ color: #0d0d0d; }
+            .post-content{ overflow: hidden;
+                .post-write-bx{ width: getPer( 780 ); margin-right: getPer( 20 ); float: left;
+                    .post-title{ border-bottom: 1px solid #d3d3d3; padding: 0 10px 10px; font-size: 16px; color: #0d0d0d; margin-bottom: 10px; 
+                        input::placeholder{ color: #0d0d0d; }
+                    }
+
+                    .post-description{
+                        textarea{
+                            width: 100%; border: 1px solid #d3d3d3; padding: 10px; font-size: 13px;
+                            background-color: transparent;
+                        }
+                    }
                 }
 
-                .post-description{
-                    textarea{
-                        width: 100%; border: 1px solid #d3d3d3; padding: 10px; font-size: 13px;
-                        background-color: transparent;
+                .map-option{ width: getPer( 480 ); float: left; padding: 5px;
+                    .map-option__title{ margin-bottom: 8px;
+                        p{ font-size: 16px; }
                     }
+
+                    .map-option-emoticon{ margin-bottom: 10px;
+                        .map-option__emoticon{ font-size: 0; 
+                            .map-option__emoticon-list{ padding: 2px; display: inline-block; margin-right: 5px; margin-bottom: 5px; border: 1px solid #d3d3d3; }
+                        }
+                    }
+
+                    .map-option-message{
+                        .map-option__message{ border-bottom: 1px solid #d3d3d3; padding: 0px 0px 10px; font-size: 13px; color: #d3d3d3; margin-bottom: 10px; 
+                            input::placeholder{ color: #d3d3d3; }
+                        }
+                    }
+
                 }
 
                 .img-list-bx{ width: 300px; 

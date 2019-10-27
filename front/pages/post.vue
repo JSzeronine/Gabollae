@@ -6,12 +6,17 @@
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
-                                <!-- <div class="swiper-slide" v-for="( image, index ) in images" :key="index" :style="{ color:'#fff', fontSize : 18, width:image.w + 'px', backgroundImage : 'url(' + image.src + ')' }"> -->
                                 <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+
                                     <div v-if="image.emoticon" class="option-bx">
                                         <img :src="image.emoticon" alt="">
                                     </div>
-                                    <img :src="image.src" alt="">
+
+                                    <div><img :src="image.src" alt=""></div>
+
+                                    <div class="message-bx">
+                                        <input v-on:input="messageChange( index )" v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기">
+                                    </div>
                                 </div>
 
                                 <div class="swiper-slide" :style="{ width:'300px' }">
@@ -28,7 +33,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="swiper-pagination"></div> -->
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>
                 </div>
@@ -36,14 +41,6 @@
                 <div class="map-content">
                     <div class="map-container">
                         <GmapMap class="gmap-container" ref="mapRef" :center="mapPosition" :zoom="17" style="width:100%; height:500px">
-                            <!-- <gmap-info-window :position="mapPosition">
-                                커피 마셨어요~!
-                            </gmap-info-window> -->
-
-                            <!-- <div v-for="( marker, index ) in markers" :key="index">
-                                <gmap-marker :position="marker" @click="markerClick( index )"></gmap-marker>
-                            </div> -->
-
                             <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
                         </GmapMap>
                     </div>
@@ -75,22 +72,14 @@
                             </li>
                         </ul>
                     </div>
-
-                    <div class="map-option-message">
-                        <div class="map-option__title">
-                            <p>메세지</p>
-                        </div>
-
-                        <div class="map-option__message">
-                            <input type="text" v-model="message" placeholder="메세지를 입력해주세요.">
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <!-- <div class="img-list-bx">
-                <img ref="imgmap" src="@/assets/images/maps/IMG_0100.JPG" alt="">
-            </div> -->
+            <div class="post-complete">
+                <div>
+                    <a class="btn-complete" href="javascript:;">입력 완료</a>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -119,11 +108,22 @@ export default {
                 require( '@/assets/images/icon/1_06.gif' ),
                 require( '@/assets/images/icon/1_07.gif' ),
                 require( '@/assets/images/icon/1_08.gif' ),
+                require( '@/assets/images/icon/1_09.gif' ),
+                require( '@/assets/images/icon/1_10.gif' ),
                 require( '@/assets/images/icon/1_46.gif' ),
                 require( '@/assets/images/icon/1_47.gif' ),
                 require( '@/assets/images/icon/1_48.gif' ),
                 require( '@/assets/images/icon/1_49.gif' ),
                 require( '@/assets/images/icon/1_50.gif' ),
+                require( '@/assets/images/icon/4_31.gif' ),
+                require( '@/assets/images/icon/5_43.gif' ),
+                require( '@/assets/images/icon/5_44.gif' ),
+                require( '@/assets/images/icon/5_45.gif' ),
+                require( '@/assets/images/icon/5_46.gif' ),
+                require( '@/assets/images/icon/5_47.gif' ),
+                require( '@/assets/images/icon/5_48.gif' ),
+                require( '@/assets/images/icon/5_49.gif' ),
+                require( '@/assets/images/icon/5_50.gif' ),
             ],
 
             postSwiperOption : {
@@ -137,8 +137,8 @@ export default {
             },
 
             mapPosition : {
-                lat : 0,
-                lng : 0
+                lat : 37.555184,
+                lng : 126.970780
             },
 
             images : [
@@ -150,6 +150,7 @@ export default {
             markersList : [],
             isMapLoad : false,
             slideIndex : 0,
+            infoWindow : null,
         }
     },
 
@@ -164,6 +165,11 @@ export default {
         window.onload = () => {
 
             this.$refs.mapRef.$mapPromise.then((map) => {
+
+                vm.infoWindow = new google.maps.InfoWindow({
+                    pixelOffset : new google.maps.Size( 0, -20 )
+                });
+
                 let imgTag = vm.$refs.imgmap;
                 // EXIF.getData( imgTag, function(){
                 //     let data = EXIF.getAllTags( this );
@@ -192,11 +198,17 @@ export default {
 
                 vm.map = map;
                 vm.isMapLoad = true;
+
+                console.log( "구글 맵 로드 완료!" );
             });
         }
     },
 
     methods : {
+        messageChange( $index ){
+            this.showInfoWindow( $index );
+        },
+
         markerClick( $index ){
             this.slideIndex = $index;
 
@@ -206,70 +218,67 @@ export default {
             this.map.panTo( this.markers[ $index ]);
 
             this.markersList.forEach(( $item, $i ) => {
+                
                 if( $index == $i ){
+                    $item.setZIndex( 101 );
+                    $item.setAnimation( null );
                     $item.setAnimation( google.maps.Animation.BOUNCE );
                 }else{
+                    $item.setZIndex( 100 );
                     if( $item.getAnimation() !== null ) $item.setAnimation( null );
                 }
             });
 
-            // let marker = this.markersList[ $index ];
+            this.showInfoWindow( $index );
         },
 
         onImageUpload( $e ){
-            this.$refs.imageInput.click();
-        },
-
-        onChangeImages( $e ){
             if( !this.isMapLoad ){
                 alert( "구글 맵이 로드중입니다." );
                 return;
             }
 
+            this.$refs.imageInput.click();
+        },
+
+        onChangeImages( $e ){
             let input = $e.target;
             let vm = this;
 
             if( input.files && input.files[ 0 ] ){
-
-                console.log( "호출" );
-
                 Find.getMapPosition( input, ( $position ) => {
                     vm.markers = vm.markers.concat( $position );
                     vm.mapPosition = $position[ 0 ];
-                });
 
-                let list = Array.prototype.slice.call( input.files );
-                let newList = [];
-                let count = 0;
-                list.forEach(( $item, $index ) => {
-                    loadImage( $item, function( img, $data ){
-                        vm.description = JSON.stringify( $data.exif[ 2 ] );
-                        
-                        count++;
-                        newList[ $index ] = img;
+                    let list = Array.prototype.slice.call( input.files );
+                    let newList = [];
+                    let count = 0;
+                    list.forEach(( $item, $index ) => {
+                        loadImage( $item, function( img, $data ){
+                            count++;
+                            newList[ $index ] = img;
 
-                        if( count >= list.length ){
-                            
-                            newList.forEach(( $tag ) => {
-                                // vm.images.push( $tag.toDataURL() );
+                            if( count >= list.length ){
+                                
+                                newList.forEach(( $tag ) => {
+                                    vm.images.push({
+                                        src : $tag.toDataURL(),
+                                        w : $tag.width,
+                                        emoticon : ""
+                                    });
 
-                                vm.images.push({
-                                    src : $tag.toDataURL(),
-                                    w : $tag.width,
-                                    emoticon : ""
+                                    vm.postSwiper.update();
                                 });
 
-                                vm.postSwiper.update();
-                            });
+                                // vm.onComplete();
+                                vm.dragMapComplete();
+                            }
 
-                            // vm.onComplete();
-                            vm.dragMapComplete();
-                        }
-
-                    }, { 
-                        // maxWidth:896,
-                        maxHeight : 500,
-                        orientation : true 
+                        }, { 
+                            // maxWidth:896,
+                            maxHeight : 500,
+                            orientation : true 
+                        });
                     });
                 });
             }
@@ -296,6 +305,18 @@ export default {
                 marker.addListener( "click", function( $e ){
                     vm.markerClick( i );
                 });
+            }
+        },
+
+        showInfoWindow( $index ){
+            let marker = this.markersList[ $index ];
+            let message = this.images[ $index ].message;
+
+            if( message ){
+                this.infoWindow.setContent( message );
+                this.infoWindow.open( this.map, marker );
+            }else{
+                this.infoWindow.close();
             }
         },
 
@@ -368,7 +389,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .post{ padding-top: 20px; background-color: #f9f9f9;
+    .post{ padding-top: 20px; background-color: #f9f9f9; padding-bottom: 150px;
         .post-bx{ width: 100%; max-width: 1280px; margin: 0 auto; 
             .post-img-map-content{ overflow: hidden; margin-bottom: 10px; font-size: 0;
                 .img-content{ float: left; width: getPer( 780 ); margin-right: getPer( 20 ); height:500px; overflow: hidden; background-color: #fff;
@@ -376,16 +397,21 @@ export default {
                         .swiper-container{ height: 100%;
                             .swiper-wrapper{
                                 .swiper-slide{ display: inline-block; height: 100%; background-repeat: no-repeat; background-size: contain; background-position: center;
-                                    &.image-view-list{ border-radius: 15px; overflow: hidden; position: relative;
+                                    &.image-view-list{ position: relative;
                                         .option-bx{ position: absolute; right: 0; top: 0; padding-right: 10px; padding-top: 10px;
                                             img{ padding: 2px; display: inline-block; margin-right: 5px; margin-bottom: 5px; border: 1px solid #0d0d0d; background-color: #fff;
+
                                             }
+                                        }
+
+                                        .message-bx{ opacity: 0.8; position: absolute; width: 100%; bottom: 0px; left: 0; background-color: #fff;
+                                            input{ font-size: 12px; padding: 10px; }
                                         }
                                     }
 
                                     img{ width: 100%; }
                                     
-                                    .upload-bx{ width: 100%; height: 100%; text-align: center; padding-top: 194px; border: 1px solid #e1e1e1;
+                                    .upload-bx{ width: 100%; height: 100%; text-align: center; padding-top: 194px; 
                                         .upload-title{ text-align: center; font-size: 13px; color: #0d0d0d; margin-bottom: 10px; line-height: 18px; }
 
                                         .btn-upload-bx{ 
@@ -409,7 +435,7 @@ export default {
                 }
             }
 
-            .post-content{ overflow: hidden;
+            .post-content{ overflow: hidden; margin-bottom: 30px;
                 .post-write-bx{ width: getPer( 780 ); margin-right: getPer( 20 ); float: left;
                     .post-title{ border-bottom: 1px solid #d3d3d3; padding: 0 10px 10px; font-size: 16px; color: #0d0d0d; margin-bottom: 10px; 
                         input::placeholder{ color: #0d0d0d; }
@@ -433,17 +459,16 @@ export default {
                             .map-option__emoticon-list{ padding: 2px; display: inline-block; margin-right: 5px; margin-bottom: 5px; border: 1px solid #d3d3d3; }
                         }
                     }
-
-                    .map-option-message{
-                        .map-option__message{ border-bottom: 1px solid #d3d3d3; padding: 0px 0px 10px; font-size: 13px; color: #d3d3d3; margin-bottom: 10px; 
-                            input::placeholder{ color: #d3d3d3; }
-                        }
-                    }
-
                 }
 
                 .img-list-bx{ width: 300px; 
                     img{ width: 100%; }
+                }
+            }
+
+            .post-complete{
+                > div{ text-align: center;
+                    .btn-complete{ display: inline-block; color: #0d0d0d; font-size: 16px; border: 1px solid #d3d3d3; padding: 10px 60px; }
                 }
             }
         }

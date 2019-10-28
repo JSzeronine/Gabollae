@@ -3,8 +3,6 @@
         <div class="mybox">
             {{ hello }}
         </div>
-
-
     </div>
 </template>
 

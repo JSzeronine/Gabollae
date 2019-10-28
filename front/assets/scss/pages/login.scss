@@ -1,0 +1,21 @@
+.login{ padding-top: 100px;
+    .login-bx{ margin-bottom: 100px;
+        .login-title{ margin-bottom: 50px;
+            h2{ font-size: 21px; text-align: center; font-weight: bold; }
+        }
+
+        .login-container{ width: 440px; margin: 0 auto; margin-bottom: 100px;
+            > div{ overflow: hidden; width: 100%; margin-bottom: 20px;
+                input{ width: 100%; border-bottom: 1px solid #d3d3d3; float: right; font-size: 16px; padding: 10px; 
+    
+                }
+            }
+        }
+
+        .login-btn-bx{ text-align: center;
+            a{ display: inline-block; color: #0d0d0d; font-size: 16px; border: 1px solid #d3d3d3; padding: 10px 60px; 
+
+            }
+        }
+    }
+}

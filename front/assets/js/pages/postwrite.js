@@ -8,7 +8,6 @@ export default {
 
     data(){
         return{
-            testImage : "@/assets/images/icon/1_01.gif",
             title : "",
             description : "",
             message : "",
@@ -93,6 +92,11 @@ export default {
     },
 
     methods : {
+        // a(){
+            // this.description = this.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            // this.testD = this.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        // },
+
         messageChange( $index ){
             this.showInfoWindow( $index );
         },

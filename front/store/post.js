@@ -1,0 +1,128 @@
+
+export const state = () => ({
+    title : "강릉 여행기~! 2019.10.29",
+    description : `.
+    카페에서 호다닥 드로잉~<br />
+    스케치는 더러운게 제 맛!ㅎㅎㅎ<br />
+    치마 자주 입는 울언니 추우니까<br />
+    모자💂🏻‍♀️목도리🧣양말🧦 준비 땅!<br />
+    .<br />
+    .<br />
+    .<br />
+    .<br />
+    .<br />
+    .<br />
+    ===================================<br />
+    ⛔️ 게시물 모두 창작디자인입니다. 도용/카피 금지!<br />
+    .<br />
+    #손글씨 #다꾸 #손그림 #드로잉클래스 #그림그리기 #여행드로잉 #펜드로잉 #마카드로잉 #일러스트 #패션일러스트 #데일리룩그림 #겨울코디 #dailylook #artwork #doodle #pendrawing #illustration #插图 #画 #绘 #手绘 #วาดรูป #ออกแบบ #รับวาดรูป
+    .`,
+    comments : [
+        {
+            photo : "/images/common/profile.png",
+            nickname : "Zeronine",
+            comment : "재밌어 보여요~"
+        }
+    ],
+
+    hashtags : [
+        { value : "강릉" },
+        { value : "바다 구경" },
+        { value : "여행을 떠나요" },
+        { value : "강릉" },
+        { value : "바다 구경" },
+        { value : "여행을 떠나요" },
+        { value : "바다" },
+        { value : "여행" },
+    ],
+
+    images : [
+        {
+            src : "/images/uploads/IMG_0134.JPG",
+            emoticon : "/images/emoticons/1_02.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.55517222222222, lng : 126.97225277777778 }
+        },
+        {
+            src : "/images/uploads/IMG_0141.JPG",
+            emoticon : "/images/emoticons/1_01.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.55573611111111, lng : 126.96558333333334 }
+        },
+        {
+            src : "/images/uploads/IMG_0146.JPG",
+            emoticon : "/images/emoticons/1_03.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.580597222222224, lng : 127.04852222222222 }
+        },
+        {
+            src : "/images/uploads/IMG_0153.JPG",
+            emoticon : "/images/emoticons/1_04.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.49305277777778, lng : 127.49182777777777 }
+        },
+        {
+            src : "/images/uploads/IMG_0157.JPG",
+            emoticon : "/images/emoticons/1_05.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.50938333333333, lng : 128.2171638888889 }
+        },
+        {
+            src : "/images/uploads/IMG_0166.JPG",
+            emoticon : "/images/emoticons/1_46.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.81229444444444, lng : 128.8981472222222 }
+        },
+        {
+            src : "/images/uploads/IMG_0174.JPG",
+            emoticon : "/images/emoticons/1_47.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.754063888888886, lng : 128.8994138888889 }
+        },
+        {
+            src : "/images/uploads/IMG_0183.JPG",
+            emoticon : "/images/emoticons/1_48.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.753661111111114, lng : 128.89971944444443 }
+        },
+        {
+            src : "/images/uploads/IMG_0207.JPG",
+            emoticon : "/images/emoticons/1_49.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.813605555555554, lng : 128.8981472222222 }
+        },
+        {
+            src : "/images/uploads/IMG_0214.JPG",
+            emoticon : "/images/emoticons/1_50.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.81419444444444, lng : 128.8983 }
+        },
+        {
+            src : "/images/uploads/IMG_0224.JPG",
+            emoticon : "/images/emoticons/4_31.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.81411666666666, lng : 128.89820833333332 }
+        },
+        {
+            src : "/images/uploads/IMG_0238.JPG",
+            emoticon : "/images/emoticons/emoji_1.gif",
+            message : "머리아퐁~!",
+            position : { lat : 37.76396666666667, lng : 128.8994138888889 }
+        },
+        {
+            src : "/images/uploads/IMG_2813.JPG",
+            emoticon : "/images/emoticons/emoji_8.gif",
+            message : "머리아퐁~!",
+            position : { lat : 62.45865277777778, lng : -114.36195277777777 }
+        },
+    ]
+});
+
+export const mutations = {
+
+}
+
+export const actions = {
+
+}
+

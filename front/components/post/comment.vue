@@ -2,8 +2,7 @@
     <div class="comment">
         <div class="comment-bx">
             <div class="photo">
-                <a href="javascript:;" :style="{ backgroundImage : 'url( /images/common/profile.png )'}">
-                </a>
+                <a href="javascript:;" :style="{ backgroundImage : 'url( /images/common/profile.png )'}"></a>
             </div>
 
             <div class="intro-bx">

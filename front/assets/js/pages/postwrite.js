@@ -1,5 +1,4 @@
 import Find from "@/plugins/find";
-import loadImage from "blueimp-load-image";
 
 export default {
     components : {
@@ -18,27 +17,16 @@ export default {
                 require( '@/assets/images/icon/1_03.gif' ),
                 require( '@/assets/images/icon/1_04.gif' ),
                 require( '@/assets/images/icon/1_05.gif' ),
-                require( '@/assets/images/icon/1_06.gif' ),
-                require( '@/assets/images/icon/1_07.gif' ),
-                require( '@/assets/images/icon/1_08.gif' ),
-                require( '@/assets/images/icon/1_09.gif' ),
-                require( '@/assets/images/icon/1_10.gif' ),
+                require( '@/assets/images/icon/1_36.gif' ),
+                require( '@/assets/images/icon/1_37.gif' ),
+                require( '@/assets/images/icon/1_38.gif' ),
+                require( '@/assets/images/icon/1_39.gif' ),
+                require( '@/assets/images/icon/1_40.gif' ),
                 require( '@/assets/images/icon/1_46.gif' ),
                 require( '@/assets/images/icon/1_47.gif' ),
                 require( '@/assets/images/icon/1_48.gif' ),
                 require( '@/assets/images/icon/1_49.gif' ),
                 require( '@/assets/images/icon/1_50.gif' ),
-                require( '@/assets/images/icon/4_31.gif' ),
-                require( '@/assets/images/icon/5_43.gif' ),
-                require( '@/assets/images/icon/5_44.gif' ),
-                require( '@/assets/images/icon/5_45.gif' ),
-                require( '@/assets/images/icon/5_46.gif' ),
-                require( '@/assets/images/icon/5_47.gif' ),
-                require( '@/assets/images/icon/5_48.gif' ),
-                require( '@/assets/images/icon/5_49.gif' ),
-                require( '@/assets/images/icon/5_50.gif' ),
-                require( '@/assets/images/icon/emoji_1.gif' ),
-                require( '@/assets/images/icon/emoji_8.gif' ),
             ],
 
             postwriteSwiperOption : {
@@ -52,11 +40,7 @@ export default {
 
             mapCenter : { lat : 37.555184, lng : 126.970780 },
             images : [
-                // { 
-                //     src : require( "@/assets/images/maps3/IMG_0134.JPG" ), 
-                //     w:450,
-                //     message : ""
-                // },
+                // { src : require( "@/assets/images/maps3/IMG_0134.JPG" ), w:450, message : "" }
             ],
 
             markersPosition : [],
@@ -76,52 +60,42 @@ export default {
 
     mounted(){
         let vm = this;
-        window.onload = () => {
-
-            this.$refs.mapRef.$mapPromise.then((map) => {
-                console.log( "구글 맵 로드 완료!" );
-
-                vm.infoWindow = new google.maps.InfoWindow({
-                    pixelOffset : new google.maps.Size( 0, -20 )
-                });
-
-                vm.map = map;
-                vm.isMapLoad = true;
+        window.onload = async () => {
+            vm.map = await this.$refs.mapRef.$mapPromise;
+            vm.infoWindow = new google.maps.InfoWindow({
+                pixelOffset : new google.maps.Size( 0, -20 ),
             });
+
+            vm.isMapLoad = true;
         }
     },
 
     methods : {
-        // a(){
-            // this.description = this.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            // this.testD = this.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        // },
-
         messageChange( $index ){
             this.showInfoWindow( $index );
         },
 
         markerClick( $index ){
             this.slideIndex = $index;
-
             this.swiper.slideTo( $index );
-            if( this.markersPosition[ $index ] === undefined ) return;
 
-            this.map.panTo( this.markersPosition[ $index ]);
+            if( this.markersPosition[ $index ] ){
+                this.map.panTo( this.markersPosition[ $index ]);
 
-            this.markersList.forEach(( $item, $i ) => {
-                
-                if( $index == $i ){
-                    $item.setZIndex( 101 );
-                    $item.setAnimation( null );
-                    $item.setAnimation( google.maps.Animation.BOUNCE );
-                }else{
-                    $item.setZIndex( 100 );
-                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
-                }
-            });
-
-            this.showInfoWindow( $index );
+                this.markersList.forEach(( $item, $i ) => {
+                    
+                    if( $index == $i ){
+                        $item.setZIndex( 101 );
+                        $item.setAnimation( null );
+                        $item.setAnimation( google.maps.Animation.BOUNCE );
+                    }else{
+                        $item.setZIndex( 100 );
+                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                    }
+                });
+    
+                this.showInfoWindow( $index );
+            }
         },
 
         onImageUpload( $e ){
@@ -133,48 +107,36 @@ export default {
             this.$refs.imageInput.click();
         },
 
-        onChangeImages( $e ){
+        async onChangeImages( $e ){
             let input = $e.target;
             let vm = this;
 
             if( input.files && input.files[ 0 ] ){
-                Find.getMapPosition( input, ( $position ) => {
-                    vm.markersPosition = vm.markersPosition.concat( $position );
-                    vm.mapCenter = $position[ 0 ];
+                let list = Array.prototype.slice.call( input.files );
 
-                    let list = Array.prototype.slice.call( input.files );
-                    let newList = [];
-                    let count = 0;
+                let i = 0;
+                let len = list.length;
+                let file;
+                let imgList = [];
 
-                    list.forEach(( $item, $index ) => {
-                        loadImage( $item, function( img, $data ){
-                            count++;
-                            newList[ $index ] = img;
-
-                            if( count >= list.length ){
-                                
-                                newList.forEach(( $tag ) => {
-                                    vm.images.push({
-                                        src : $tag.toDataURL(),
-                                        w : $tag.width,
-                                        emoticon : ""
-                                    });
-
-                                    vm.postwriteSwiper.update();
-                                });
-
-                                // vm.onComplete();
-                                vm.dragMapComplete();
-                            }
-
-                        }, { 
-                            // maxWidth:896,
-                            maxWidth : 690,
-                            maxHeight : 690,
-                            orientation : true 
-                        });
+                for( i; i<len; i++ )
+                {
+                    file = list[ i ];
+                    vm.markersPosition.push( await Find.getMapPosition( file ));
+                    imgList.push( await Find.getLoadImage( file ));
+                }
+                imgList.forEach(( $image ) => {
+                    vm.images.push({
+                        src : $image.toDataURL(),
+                        w : $image.width,
+                        emoticon : ""
                     });
                 });
+
+                vm.mapCenter = vm.markersPosition[ 0 ];
+
+                vm.postwriteSwiper.update();
+                vm.dragMapComplete();
             }
         },
 
@@ -189,8 +151,6 @@ export default {
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
                     map : vm.map,
-                    // label : "" + i
-                    // title : "메롱"
                 });
 
                 this.markersList.push( marker );
@@ -205,13 +165,62 @@ export default {
             let message = this.images[ $index ].message;
 
             if( message ){
-                this.infoWindow.setContent( message );
+
+                let messageTag = '<div class="info-window-style">';
+                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '<br />');
+                messageTag += '</div>';
+
+                this.infoWindow.setContent( messageTag );
                 this.infoWindow.open( this.map, marker );
+
             }else{
                 this.infoWindow.close();
             }
         },
 
+        onSlide(){
+            let index = this.postwriteSwiper.activeIndex;
+            this.markerClick( index );
+        },
+
+        swiperSlideClick( $index ){
+            this.markerClick( $index );
+        },
+
+        emoticonClick( $index ){
+            let emoticon = this.emoticons[ $index ];
+
+            this.images[ this.slideIndex ].emoticon = emoticon;
+            this.markersList[ this.slideIndex ].setIcon( emoticon );
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 길찾기[ 그닥 쓰고 싶진 않지만..일단 갖고 있자 ]
         onComplete(){
             let vm = this;
             function calculateAndDisplayRoute( start, destination) {
@@ -261,20 +270,5 @@ export default {
                 calculateAndDisplayRoute( this.markers[ i ], this.markers[ i + 1 ]);
             }
         },
-
-        onSlide(){
-            let index = this.postwriteSwiper.activeIndex;
-            this.markerClick( index );
-        },
-
-        swiperSlideClick( $index ){
-            this.markerClick( $index );
-        },
-
-        emoticonClick( $index ){
-            let emoticon = this.emoticons[ $index ];
-            this.images[ this.slideIndex ].emoticon = emoticon;
-            this.markersList[ this.slideIndex ].setIcon( emoticon );
-        }
     }
 }

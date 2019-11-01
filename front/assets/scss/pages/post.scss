@@ -1,7 +1,7 @@
 .post{ padding-top: 20px; padding-bottom: 150px;
     .post-bx{ width: 100%; max-width: 1280px; margin: 0 auto; 
-        .post-img-map-content{ overflow: hidden; margin-bottom: 10px; font-size: 0;
-            .img-content{ float: left; width: getPer( 780 ); margin-right: getPer( 20 ); background-color: #fff;
+        .post-img-map-content{ overflow: hidden; font-size: 0; margin-bottom: 10px; position: relative;
+            .img-content{ float: left; width: getPer( 780 ); margin-right: getPer( 20 ); background-color: #fff; position: relative;
                 .img-container{ width: 100%; height: 690px;
                     .swiper-container{ height: 100%;
                         .swiper-wrapper{
@@ -26,31 +26,43 @@
                         }
                     }
                 }
+            }
 
-                .post-content{ margin-bottom: 20px; border-bottom: 1px solid #d3d3d3; padding: 50px 0 50px;
-                    .post-write-bx{ margin-right: getPer( 20 ); 
-                        .post-title{ padding: 0 10px 10px; font-size: 18px; color: #0d0d0d; }
-                        .post-description{
-                            p{ width: 100%; padding: 10px; font-size: 13px; line-height: 18px; }
-                        }
+            .map-content{ width: getPer( 480 ); float: left; height: 100%;
+                .map-container{ width: 100%; height: 690px;
+                    .vue-map-container{ width: 100%; height: 100%; display: block;
+                        .vue-map{ width: 100%; height: 100%; }
+                    }
+                }
+            }
+        }
 
-                        .hash-tag-bx{ padding: 10px;
-                            ul{
-                                li{ float: left; margin-right: 8px; margin-bottom: 5px;
-                                    a{ font-size: 15px; color: #4b4f56; 
-                                        &:hover{ text-decoration: underline; }
-                                    }
-                                }
+        .post-content{ margin-bottom: 20px; padding-top: 0px; overflow: hidden;
+            .post-write-bx{ width: getPer( 780 ); float: left; margin-right: getPer( 20 ); 
+                .post-title{ padding: 0 10px 10px; font-size: 18px; color: #0d0d0d; }
+                .post-description{
+                    p{ width: 100%; padding: 10px; font-size: 13px; line-height: 18px; }
+                }
+
+                .hash-tag-bx{ padding: 10px 10px 20px; width: 100%; margin-bottom: 50px; border-bottom: 1px solid #d3d3d3; 
+                    ul{ overflow: hidden; 
+                        li{ float: left; margin-right: 8px; margin-bottom: 5px;
+                            a{ font-size: 15px; color: #4b4f56; 
+                                &:hover{ text-decoration: underline; }
                             }
                         }
                     }
                 }
             }
 
-            .map-content{ width: getPer( 480 ); float: left;
-                .map-container{ width: 100%; height: 570px; margin-bottom: 10px;
-                    .vue-map-container{ width: 100%; height: 100%; display: block;
-                        .vue-map{ width: 100%; height: 100%; }
+            .post-user-bx{ width: getPer( 480 ); float: left; 
+                .profile-bx{ margin-bottom: 50px; }
+                .new-list{
+                    h3{ text-align: center; padding: 10px 0; font-size: 18px; color: #0d0d0d; font-weight: bold; margin-bottom: 15px; border: 1px solid black; }
+                    ul{
+                        li{
+                            margin-bottom: 10px;
+                        }
                     }
                 }
             }

@@ -16,14 +16,15 @@ module.exports = {
     ],
 
     modules : [
-        '@nuxtjs/style-resources'
+        '@nuxtjs/style-resources',
+        '@nuxtjs/axios'
     ],
 
     css : [
-        { src : "@/assets/scss/reset.scss", lang : 'scss' },
         { src : "@/assets/scss/layout.scss", lang : 'scss' },
         { src : "@/assets/scss/common.scss", lang : 'scss' },
         { src : "swiper/dist/css/swiper.css" },
+        { src : "@/assets/scss/reset.scss", lang : 'scss' },
     ],
 
     styleResources : {
@@ -34,7 +35,7 @@ module.exports = {
     },
 
     head: {
-        title: '가볼래?가볼래!',
+        title: 'TEST',
         meta: [
             { charset: 'utf-8' },
             // { name: 'viewport', content: 'width=device-width, initial-scale=1' },

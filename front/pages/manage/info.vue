@@ -1,0 +1,87 @@
+<template>
+    <div class="manage-bx">
+        <div class="manage-info">
+            <div class="profile-photo-bx">
+                <div class="profile-photo" :style="{ backgroundImage : 'url(' + me.photo + ')' }"></div>
+                <div class="profile-nickname">제로나인</div>
+                <div class="profile-photo-btn">
+                    <a class="btn" href="javascript:;">사진 등록</a>
+                    <input ref="upload" type="file">
+                </div>
+            </div>
+            <div class="profile-text">
+                <h2>소개</h2>
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </div>
+
+            <div class="profile-password">
+                <h2>비밀번호 변경</h2>
+                <div>
+                    <input class="default-input" type="password" placeholder="현재 비밀번호">
+                </div>
+                
+                <div><input class="default-input" type="password" placeholder="변경할 비밀번호"></div>
+                <div><input class="default-input" type="password" placeholder="변경할 비밀번호 확인"></div>
+            </div>
+
+            <div class="">
+                <a class="btn-default" href="javascript:;">변경 완료</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import Profile from "@/components/common/profile";
+import { mapState } from "vuex";
+export default {
+    layout : "manage",
+    components : {
+        Profile
+    },
+
+    computed : {
+        ...mapState( "user", [
+            "me"
+        ])
+    },
+
+    mounted(){
+
+    }
+}
+
+</script>
+
+<style lang="scss" scoped>
+    .manage-bx{ text-align: center; padding-top: 100px;
+        .manage-info{ width: 480px; display: inline-block;
+            .profile-photo-bx{ margin-bottom: 50px;
+                .profile-photo{ display: inline-block; width: 100px; height: 100px; background-repeat: no-repeat; background-size: cover; background-position: center; 
+                    border: 1px solid #e0e5ee; border-radius: 100%; overflow: hidden; margin-bottom: 10px;
+                }
+
+                .profile-nickname{ font-size: 14px; color: #0d0d0d; margin-bottom: 5px; }
+
+                .profile-photo-btn{
+                    input{ display: none; }
+                }
+            }
+
+            .profile-text{ text-align: left; margin-bottom: 50px;
+                h2{ font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+                textarea{ width: 100%; height: 100px; font-size: 13px; padding: 10px; }
+            }
+
+            .profile-password{ text-align: left; margin-bottom: 50px;
+                h2{ font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+                > div{
+                    margin-bottom: 20px;
+                }
+                
+            }
+        }
+    }
+
+    
+</style>

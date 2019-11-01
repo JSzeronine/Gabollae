@@ -1,12 +1,14 @@
 import { mapState } from 'vuex';
 
 import Comment from "@/components/post/comment.vue";
+import PostList from "@/components/post/postlist";
 import Profile from "@/components/common/profile.vue";
 
 export default {
     components : {
         Comment,
-        Profile
+        Profile,
+        PostList
     },
 
     data(){
@@ -43,19 +45,15 @@ export default {
 
     mounted(){
         let vm = this;
-        window.onload = () => {
-            this.$refs.mapRef.$mapPromise.then((map) => {
-                console.log( "구글 맵 로드 완료!" );
-
-                vm.infoWindow = new google.maps.InfoWindow({
-                    pixelOffset : new google.maps.Size( 0, -20 )
-                });
-
-                vm.map = map;
-                vm.isMapLoad = true;
-
-                vm.dragMapComplete();
+        window.onload = async () => {
+            vm.map = await this.$refs.mapRef.$mapPromise;
+            vm.infoWindow = new google.maps.InfoWindow({
+                pixelOffset : new google.maps.Size( 0, -30 )
             });
+
+            vm.isMapLoad = true;
+
+            vm.dragMapComplete();
         }
     },
 
@@ -69,18 +67,9 @@ export default {
             this.swiper.slideTo( $index );
 
             if( this.images[ $index ].position === undefined ) return;
-
-            // if( $index - 1 >= 0 ){
-            //     let bounds0 = new google.maps.LatLngBounds( new google.maps.LatLng( this.images[ $index ].position.lat, this.images[ $index ].position.lng ) );
-            //     bounds0.extend( new google.maps.LatLng( this.images[ $index - 1 ].position.lat, this.images[ $index - 1 ].position.lng ) )
-            //     this.map.fitBounds( bounds0 );
-            //     this.map.panToBounds( bounds0 );
-            // }else{
-                this.map.panTo( this.images[ $index ].position );
-            // }   
+            this.map.panTo( this.images[ $index ].position );
 
             this.markersList.forEach(( $item, $i ) => {
-                
                 if( $index == $i ){
                     $item.setZIndex( 101 );
                     $item.setAnimation( null );
@@ -96,7 +85,7 @@ export default {
 
         dragMapComplete(){
             let vm = this;
-            let len = this.images.length;
+            let len = vm.images.length;
             let position;
             let marker;
             for( let i = 0; i<len; i++ )
@@ -106,7 +95,7 @@ export default {
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
                     map : vm.map,
-                    icon : this.images[ i ].emoticon
+                    icon : this.images[ i ].emoticon,
                 });
 
                 this.markersList.push( marker );
@@ -114,6 +103,11 @@ export default {
                     vm.markerClick( i );
                 });
             }
+
+            //     let bounds0 = new google.maps.LatLngBounds( new google.maps.LatLng( this.images[ $index ].position.lat, this.images[ $index ].position.lng ) );
+            //     bounds0.extend( new google.maps.LatLng( this.images[ $index - 1 ].position.lat, this.images[ $index - 1 ].position.lng ) )
+            //     this.map.fitBounds( bounds0 );
+            //     this.map.panToBounds( bounds0 );
 
             vm.markerClick( 0 );
         },
@@ -123,8 +117,13 @@ export default {
             let message = this.images[ $index ].message;
 
             if( message ){
-                this.infoWindow.setContent( message );
+                let messageTag = '<div class="info-window-style">';
+                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '<br />');
+                messageTag += '</div>';
+
+                this.infoWindow.setContent( messageTag );
                 this.infoWindow.open( this.map, marker );
+
             }else{
                 this.infoWindow.close();
             }

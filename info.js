@@ -9,7 +9,6 @@
 //     modules : [
 //         '@nuxtjs/style-resources'
 //     ],
-
 //     styleResources : {
 //         scss : [
 //             '@/assets/scss/_function.scss'

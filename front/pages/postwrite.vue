@@ -13,7 +13,8 @@
                                         </div>
 
                                         <div class="message-bx">
-                                            <input v-on:input="messageChange( index )" v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기">
+                                            <textarea v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
+                                            <!-- <input v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기"> -->
                                         </div>
                                     </div>
 
@@ -57,7 +58,7 @@
 
                 <div class="map-content">
                     <div class="map-container">
-                        <GmapMap class="gmap-container" ref="mapRef" :center="mapCenter" :zoom="17" style="width:100%; height:690px">
+                        <GmapMap class="gmap-container" ref="mapRef" :center="mapCenter" :zoom="15" style="width:100%; height:690px">
                             <!-- <gmap-polyline v-bind:path.sync="markers" v-bind:options="{ strokeColor:'rgba( 0, 0, 0, 1 )', strokeWidth : '0.1' }"></gmap-polyline> -->
                         </GmapMap>
                     </div>

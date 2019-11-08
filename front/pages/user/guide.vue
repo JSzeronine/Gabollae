@@ -1,9 +1,17 @@
 <template>
-    <div class="follow">
-        <div class="follow-bx">
-            <ul class="follow-menu">
-                <li class="active"><a href="javascript:;">나의 가이드</a></li>
-                <li><a href="javascript:;">내가 가이드</a></li>
+    <div class="user-bx">
+        <div class="user-visual">
+            <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
+            <ProfileSmall />
+        </div>
+
+        <div class="user-btns">
+            <ul>
+                <li>
+                    <router-link class="btn" to="/user/info">홈</router-link>
+                    <router-link class="btn" to="/user/travel">여행지</router-link>
+                    <router-link class="btn" to="/user/guide">나의 가이드</router-link>
+                </li>
             </ul>
         </div>
 
@@ -29,50 +37,27 @@
                 <li><Following /></li>
             </ul>
         </div>
-
-        <div class="follower-list-bx">
-            <ul>
-                <li>
-                    <Follower />
-                </li>
-            </ul>
-        </div>
     </div>
 </template>
-<script>
 
+<script>
 import Following from "@/components/common/following";
-import Follower from "@/components/common/follower";
+import ProfileSmall from "@/components/common/profile_small";
 
 export default {
-    layout : "manage",
-    data(){
-        return{
-            
-        }
-    },
-
     components : {
-        Following,
-        Follower
+        ProfileSmall,
+        Following
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
-    .follow{ padding-top: 50px;
-        .follow-bx{
-            ul{ overflow: hidden;
-                li{ width: 50%; float: left; text-align: center;
-                    a{ display: inline-block; width: 100%; padding: 10px 0; border: 1px solid #e0e5ee; font-size: 16px; }
-
-                    &.active{
-                        a{ background-color: #e0e5ee; }
-                    }
-                }
+    .user-bx{ max-width: 1280px; width: 100%; margin: 0 auto; 
+        .user-visual{ margin-bottom: 20px;
+            .visual-bg{ width: 1280px; height: 240px; background-repeat: no-repeat; background-size: cover; background-position: center; 
+                margin-bottom: 10px;
             }
         }
     }
-
 </style>

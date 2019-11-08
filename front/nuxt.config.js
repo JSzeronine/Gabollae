@@ -12,7 +12,7 @@ module.exports = {
 
     plugins : [
         { src : "~/plugins/swiper.js", ssr : false },
-        { src : "~/plugins/google-maps", ssr : false }
+        { src : "~/plugins/google-maps", ssr : false },
     ],
 
     modules : [
@@ -44,4 +44,14 @@ module.exports = {
             { hid: 'description', name: 'description', content: 'This is the generic description.'}
         ],
     },
+
+    axios : {
+        browserBaseURL : "http://localhost:3085",
+        baseURL : "http://localhost:3085",
+        https : false,
+    },
+    
+    server : {
+        port : 3080,
+    }
 }

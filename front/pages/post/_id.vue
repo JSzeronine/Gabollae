@@ -36,6 +36,13 @@
                         <p>{{ title }}</p>
                     </div>
 
+                    <div>
+                        <a class="btn" href="javascript:;">
+                            가볼래
+                            <span>9999+</span>
+                        </a>
+                    </div>
+
                     <div class="post-description">
                         <p v-html="description"></p>
                     </div>

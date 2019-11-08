@@ -17,3 +17,60 @@
 .default-input{
     width: 100%; border-bottom: 1px solid #d3d3d3; font-size: 16px; padding: 10px; 
 }
+
+.text-nowrap1{
+    overflow:hidden; 
+    text-overflow:ellipsis; 
+    white-space:nowrap; 
+    word-wrap:normal; 
+}
+
+.text-nowrap2{
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.travel-list-content{ 
+    .list-title{ margin-bottom: 10px;
+        h2{ font-size: 30px; color: #222; text-align: center; }
+        .btn_more{ text-align: right; padding-right: 10px;
+            a{ font-size: 13px; color: #000; }
+        }
+    }
+
+    .list-bx{
+        > ul{ overflow: hidden; margin-left: -26px;
+            > li{ float: left; width: 300px; margin-left: 26px; margin-bottom: 25px;
+                
+            }
+        }
+    }
+}
+
+.agree-check{ margin-bottom: 10px;
+    label{ overflow: hidden;
+        span{ float: left; 
+            &.icon-checkbx{ display: inline-block; width: 20px; height: 20px; margin-right: 5px;
+                background-image: url( "/images/common/icon_checkbx.jpg" ); background-repeat: no-repeat; background-size: cover; background-position: 0 0;
+            }
+
+            &.text-checkbx{ padding-top: 1px; font-size: 15px; }
+        }
+    }
+
+    input:checked + label{
+        .icon-checkbx{
+            background-position: 0 -20px;
+        }
+    }
+}
+
+.following-list-bx{
+    ul{ overflow: hidden; margin-left: -26px;
+        li{ float: left; margin-left: 26px; margin-bottom: 10px; }
+    }
+}

@@ -5,10 +5,10 @@
             h2{ font-size: 21px; text-align: center; font-weight: bold; }
         }
 
-        .signup-container{ width: 440px; margin: 0 auto; margin-bottom: 100px;
+        .signup-container{ width: 440px; margin: 0 auto; margin-bottom: 50px;
             > div{ overflow: hidden; width: 100%; margin-bottom: 20px;
                 input{ width: 100%; border-bottom: 1px solid #d3d3d3; float: right; font-size: 16px; padding: 10px; 
-    
+                    
                 }
             }
         }
@@ -16,6 +16,14 @@
         .signup-btn-bx{ text-align: center;
             a{ display: inline-block; color: #0d0d0d; font-size: 16px; border: 1px solid #d3d3d3; padding: 10px 60px; 
 
+            }
+        }
+
+        .signup-check-bx{ width: 440px; margin: 0 auto; margin-bottom: 100px;
+            .agree-text{
+                textarea{ width: 100%; padding: 10px; font-size: 13px;
+                    
+                }
             }
         }
     }

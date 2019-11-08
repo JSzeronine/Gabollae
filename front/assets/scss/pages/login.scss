@@ -1,15 +1,19 @@
-.login{ padding-top: 100px;
+.login{ padding-top: 100px; width: 440px; margin: 0 auto; 
     .login-bx{ margin-bottom: 100px;
         .login-title{ margin-bottom: 50px;
             h2{ font-size: 21px; text-align: center; font-weight: bold; }
         }
 
-        .login-container{ width: 440px; margin: 0 auto; margin-bottom: 100px;
+        .login-container{ margin-bottom: 20px;
             > div{ overflow: hidden; width: 100%; margin-bottom: 20px;
                 input{ width: 100%; border-bottom: 1px solid #d3d3d3; float: right; font-size: 16px; padding: 10px; 
     
                 }
             }
+        }
+
+        .agree-check{
+            margin-bottom: 100px;
         }
 
         .login-btn-bx{ text-align: center;

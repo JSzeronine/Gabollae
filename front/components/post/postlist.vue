@@ -18,10 +18,13 @@
                     <dd class="user">
                         <a href="javascript:;">
                             제로나인
+                            <span class="follow-value">
+                                가이드 <span class="follow-count">9999+</span>
+                            </span>
                         </a>
                     </dd>
                     <dd class="like">
-                        좋아요<span> 20</span>
+                        가볼래 <span>9999+</span>
                     </dd>
                 </dl>
             </div>
@@ -58,7 +61,9 @@ export default {
                         }
 
                         &.user{ 
-                            a{ font-size: 14px; color: #725898; }
+                            a{ font-size: 14px; color: #725898; 
+                                .follow-value{ font-size: 13px; color: #0d0d0d; }
+                            }
                         }
 
                         &.like{ margin-bottom: 0;

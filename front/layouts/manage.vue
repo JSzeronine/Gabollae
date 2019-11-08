@@ -37,7 +37,7 @@
 
 <style lang="scss" scoped>
     .config{
-        .config-bx{ width: 100%; max-width: 1024px; margin: 0 auto;
+        .config-bx{ width: 100%; max-width: 1280px; margin: 0 auto;
             h2{ font-size: 21px; text-align: center; font-weight: bold; margin-bottom: 50px; }
 
             .config-menu{

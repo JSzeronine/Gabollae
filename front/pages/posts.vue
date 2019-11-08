@@ -1,5 +1,5 @@
 <template>
-    <div class="manage-posts-bx">
+    <div class="posts">
         <div class="travel-list-bx">
             <div class="travel-list-content">
                 <div class="list-title">
@@ -8,6 +8,14 @@
 
                 <div class="list-bx">
                     <ul>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
+                        <li><TravelList /></li>
                         <li><TravelList /></li>
                         <li><TravelList /></li>
                         <li><TravelList /></li>
@@ -27,18 +35,11 @@
 import TravelList from "@/components/common/travel_list";
 export default {
     components : {
-        TravelList
-    },
-
-    layout : "manage",
-    data(){
-        return{
-
-        }
-    },
+        TravelList,
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-    
+    .posts{ width: 100%; max-width: 1280px; margin: 0 auto; }
 </style>

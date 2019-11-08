@@ -13,7 +13,6 @@
                 </a>
 
             </div>
-            <div class="intro" v-html="me.intro"></div>
             <div class="follow">
                 <a class="btn" href="javascript:;">여행 가이드 등록</a>
             </div>
@@ -58,7 +57,6 @@
                     .follow-value{ font-size: 13px; color: #0d0d0d; }
                 }
             }
-            .intro{ font-size: 13px; margin-bottom: 10px; }
             .follow{ font-size: 13px; }
         }
     }

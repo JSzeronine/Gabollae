@@ -2,8 +2,11 @@
     <div class="manage-bx">
         <div class="manage-info">
             <div class="profile-photo-bx">
-                <div class="profile-photo" :style="{ backgroundImage : 'url(' + me.photo + ')' }"></div>
-                <div class="profile-nickname">제로나인</div>
+
+                <div v-if="me.photo" class="profile-photo" :style="{ backgroundImage : 'url(' + me.photo + ')' }"></div>
+                <div v-else class="profile-photo"></div>
+
+                <div class="profile-nickname">{{ me.nickname }}</div>
                 <div class="profile-photo-btn">
                     <a class="btn" href="javascript:;">사진 등록</a>
                     <input ref="upload" type="file">
@@ -11,7 +14,8 @@
             </div>
             <div class="profile-text">
                 <h2>소개</h2>
-                <textarea name="" id="" cols="30" rows="10"></textarea>
+                <textarea v-model="me.intro" name="" id="" cols="30" rows="10">
+                </textarea>
             </div>
 
             <div class="profile-password">
@@ -25,7 +29,7 @@
             </div>
 
             <div class="">
-                <a class="btn-default" href="javascript:;">변경 완료</a>
+                <a @click="changeUserInfo" class="btn-default" href="javascript:;">변경 완료</a>
             </div>
         </div>
     </div>
@@ -35,19 +39,38 @@
 import Profile from "@/components/common/profile";
 import { mapState } from "vuex";
 export default {
+    data(){
+        return{
+        }
+    },
+
     layout : "manage",
     components : {
         Profile
     },
 
+    fetch({ store, params }){
+        return store.dispatch( "user/info" );
+    },
+
     computed : {
-        ...mapState( "user", [
-            "me"
-        ])
+        me(){
+            return { ...this.$store.state.user.me }
+        }
     },
 
     mounted(){
+        
+    },
 
+    methods : {
+        changeUserInfo(){
+            this.$store.dispatch( "user/changeInfo", this.me ).then(( result ) => {
+                console.log( "변경 완료" );
+            }).catch(( error ) => {
+                console.error( error );
+            })
+        }
     }
 }
 
@@ -58,7 +81,7 @@ export default {
         .manage-info{ width: 480px; display: inline-block;
             .profile-photo-bx{ margin-bottom: 50px;
                 .profile-photo{ display: inline-block; width: 100px; height: 100px; background-repeat: no-repeat; background-size: cover; background-position: center; 
-                    border: 1px solid #e0e5ee; border-radius: 100%; overflow: hidden; margin-bottom: 10px;
+                    border: 1px solid #e0e5ee; border-radius: 100%; overflow: hidden; margin-bottom: 10px; background-color: #e0e5ee;
                 }
 
                 .profile-nickname{ font-size: 14px; color: #0d0d0d; margin-bottom: 5px; }

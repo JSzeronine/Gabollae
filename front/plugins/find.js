@@ -49,11 +49,33 @@ export default class Find{
     }
 
     static ConvertDMSToDD(degrees, minutes, seconds, direction) {
-        var dd = degrees + (minutes / 60) + (seconds / 3600 );
-        if (direction == "S" || direction == "W") {
+        var dd = degrees + ( minutes / 60 ) + ( seconds / 3600 );
+        if( direction == "S" || direction == "W" ) {
             dd = dd * -1; 
         }
 
         return dd;
+    }
+
+    static getStaticGoogleMapImage( $pos, $zoom, $w, $h )
+    {
+        let lat = $pos.lat;
+        let lng = $pos.lng;
+
+        let w = $w;
+        let h = $h;
+        let zoom = $zoom;
+
+        let map = "";
+        map += "https://maps.googleapis.com/maps/api/staticmap?";
+        map += "center=" + lat  + "," + lng;
+        map += "&zoom=" + zoom;
+        map += "&size=" + w + "x" + h;
+        map += "&markers=color:red";
+        map += "%7C%7C" + lat + "," + lng;
+        map += "&maptype=roadmap";
+        map += "&key=" + "AIzaSyDTBk9ygjxvVMy-a99bauzRV_bXGY3sFzI";
+
+        return map;
     }
 }

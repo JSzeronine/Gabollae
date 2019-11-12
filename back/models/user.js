@@ -12,7 +12,7 @@ module.exports = ( sequelize, DataTypes ) => {
         },
 
         intro : {
-            type : DataTypes.STRING( 200 ),
+            type : DataTypes.TEXT,
             allowNull : true,
         },
 
@@ -42,12 +42,13 @@ module.exports = ( sequelize, DataTypes ) => {
         }
 
     }, {
-        charset : "utf8",
-        collate : "utf8_general_ci"
+        charset : "utf8mb4",
+        collate : "utf8mb4_general_ci"
     });
 
     User.associate = ( db ) => {
-
+        db.User.hasMany( db.Post );
+        db.User.hasMany( db.Comment );
     };
 
     return User;

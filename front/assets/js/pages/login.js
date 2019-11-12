@@ -14,9 +14,7 @@ export default{
                 password : this.password,
                 checked : this.checked,
             }).then(( $result ) => {
-
-                this.$router.push( "/postwrite" );
-                
+                this.$router.push( "/manage/info" );
             });
         }
     }

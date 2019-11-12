@@ -78,4 +78,34 @@ export default class Find{
 
         return map;
     }
+
+    static dataURItoBlob( dataURI )
+    {
+        return new Promise(( resolve, reject ) => {
+            let byteString = atob(dataURI.split(',')[1]);
+            let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+            let ab = new ArrayBuffer(byteString.length);
+            let ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++)
+            {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            
+            let bb = new Blob([ab], { "type": mimeString });            
+            resolve( bb );
+        });
+
+        // let byteString = atob(dataURI.split(',')[1]);
+        // let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+        // let ab = new ArrayBuffer(byteString.length);
+        // let ia = new Uint8Array(ab);
+        // for (let i = 0; i < byteString.length; i++)
+        // {
+        //     ia[i] = byteString.charCodeAt(i);
+        // }
+
+        // let bb = new Blob([ab], { "type": mimeString });
+        // return bb;
+    }
+
 }

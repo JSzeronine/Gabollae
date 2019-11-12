@@ -18,6 +18,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- <div class="img-view" :style="{ backgroundImage : 'url( http://localhost:3085/' + image.src +  ')'}"> -->
                                     <div class="img-view" :style="{ backgroundImage : 'url(' + image.src +  ')'}">
                                         <!-- <img :src="image.src" alt=""> -->
                                     </div>
@@ -47,7 +48,7 @@
                         </div>
 
                         <div class="postwrite-description">
-                            <textarea v-model="description" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
+                            <textarea v-model="content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
                         </div>
 
                         <div class="hash-tag-bx">

@@ -3,15 +3,17 @@
         <div class="manage-info">
             <div class="profile-photo-bx">
 
-                <div v-if="me.photo" class="profile-photo" :style="{ backgroundImage : 'url(' + me.photo + ')' }"></div>
-                <div v-else class="profile-photo"></div>
+                <div v-if="me.photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + me.photo + ')' }"></div>
+                <div v-else class="profile-photo">
+                </div>
 
                 <div class="profile-nickname">{{ me.nickname }}</div>
                 <div class="profile-photo-btn">
-                    <a class="btn" href="javascript:;">사진 등록</a>
-                    <input ref="upload" type="file">
+                    <a class="btn" href="javascript:;" @click="onImageUpload">사진 등록</a>
+                    <input ref="imageInput" type="file" hidden @change="onChangeImages">
                 </div>
             </div>
+
             <div class="profile-text">
                 <h2>소개</h2>
                 <textarea v-model="me.intro" name="" id="" cols="30" rows="10">
@@ -38,9 +40,12 @@
 <script>
 import Profile from "@/components/common/profile";
 import { mapState } from "vuex";
+import Find from "@/plugins/find";
+
 export default {
     data(){
         return{
+
         }
     },
 
@@ -49,28 +54,47 @@ export default {
         Profile
     },
 
-    fetch({ store, params }){
-        return store.dispatch( "user/info" );
-    },
-
     computed : {
         me(){
+            if( !this.$store.state.user.me ){
+                this.$router.push( "/login" );
+            }
+
             return { ...this.$store.state.user.me }
         }
     },
 
     mounted(){
-        
+
     },
 
     methods : {
+        onImageUpload(){
+            this.$refs.imageInput.click();
+        },
+
+        async onChangeImages( $e ){
+            const vm = this;
+            let input = $e.target;
+
+            let img = await Find.getLoadImage( input.files[ 0 ]);
+            let data = img.toDataURL( "image/jpeg" );
+
+            // this.$store.dispatch( "user/photoChange", data );
+
+            const imageForData = new FormData();
+            imageForData.append( "image", Find.dataURItoBlob( data ));
+
+            this.$store.dispatch( "user/uploadPhoto", imageForData );
+        },
+
         changeUserInfo(){
-            this.$store.dispatch( "user/changeInfo", this.me ).then(( result ) => {
+            this.$store.dispatch( "user/infoChange", this.me ).then(( result ) => {
                 console.log( "변경 완료" );
             }).catch(( error ) => {
                 console.error( error );
             })
-        }
+        },
     }
 }
 

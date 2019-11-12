@@ -8,7 +8,7 @@ export default {
     data(){
         return{
             title : "",
-            description : "",
+            content : "",
             message : "",
             hashTag : "",
             emoticons : [
@@ -118,20 +118,53 @@ export default {
                 let len = list.length;
                 let file;
                 let imgList = [];
+                let img;
+                let imgFormData = new FormData();
+                let ws = [];
 
                 for( i; i<len; i++ )
                 {
                     file = list[ i ];
                     vm.markersPosition.push( await Find.getMapPosition( file ));
-                    imgList.push( await Find.getLoadImage( file ));
-                }
-                imgList.forEach(( $image ) => {
+
+                    img = await Find.getLoadImage( file );
+                    ws.push( img.width );
+
+                    let imgData = img.toDataURL( 'image/jpeg', 1 );
+                    imgFormData.append( "image", await Find.dataURItoBlob( imgData ));
+
                     vm.images.push({
-                        src : $image.toDataURL(),
-                        w : $image.width,
+                        src : imgData,
+                        w : img.width,
+                        emoticon : ""
+                    });
+
+                    // vm.images.push({
+                    //     src : imgData,
+                    //     w : img.width,
+                    //     emoticon : ""
+                    // });
+
+                    
+                }
+
+                let imgURL = await this.$store.dispatch( "post/uploadImages", imgFormData );
+
+                imgURL.data.forEach(( $src, $index ) => {
+                    vm.images.push({
+                        src : "http://localhost:3085/" + $src,
+                        w : ws[ $index ],
                         emoticon : ""
                     });
                 });
+
+                // imgList.forEach(( $image, $index ) => {
+                //     vm.images.push({
+                //         src : imgURL.data[ $index ],
+                //         w : $image.width,
+                //         emoticon : ""
+                //     });
+                // });
 
                 vm.mapCenter = vm.markersPosition[ 0 ];
 

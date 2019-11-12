@@ -20,7 +20,10 @@ export default{
                 birth : this.birth,
                 userName : this.userName,
                 checked : this.checked,
-            });
+            }).then(( $result ) => {
+                console.log( "회원가입 완료" );
+                this.$router.push( "/login" );
+            })
         }
     }
 }

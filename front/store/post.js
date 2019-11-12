@@ -1,7 +1,8 @@
+import { runInNewContext } from "vm";
 
 export const state = () => ({
     title : "강릉 여행기~! 2019.10.29",
-    description : `.
+    content : `.
     카페에서 호다닥 드로잉~
     스케치는 더러운게 제 맛!ㅎㅎㅎ
     치마 자주 입는 울언니 추우니까
@@ -138,6 +139,19 @@ export const mutations = {
 }
 
 export const actions = {
+    uploadImages({ commit }, $data ){
 
+        return new Promise(( resolve, reject ) => {
+            console.log( "여기까진 넘어오니?" );
+            this.$axios.post( "/post/images", $data, {
+                withCredentials : true,
+            }).then(( result ) => {
+                resolve( result );
+            }).catch(( error ) => {
+                reject();
+            });
+        });
+        
+    }
 }
 

@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="postwrite-description">
-                            <textarea v-model="description" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
+                            <textarea v-model="content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
                         </div>
 
                         <div class="hash-tag-bx">

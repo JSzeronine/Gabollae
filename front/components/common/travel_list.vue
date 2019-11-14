@@ -1,22 +1,26 @@
 <template>
     <div class="travel-list-item" @mouseenter="mOver" @mouseleave="mOut">
         <div class="img-bx">
-            <router-link to="">
-                <div class="photo_travel" style="background-image:url( /images/common/list_sample.jpg );"></div>
+            <router-link :to="`/post/${ info.id }`">
+                <div class="photo_travel" :style="{ backgroundImage:`url( http://localhost:3085/${ info.src })` }"></div>
                 <div class="photo_map" style="background-image:url( /images/common/map_sample.jpg );"></div>
             </router-link>
         </div>
 
         <div class="travel-list-content">
             <dl>
-                <dt class="text-nowrap1">제목</dt>
+                <dt class="text-nowrap1">
+                    {{ info.title }}
+                </dt>
                 <dd class="description text-nowrap2">
-                    내용내용
+                    {{ info.content }}
                 </dd>
             </dl>
 
             <div class="info-bx">
-                <router-link class="user" to="">최관영</router-link>
+                <router-link class="user" to="">
+                    {{ info.User.nickname }}
+                </router-link>
                 <span>|</span>
                 <span class="gabollae">
                     가볼래
@@ -32,10 +36,18 @@ import Find from "@/plugins/find.js";
 import TweenMax from "gsap";
 
 export default {
+    props : {
+        info : Object
+    },
+
     data(){
         return{
             
         }
+    },
+
+    mounted(){
+        console.log( this.info )
     },
 
     methods : {

@@ -29,7 +29,6 @@ const upload = multer({
 });
 
 router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) => {
-    
     try{
         if( req.user.photo ){
             await fs.unlinkSync( `./uploads/${ req.user.photo }` );
@@ -48,9 +47,6 @@ router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) 
                 id : req.user.id
             }
         });
-
-        console.log( user.photo );
-        console.log( req.user.photo );
 
         res.send( user );
     }catch( error ){

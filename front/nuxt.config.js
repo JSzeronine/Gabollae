@@ -1,5 +1,7 @@
+const axios = require( "axios" );
 
 module.exports = {
+    mode: 'universal', // 렌더링 모드 선택 : 'universal' | 'spa'
     build : {
         vendor : [
             "gsap",

@@ -1,19 +1,18 @@
 <template>
     <div class="postlist-bx">
         <div class="bx">
-            <div class="thumbnail" :style="{ backgroundImage : 'url( /images/uploads/IMG_0134.JPG )'}">
-            </div>
+            <router-link :to="`/post/${ info.id }`">
+                <div class="thumbnail" :style="{ backgroundImage : `url( http://localhost:3085/${ info.src })` }">
+                </div>
+            </router-link>
 
             <div class="info">
                 <dl>
                     <dt class="title">
-                        강릉 여행기~!
+                        {{ info.title }}
                     </dt>
                     <dd class="content">
-                        카페에서 호다닥 드로잉~
-                        스케치는 더러운게 제 맛!ㅎㅎㅎ
-                        치마 자주 입는 울언니 추우니까
-                        모자💂🏻‍♀️목도리🧣양말🧦 준비 땅!
+                        {{ info.content }}
                     </dd>
                     <dd class="user">
                         <a href="javascript:;">
@@ -34,10 +33,21 @@
 
 <script>
 export default {
+    props : {
+        info : Object
+    },
+
     data(){
         return{
 
         }
+    },
+
+    mounted(){
+        console.log( this.info.content );
+        console.log( this.info.id );
+        console.log( this.info.src );
+        console.log( this.info.title );
     }
 }
 </script>

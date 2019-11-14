@@ -1,19 +1,19 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : 'url(' + me.photo + ')'}"></a>
+            <a v-if="order.photo" href="javascript:;" :style="{ backgroundImage : 'url(http://localhost:3085/' + order.photo + ')'}"></a>
         </div>
         <div class="intro-bx">
             <div class="nickname">
                 <a href="javascript:;">
-                    {{ me.nickname }}
+                    {{ order.nickname }}
                     <span class="follow-value">
                         가이드 <span class="follow-count">9999+</span>
                     </span>
                 </a>
 
             </div>
-            <div class="intro" v-html="me.intro"></div>
+            <div class="intro" v-html="order.intro"></div>
             <div class="follow">
                 <a class="btn" href="javascript:;">여행 가이드 등록</a>
             </div>
@@ -32,12 +32,12 @@
         },
 
         computed : {
-            ...mapState( "user", [ 
-                "me" ])
+            order(){
+                return this.$store.state.post.order;
+            },
         },
 
         mounted(){
-
         }
     }
 </script>

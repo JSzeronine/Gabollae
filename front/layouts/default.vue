@@ -17,7 +17,7 @@ if (process.browser) {
 export default {
     components : {
         Header
-    }
+    },
 }
 </script>
 

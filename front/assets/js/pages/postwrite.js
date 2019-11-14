@@ -12,21 +12,21 @@ export default {
             message : "",
             hashTag : "",
             emoticons : [
-                require( '@/assets/images/icon/1_01.gif' ),
-                require( '@/assets/images/icon/1_02.gif' ),
-                require( '@/assets/images/icon/1_03.gif' ),
-                require( '@/assets/images/icon/1_04.gif' ),
-                require( '@/assets/images/icon/1_05.gif' ),
-                require( '@/assets/images/icon/1_36.gif' ),
-                require( '@/assets/images/icon/1_37.gif' ),
-                require( '@/assets/images/icon/1_38.gif' ),
-                require( '@/assets/images/icon/1_39.gif' ),
-                require( '@/assets/images/icon/1_40.gif' ),
-                require( '@/assets/images/icon/1_46.gif' ),
-                require( '@/assets/images/icon/1_47.gif' ),
-                require( '@/assets/images/icon/1_48.gif' ),
-                require( '@/assets/images/icon/1_49.gif' ),
-                require( '@/assets/images/icon/1_50.gif' ),
+                '1_01.gif',
+                '1_02.gif',
+                '1_03.gif',
+                '1_04.gif',
+                '1_05.gif',
+                '1_36.gif',
+                '1_37.gif',
+                '1_38.gif',
+                '1_39.gif',
+                '1_40.gif',
+                '1_46.gif',
+                '1_47.gif',
+                '1_48.gif',
+                '1_49.gif',
+                '1_50.gif',
             ],
 
             postwriteSwiperOption : {
@@ -53,6 +53,14 @@ export default {
     },
 
     computed : {
+        me(){
+            if( !this.$store.state.user.me ){
+                return this.$router.push( "/login" );
+            }
+
+            return { ...this.$store.state.user.me }
+        },
+
         swiper(){
             return this.$refs.uploadImgSwiper.swiper;
         }
@@ -61,13 +69,24 @@ export default {
     mounted(){
         let vm = this;
         window.onload = async () => {
-            vm.map = await this.$refs.mapRef.$mapPromise;
+            
+        }
+
+        this.$refs.mapRef.$mapPromise.then(( $map ) => {
+            vm.map = $map;
             vm.infoWindow = new google.maps.InfoWindow({
                 pixelOffset : new google.maps.Size( 0, -20 ),
             });
 
             vm.isMapLoad = true;
-        }
+
+            console.log( this.me );
+            console.log( "window onload" );
+        });
+    },
+
+    beforeDestroy(){
+
     },
 
     methods : {
@@ -132,39 +151,20 @@ export default {
 
                     let imgData = img.toDataURL( 'image/jpeg', 1 );
                     imgFormData.append( "image", await Find.dataURItoBlob( imgData ));
-
-                    vm.images.push({
-                        src : imgData,
-                        w : img.width,
-                        emoticon : ""
-                    });
-
-                    // vm.images.push({
-                    //     src : imgData,
-                    //     w : img.width,
-                    //     emoticon : ""
-                    // });
-
-                    
                 }
 
                 let imgURL = await this.$store.dispatch( "post/uploadImages", imgFormData );
 
                 imgURL.data.forEach(( $src, $index ) => {
                     vm.images.push({
-                        src : "http://localhost:3085/" + $src,
+                        src : $src,
                         w : ws[ $index ],
-                        emoticon : ""
+                        emoticon : "",
+                        lat : vm.markersPosition[ $index ].lat,
+                        lng : vm.markersPosition[ $index ].lng,
+                        message : "",
                     });
                 });
-
-                // imgList.forEach(( $image, $index ) => {
-                //     vm.images.push({
-                //         src : imgURL.data[ $index ],
-                //         w : $image.width,
-                //         emoticon : ""
-                //     });
-                // });
 
                 vm.mapCenter = vm.markersPosition[ 0 ];
 
@@ -224,7 +224,27 @@ export default {
             let emoticon = this.emoticons[ $index ];
 
             this.images[ this.slideIndex ].emoticon = emoticon;
-            this.markersList[ this.slideIndex ].setIcon( emoticon );
+            this.markersList[ this.slideIndex ].setIcon( "/images/emoticons/" + emoticon );
+        },
+
+        postComplete(){
+            let vm = this;
+            let title = this.title;
+            let images = this.images;
+
+            let content = this.content;
+            let hashTag = this.hashTag;
+
+            this.$store.dispatch( "post/write", { title, images, content, hashTag })
+                .then(( $result ) => {
+                    console.log( "게시글 업로드 완료!" );
+                    console.log( $result );
+
+                    vm.$router.push( "/post/" + $result.data.postId );
+                })
+                .catch(( error ) => {
+                    console.error( error );
+                });
         },
 
 

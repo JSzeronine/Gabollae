@@ -9,7 +9,7 @@
                                 <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
-                                            <img v-if="image.emoticon" :src="image.emoticon" alt="">
+                                            <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
                                         </div>
 
                                         <div class="message-bx">
@@ -18,8 +18,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- <div class="img-view" :style="{ backgroundImage : 'url( http://localhost:3085/' + image.src +  ')'}"> -->
-                                    <div class="img-view" :style="{ backgroundImage : 'url(' + image.src +  ')'}">
+                                    <div class="img-view" :style="{ backgroundImage : 'url( http://localhost:3085/' + image.src +  ')'}">
                                         <!-- <img :src="image.src" alt=""> -->
                                     </div>
                                 </div>
@@ -52,7 +51,7 @@
                         </div>
 
                         <div class="hash-tag-bx">
-                            <input type="text" v-model="hashTag" placeholder="#강릉 #바다 #여행리뷰">
+                            <input v-model="hashTag" type="text" placeholder="#강릉 #바다 #여행리뷰">
                         </div>
                     </div>
                 </div>
@@ -73,7 +72,7 @@
                             <ul class="map-option__emoticon">
                                 <li class="map-option__emoticon-list" v-for="( emoticon, index ) in emoticons" :key="index">
                                     <a href="javascript:;" @click="emoticonClick( index )">
-                                        <img :src="emoticon" alt="">
+                                        <img :src="'/images/emoticons/' + emoticon" alt="">
                                     </a>
                                 </li>
                             </ul>
@@ -84,7 +83,7 @@
 
             <div class="postwrite-complete">
                 <div>
-                    <a class="btn-complete" href="javascript:;">입력 완료</a>
+                    <a @click="postComplete" class="btn-complete" href="javascript:;">입력 완료</a>
                 </div>
             </div>
         </div>

@@ -3,18 +3,17 @@
         <div class="post-bx">
             <div class="post-img-map-content">
                 <div class="img-content">
-
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
                                 <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
-                                            <img v-if="image.emoticon" :src="image.emoticon" alt="">
+                                            <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
                                         </div>
                                     </div>
 
-                                    <div class="img-view" :style="{ backgroundImage : 'url(' + image.src + ')'}"></div>
+                                    <div class="img-view" :style="{ backgroundImage : 'url(http://localhost:3085/' + image.src + ')'}"></div>
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -50,8 +49,8 @@
                     <div class="hash-tag-bx">
                         <ul>
                             <li v-for="( tag, index ) in hashtags" :key="index">
-                                <a href="javascript:;">
-                                    {{ `#${ tag.value }` }}
+                                <a @click="hashtagClick( index )" href="javascript:;">
+                                    {{ `#${ tag.content }` }}
                                 </a>
                             </li>
                         </ul>
@@ -68,31 +67,9 @@
                     <div class="new-list">
                         <h3>다른 여행~!</h3>
                         <ul>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
-                            <li><PostList /></li>
+                            <li v-for="( item, index ) in list" :key="index">
+                                <PostList :info="item" />
+                            </li>
                         </ul>
                     </div>
                 </div>

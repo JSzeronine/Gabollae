@@ -5,13 +5,18 @@ module.exports = ( sequelize, DataTypes ) => {
             allowNull : false,
         },
 
+        w : {
+            type : DataTypes.DOUBLE,
+            allowNull : false,
+        },
+
         message : {
             type : DataTypes.TEXT,
             allowNull : false,
         },
 
         emoticon : {
-            type : DataTypes.STRING( 20 ),
+            type : DataTypes.STRING( 200 ),
             allowNull : false,
         },
 

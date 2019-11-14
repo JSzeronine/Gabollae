@@ -1,19 +1,4 @@
 export const state = () => ({
-    // me : {
-    //     photo : "/images/common/profile.png",
-    //     nickname : "제로나인",
-    //     intro : `화실 ORKIS
-    //     성인취미미술, 초보
-        
-    //     유럽미술부터 현대미술까지 1:1지도
-        
-    //     상담 : 010.2071.7207
-    //     카톡 : studioorkis
-    //     판매 : @orkisstudio
-    //     작가 : @ianorkis
-    //     수원시 영통구 이의동1352 에듀하임103-216
-    //     blog.naver.com/studioorkis`,
-    // },
     me : null,
     posts : [
         {

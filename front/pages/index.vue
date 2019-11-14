@@ -1,13 +1,13 @@
 <template>
     <div class="main">
-        <Visual />
+        <!-- <Visual /> -->
         <div class="main-content">
-            <Search />
+            <!-- <Search /> -->
 
             <div class="travel-list-bx">
                 <div class="travel-list-content">
                     <div class="list-title">
-                        <h2>최신 여행지</h2>
+                        <!-- <h2>최신 여행지</h2> -->
                         <div class="btn_more">
                             <router-link to="">더보기</router-link>
                         </div>
@@ -15,14 +15,9 @@
 
                     <div class="list-bx">
                         <ul>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
-                            <li><TravelList /></li>
+                            <li v-for="( post, index ) in all" :key="index">
+                                <TravelList :info="post" />
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -35,6 +30,8 @@
 import Visual from '@/components/main/visual';
 import Search from '@/components/common/search';
 import TravelList from "@/components/common/travel_list";
+
+import { mapState } from "vuex";
 
 export default {
     components : {
@@ -49,8 +46,18 @@ export default {
         }
     },
 
-    mounted(){
+    fetch({ store }){
+        return store.dispatch( "post/allPost" )
+    },
 
+    computed : {
+        ...mapState( "post", [
+            "all"
+        ])
+    },
+
+    mounted(){
+        
     },
 
     methods : {

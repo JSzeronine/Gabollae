@@ -31,12 +31,22 @@ export default {
         }
     },
 
+    async fetch({ store, params }){
+        await store.dispatch( "post/loadPost", {
+            postId : params.id
+        });
+
+        return await store.dispatch( "post/loadAllUserPost" )
+    },
+
     computed : {
         swiper(){
             return this.$refs.uploadImgSwiper.swiper;
         },
 
         ...mapState( "post", [ 
+            "list",
+            "order",
             "title", 
             "description", 
             "images", 
@@ -46,15 +56,19 @@ export default {
     mounted(){
         let vm = this;
         window.onload = async () => {
-            vm.map = await this.$refs.mapRef.$mapPromise;
+
+        }
+
+        this.$refs.mapRef.$mapPromise.then(( $map ) => {
+            vm.map = $map;
             vm.infoWindow = new google.maps.InfoWindow({
-                pixelOffset : new google.maps.Size( 0, -30 )
+                pixelOffset : new google.maps.Size( 0, -20 ),
             });
 
             vm.isMapLoad = true;
 
             vm.dragMapComplete();
-        }
+        });
     },
 
     methods : {
@@ -66,37 +80,41 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.images[ $index ].position === undefined ) return;
-            this.map.panTo( this.images[ $index ].position );
+            if( this.images[ $index ].lat && this.images[ $index ].lng ){
+                this.map.panTo({ lat : this.images[ $index ].lat, lng : this.images[ $index ].lng });
 
-            this.markersList.forEach(( $item, $i ) => {
-                if( $index == $i ){
-                    $item.setZIndex( 101 );
-                    $item.setAnimation( null );
-                    $item.setAnimation( google.maps.Animation.BOUNCE );
-                }else{
-                    $item.setZIndex( 100 );
-                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
-                }
-            });
-
-            this.showInfoWindow( $index );
+                this.markersList.forEach(( $item, $i ) => {
+                    if( $index == $i ){
+                        $item.setZIndex( 101 );
+                        $item.setAnimation( null );
+                        $item.setAnimation( google.maps.Animation.BOUNCE );
+                    }else{
+                        $item.setZIndex( 100 );
+                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                    }
+                });
+    
+                this.showInfoWindow( $index );
+            }
         },
 
         dragMapComplete(){
             let vm = this;
             let len = vm.images.length;
-            let position;
             let marker;
+            let emoticon;
             for( let i = 0; i<len; i++ )
             {
-                position = this.images[ i ].position;
-
                 marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( position.lat, position.lng ),
+                    position : new google.maps.LatLng( this.images[ i ].lat, this.images[ i ].lng ),
                     map : vm.map,
-                    icon : this.images[ i ].emoticon,
                 });
+
+                emoticon = this.images[ i ].emoticon;
+
+                if( emoticon ){
+                    marker.setIcon( '/images/emoticons/' + this.images[ i ].emoticon );
+                }
 
                 this.markersList.push( marker );
                 marker.addListener( "click", function( $e ){
@@ -137,5 +155,9 @@ export default {
         swiperSlideClick( $index ){
             this.markerClick( $index );
         },
+
+        hashtagClick( $index ){
+            console.log( this.hashtags[ $index ] );
+        }
     }
 }

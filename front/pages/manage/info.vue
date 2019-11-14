@@ -1,6 +1,6 @@
 <template>
     <div class="manage-bx">
-        <div class="manage-info">
+        <div v-if="me" class="manage-info">
             <div class="profile-photo-bx">
 
                 <div v-if="me.photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + me.photo + ')' }"></div>
@@ -57,11 +57,11 @@ export default {
     computed : {
         me(){
             if( !this.$store.state.user.me ){
-                this.$router.push( "/login" );
+                return this.$router.push( "/login" );
             }
 
             return { ...this.$store.state.user.me }
-        }
+        },
     },
 
     mounted(){
@@ -78,12 +78,12 @@ export default {
             let input = $e.target;
 
             let img = await Find.getLoadImage( input.files[ 0 ]);
-            let data = img.toDataURL( "image/jpeg" );
+            let data = img.toDataURL( 'image/jpeg', 1 );
 
             // this.$store.dispatch( "user/photoChange", data );
 
             const imageForData = new FormData();
-            imageForData.append( "image", Find.dataURItoBlob( data ));
+            imageForData.append( "image", await Find.dataURItoBlob( data ));
 
             this.$store.dispatch( "user/uploadPhoto", imageForData );
         },

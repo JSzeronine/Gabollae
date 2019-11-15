@@ -46,7 +46,6 @@ export default {
 
         ...mapState( "post", [ 
             "list",
-            "order",
             "title", 
             "description", 
             "images", 

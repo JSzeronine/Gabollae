@@ -2,7 +2,7 @@
 export const state = () => ({
     all : [],
     list : [],
-    order : null,
+    other : null,
     title : null,
     content : null,
     hashtags : [],
@@ -22,7 +22,7 @@ export const mutations = {
         state.content = $data.content;
         state.images = $data.Images;
         state.hashtags = $data.Hashtags;
-        state.order = $data.User
+        state.other = $data.User;
     },
 
     loadAllUserPost( state, $data ){
@@ -65,13 +65,13 @@ export const actions = {
     },
 
     async loadAllUserPost({ commit, state }){
-        const allUserPost = await this.$axios.get( `/post/user/${ state.order.id }`, { withCredentials : true });
+        const allUserPost = await this.$axios.get( `/post/user/${ state.other.id }`, { withCredentials : true });
         commit( "loadAllUserPost", allUserPost.data );
     },
 
     async allPost({ commit }){
         const allUserPost = await this.$axios.get( `/post/all`, { withCredentials : true });
         commit( "loadAllPost", allUserPost.data );
-    }
+    },
 }
 

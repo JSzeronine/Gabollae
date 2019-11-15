@@ -73,8 +73,7 @@ export default {
         .img-bx{ width: 100%; height: 200px; overflow: hidden;
             a{
                 > div{ width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover; background-position: center;
-                    &.photo_travel{}
-                    &.photo_map{}
+                
                 }
             }
         }

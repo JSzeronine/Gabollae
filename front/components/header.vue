@@ -2,19 +2,26 @@
     <div class="header">
         <div class="header-content">
             <div class="logo-bx">
-                <a class="btn-hamburger" href="javascript:;">
+                <router-link to="/">
                     <img src="/images/common/btn_hamburger.png" alt="">
-                </a>
-                <router-link class="logo" to="/">
-                    <img src="/logo.jpg" alt="">
                 </router-link>
+                <!-- <router-link class="logo" to="/">
+                    <img src="/logo.jpg" alt="">
+                </router-link> -->
             </div>
 
             <div class="menu-bx">
                 <ul>
-                    <li><router-link to="/">로그인</router-link></li>
-                    <li><router-link to="/">마이페이지</router-link></li>
-                    <li><router-link to="/">고객센터</router-link></li>
+                    <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>
+                    <li v-if="!me"><router-link to="/signup">회원가입</router-link></li>
+                    <li v-if="me"><router-link :to="`/user/${ me.id }`">나의 페이지</router-link></li>
+                    <li><router-link to="/postwrite">글쓰기</router-link></li>
+                    <li v-if="me"><router-link to="/manage/info">설정</router-link></li>
+                    <li v-if="me">
+                        <a @click="logout" href="javascript:;">
+                            로그아웃
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -23,9 +30,21 @@
 
 <script>
 
+
 export default {
-    
+    computed : {
+        me(){
+            return this.$store.state.user.me;
+        }
+    },
+
+    methods : {
+        logout(){
+            this.$store.dispatch( "user/logout" );
+        }
+    }
 }
+
 </script>
 
 <style lang="scss" scoped>

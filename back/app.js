@@ -13,6 +13,7 @@ const app = express();
 
 const userRouter = require( "./routes/user" );
 const postRouter = require( "./routes/post" );
+const otherRouter = require( "./routes/other" );
 
 db.sequelize.sync();
 passportConfig();
@@ -42,6 +43,7 @@ app.use( passport.session() );
 
 app.use( "/user", userRouter );
 app.use( "/post", postRouter );
+app.use( "/other", otherRouter );
 
 app.get( "/", ( req, res ) => {
     res.send( "안녕 시퀄라이즈" );

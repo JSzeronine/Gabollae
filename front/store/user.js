@@ -1,59 +1,6 @@
 export const state = () => ({
     me : null,
-    posts : [
-        {
-            title : "강원도 여행",
-            content : "오늘 강원도 강릉을 갔다왔어요~! 너무 재밌는 하루였습니다. 또 가고 또 가고 싶네요. 재밌는 하루였습니다.",
-            hashtags : [
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-            ],
-
-            image : "/images/common/list_sample.jpg",
-            map : "/images/common/map_sample.jpg"
-        },
-        {
-            title : "강원도 여행",
-            content : "오늘 강원도 강릉을 갔다왔어요~! 너무 재밌는 하루였습니다. 또 가고 또 가고 싶네요. 재밌는 하루였습니다.",
-            hashtags : [
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-            ],
-
-            image : "/images/common/list_sample.jpg",
-            map : "/images/common/map_sample.jpg"
-        },
-        {
-            title : "강원도 여행",
-            content : "오늘 강원도 강릉을 갔다왔어요~! 너무 재밌는 하루였습니다. 또 가고 또 가고 싶네요. 재밌는 하루였습니다.",
-            hashtags : [
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-            ],
-
-            image : "/images/common/list_sample.jpg",
-            map : "/images/common/map_sample.jpg"
-        },
-        {
-            title : "강원도 여행",
-            content : "오늘 강원도 강릉을 갔다왔어요~! 너무 재밌는 하루였습니다. 또 가고 또 가고 싶네요. 재밌는 하루였습니다.",
-            hashtags : [
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-                { value : "#강릉", link : "" },
-            ],
-
-            image : "/images/common/list_sample.jpg",
-            map : "/images/common/map_sample.jpg"
-        },
-    ]
+    other : null,
 });
 
 export const mutations = {
@@ -63,6 +10,10 @@ export const mutations = {
 
     signup( state ){
 
+    },
+
+    logout( state, $data ){
+        state.me = $data;
     },
 
     loadUser( state, $data ){
@@ -79,13 +30,18 @@ export const mutations = {
 
     photoChange( state, $data ){
         state.me.photo = $data;
-    }
+    },
+
+    loadOther( state, $data ){
+        console.log( "값 넣어라고", $data );
+        state.other = $data;
+    },
 }
 
 export const actions = {
     signup({ commit }, $data ){
         return new Promise(( resolve, reject ) => {
-            this.$axios.post( "/user", {
+            this.$axios.post( "/user/signup", {
                 email : $data.email,
                 password : $data.password,
                 nickname : $data.nickname,
@@ -121,6 +77,17 @@ export const actions = {
         });
     },
 
+    async logout({ commit }, $data ){
+        try{
+            await this.$axios.post( "/user/logout", {}, {
+                withCredentials : true
+            });
+            commit( "logout", null );
+        }catch( error ){    
+            console.error( error );
+        }
+    },
+
     async loadUser({ commit }){
         try{
             const result = await this.$axios.get( "/user", { withCredentials : true });
@@ -131,6 +98,12 @@ export const actions = {
             console.log( this );
             console.error( error );
         }
+    },
+
+    loadOther({ commit }, $data ){
+        return this.$axios.get( `/other/${ $data.userId }`).then(( $result ) => {
+            commit( "loadOther", $result.data );
+        });
     },
 
     infoChange({ commit }, $data ){

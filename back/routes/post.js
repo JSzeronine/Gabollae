@@ -84,7 +84,6 @@ router.post( "/write", async ( req, res, next ) => {
     }
 });
 
-
 router.get( "/all", async ( req, res, next ) => {
     try{
         

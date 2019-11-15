@@ -1,19 +1,19 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <a v-if="order.photo" href="javascript:;" :style="{ backgroundImage : 'url(http://localhost:3085/' + order.photo + ')'}"></a>
+            <a v-if="other.photo" href="javascript:;" :style="{ backgroundImage : 'url(http://localhost:3085/' + other.photo + ')'}"></a>
         </div>
         <div class="intro-bx">
             <div class="nickname">
                 <a href="javascript:;">
-                    {{ order.nickname }}
+                    {{ other.nickname }}
                     <span class="follow-value">
                         가이드 <span class="follow-count">9999+</span>
                     </span>
                 </a>
 
             </div>
-            <div class="intro" v-html="order.intro"></div>
+            <div class="intro" v-html="other.intro"></div>
             <div class="follow">
                 <a class="btn" href="javascript:;">여행 가이드 등록</a>
             </div>
@@ -32,8 +32,8 @@
         },
 
         computed : {
-            order(){
-                return this.$store.state.post.order;
+            other(){
+                return this.$store.state.post.other;
             },
         },
 

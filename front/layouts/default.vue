@@ -1,6 +1,6 @@
 <template>
     <div class="wrap">
-        <!-- <Header/> -->
+        <Header/>
         <nuxt />
     </div>
 </template>

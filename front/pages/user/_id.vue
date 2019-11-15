@@ -1,6 +1,7 @@
 <template>
     <div class="user-bx">
-        <div class="user-visual">
+        USER
+        <!-- <div class="user-visual">
             <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
             <ProfileSmall />
         </div>
@@ -8,11 +9,28 @@
         <div class="user-btns">
             <ul>
                 <li>
-                    <router-link class="btn" to="/user/info">홈</router-link>
-                    <router-link class="btn" to="/user/travel">여행지</router-link>
-                    <router-link class="btn" to="/user/guide">나의 가이드</router-link>
+                    <router-link class="btn" to="/user/info/1">홈</router-link>
+                    <router-link class="btn" to="/user/travel/1">여행지</router-link>
+                    <router-link class="btn" to="/user/guide/1">나의 가이드</router-link>
                 </li>
             </ul>
+        </div>
+
+        <div class="user-info">
+        </div>
+
+        <div class="travel-list-bx">
+            <div class="travel-list-content">
+                <div class="list-title">
+                    <h2>최신 여행지</h2>
+                </div>
+
+                <div class="list-bx">
+                    <ul>
+                        <li><TravelList /></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div class="following-list-bx">
@@ -36,18 +54,38 @@
                 <li><Following /></li>
                 <li><Following /></li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 import Following from "@/components/common/following";
 import ProfileSmall from "@/components/common/profile_small";
+import TravelList from "@/components/common/travel_list";
+
+import { mapState } from "vuex";
 
 export default {
     components : {
         ProfileSmall,
-        Following
+        Following,
+        TravelList,
+    },
+
+    fetch({ store, params }){
+        return store.dispatch( "user/loadOther", {
+            userId : params.id
+        });
+    },
+
+    computed : {
+        other(){
+            return this.$store.state.user.other;
+        },
+    },
+
+    mounted(){
+        console.log( this.other );
     }
 }
 </script>

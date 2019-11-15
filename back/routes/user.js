@@ -8,11 +8,6 @@ const multer = require( "multer" );
 const fs = require( "fs" );
 const router = express.Router();
 
-router.get( "/", ( req, res, next ) => {
-    const user = req.user;
-    res.json( user );
-});
-
 const upload = multer({
     storage : multer.diskStorage({
         destination( req, file, done ){
@@ -55,6 +50,11 @@ router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) 
     }
 });
 
+router.get( "/", ( req, res, next ) => {
+    const user = req.user;
+    res.json( user );
+});
+
 router.post( "/infochange", async ( req, res, next ) => {
 
     try{
@@ -72,7 +72,7 @@ router.post( "/infochange", async ( req, res, next ) => {
             }
         });
 
-        res.send( user );
+        res.json( user );
     }catch( error ){
         console.error( error );
         next( error );
@@ -80,7 +80,7 @@ router.post( "/infochange", async ( req, res, next ) => {
     
 });
 
-router.post( "/", async ( req, res, next ) => {
+router.post( "/signup", async ( req, res, next ) => {
     try{
 
         const exUser = await db.User.findOne({
@@ -141,6 +141,14 @@ router.post( "/login", ( req, res, next ) => {
         });
 
     })( req, res, next );
+});
+
+router.post( "/logout", ( req, res, next ) => {
+    if( req.isAuthenticated() ){
+        req.logout();
+        req.session.destroy();
+        return res.status( 200 ).send( "로그아웃 되었습니다." );
+    }
 });
 
 module.exports = router;

@@ -6,7 +6,7 @@
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postwriteSwiper="postwriteSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
-                                <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <div class="swiper-slide image-view-list" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
                                             <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">

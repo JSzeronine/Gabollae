@@ -44,10 +44,7 @@ export default {
     },
 
     mounted(){
-        console.log( this.info.content );
-        console.log( this.info.id );
-        console.log( this.info.src );
-        console.log( this.info.title );
+        
     }
 }
 </script>

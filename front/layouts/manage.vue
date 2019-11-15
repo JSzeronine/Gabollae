@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <Header /> -->
+        <Header />
         <div class="config">
             <div class="config-bx">
                 <h2>설정</h2>

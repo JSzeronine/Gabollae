@@ -18,8 +18,8 @@
             </dl>
 
             <div class="info-bx">
-                <router-link class="user" to="">
-                    {{ info.User.nickname }}
+                <router-link class="user" :to="`/user/${ user.id }`">
+                    {{ user.nickname }}
                 </router-link>
                 <span>|</span>
                 <span class="gabollae">
@@ -37,7 +37,8 @@ import TweenMax from "gsap";
 
 export default {
     props : {
-        info : Object
+        info : Object,
+        user : Object
     },
 
     data(){
@@ -47,7 +48,7 @@ export default {
     },
 
     mounted(){
-        console.log( this.info )
+        
     },
 
     methods : {

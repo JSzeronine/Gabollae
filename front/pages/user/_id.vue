@@ -1,22 +1,23 @@
 <template>
     <div class="user-bx">
-        USER
-        <!-- <div class="user-visual">
-            <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
-            <ProfileSmall />
+        <div class="user-visual">
+            <!-- <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div> -->
+            <ProfileSmall :me="other" />
         </div>
 
         <div class="user-btns">
             <ul>
                 <li>
-                    <router-link class="btn" to="/user/info/1">홈</router-link>
-                    <router-link class="btn" to="/user/travel/1">여행지</router-link>
-                    <router-link class="btn" to="/user/guide/1">나의 가이드</router-link>
+                    <router-link class="btn" to="">홈</router-link>
+                    <router-link class="btn" to="">여행지</router-link>
+                    <router-link class="btn" to="">나의 가이드</router-link>
+                    <router-link v-if="me.id == other.id" to="/manage/info/" class="btn">설정</router-link>
                 </li>
             </ul>
         </div>
 
         <div class="user-info">
+            <div v-html="other.intro.replace(/(\n|\r\n)/g, '<br>')"></div>
         </div>
 
         <div class="travel-list-bx">
@@ -27,13 +28,15 @@
 
                 <div class="list-bx">
                     <ul>
-                        <li><TravelList /></li>
+                        <li v-for="( item, index ) in other.Posts" :key="index">
+                            <TravelList :info="item" :user="other" />
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="following-list-bx">
+        <!-- <div class="following-list-bx">
             <ul>
                 <li><Following /></li>
                 <li><Following /></li>
@@ -82,10 +85,14 @@ export default {
         other(){
             return this.$store.state.user.other;
         },
+
+        me(){
+            return this.$store.state.user.me;
+        }
     },
 
     mounted(){
-        console.log( this.other );
+        console.log( this.me.id, this.other.id );
     }
 }
 </script>

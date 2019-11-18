@@ -3,3 +3,4 @@ dist
 *.log
 .nuxt
 maps3
+uploads

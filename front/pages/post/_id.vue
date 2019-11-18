@@ -43,15 +43,18 @@
                     </div>
 
                     <div class="post-description">
-                        <p v-html="description"></p>
+                        <p v-html="content.replace(/(\n|\r\n)/g, '<br>')"></p>
                     </div>
 
                     <div class="hash-tag-bx">
                         <ul>
                             <li v-for="( tag, index ) in hashtags" :key="index">
-                                <a @click="hashtagClick( index )" href="javascript:;">
+                                <router-link :to="`/hashtag/${ tag.content }`">
                                     {{ `#${ tag.content }` }}
-                                </a>
+                                </router-link>
+                                <!-- <a @click="hashtagClick( index )" href="javascript:;">
+                                    
+                                </a> -->
                             </li>
                         </ul>
                     </div>

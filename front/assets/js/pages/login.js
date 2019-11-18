@@ -14,7 +14,7 @@ export default{
                 password : this.password,
                 checked : this.checked,
             }).then(( $result ) => {
-                this.$router.push( "/manage/info" );
+                this.$router.push( "/" );
             });
         }
     }

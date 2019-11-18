@@ -25,7 +25,7 @@ export const mutations = {
     },
 
     uploadPhoto( state, $data ){
-        state.me = $data;
+        state.me.photo = $data;
     },
 
     photoChange( state, $data ){
@@ -33,7 +33,6 @@ export const mutations = {
     },
 
     loadOther( state, $data ){
-        console.log( "값 넣어라고", $data );
         state.other = $data;
     },
 }
@@ -77,15 +76,13 @@ export const actions = {
         });
     },
 
-    async logout({ commit }, $data ){
-        try{
-            await this.$axios.post( "/user/logout", {}, {
-                withCredentials : true
-            });
-            commit( "logout", null );
-        }catch( error ){    
-            console.error( error );
-        }
+    logout({ commit }, $data ){
+        return new Promise(( resolve, reject ) => {
+            this.$axios.post( "/user/logout", {}, { withCredentials : true }).then(( $result ) => {
+                commit( "logout", null );
+                resolve();
+            })
+        });
     },
 
     async loadUser({ commit }){
@@ -101,7 +98,7 @@ export const actions = {
     },
 
     loadOther({ commit }, $data ){
-        return this.$axios.get( `/other/${ $data.userId }`).then(( $result ) => {
+        return this.$axios.get( `/user/${ $data.userId }`).then(( $result ) => {
             commit( "loadOther", $result.data );
         });
     },
@@ -123,13 +120,14 @@ export const actions = {
     },
 
     uploadPhoto({ commit }, $data ){
-        this.$axios.post( "user/uploadPhoto", $data, {
-            withCredentials : true
-        }).then(( $result ) => {
-            console.log( "업로드 완료", $result.data );
-            commit( "uploadPhoto", $result.data );
-        }).catch(( error ) => {
-
+        return new Promise(( resolve, reject ) => {
+            this.$axios.post( "user/uploadPhoto", $data, {
+                withCredentials : true
+            }).then(( $result ) => {
+                resolve( $result.data.photo );
+            }).catch(( error ) => {
+                console.error( error );
+            });
         })
     },
 }

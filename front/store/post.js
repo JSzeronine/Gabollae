@@ -6,6 +6,7 @@ export const state = () => ({
     title : null,
     content : null,
     hashtags : [],
+    hashtag : null,
     images : [],
     comments : [
         {
@@ -31,6 +32,11 @@ export const mutations = {
 
     loadAllPost( state, $data ){
         state.all = $data;
+    },
+
+    loadHashtagPost( state, $data ){
+        state.list = $data.Posts;
+        state.hashtag = $data.content;
     }
 }
 
@@ -57,6 +63,11 @@ export const actions = {
 
             });
         });
+    },
+
+    async hashtag({ commit }, $data ){
+        const posts = await this.$axios.get( `/post/hashtag/${ $data.hashtag }`);
+        commit( "loadHashtagPost", posts.data );
     },
 
     async loadPost({ commit }, $data ){

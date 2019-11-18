@@ -16,7 +16,7 @@
                     <div class="list-bx">
                         <ul>
                             <li v-for="( post, index ) in all" :key="index">
-                                <TravelList :info="post" />
+                                <TravelList :info="post" :user="post.User" />
                             </li>
                         </ul>
                     </div>
@@ -57,7 +57,7 @@ export default {
     },
 
     mounted(){
-        
+        console.log( this.all );
     },
 
     methods : {

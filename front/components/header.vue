@@ -12,11 +12,13 @@
 
             <div class="menu-bx">
                 <ul>
+                    <li v-if="me">
+                        <router-link :to="`/user/${ me.id }`">{{ me.nickname + " 님 안녕하세요" }}</router-link>
+                    </li>
+
                     <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>
                     <li v-if="!me"><router-link to="/signup">회원가입</router-link></li>
-                    <li v-if="me"><router-link :to="`/user/${ me.id }`">나의 페이지</router-link></li>
                     <li><router-link to="/postwrite">글쓰기</router-link></li>
-                    <li v-if="me"><router-link to="/manage/info">설정</router-link></li>
                     <li v-if="me">
                         <a @click="logout" href="javascript:;">
                             로그아웃
@@ -40,7 +42,11 @@ export default {
 
     methods : {
         logout(){
-            this.$store.dispatch( "user/logout" );
+            const vm = this;
+            this.$store.dispatch( "user/logout" ).then(() => {
+                console.log( "로그아웃!" );
+                vm.$router.push( "/login" );
+            });
         }
     }
 }

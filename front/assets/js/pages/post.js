@@ -47,12 +47,13 @@ export default {
         ...mapState( "post", [ 
             "list",
             "title", 
-            "description", 
+            "content", 
             "images", 
             "hashtags" ]),
     },
 
     mounted(){
+        console.log( this.hashtags );
         let vm = this;
         window.onload = async () => {
 
@@ -154,9 +155,5 @@ export default {
         swiperSlideClick( $index ){
             this.markerClick( $index );
         },
-
-        hashtagClick( $index ){
-            console.log( this.hashtags[ $index ] );
-        }
     }
 }

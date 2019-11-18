@@ -15,6 +15,10 @@ module.exports = () => {
             const exUser = await db.User.findOne({
                 where : { email }
             });
+
+            console.log( "==================" );
+            console.log( email );
+            console.log( "==================" );
     
             if( !exUser ){
                 // 에러, 성공, 실패

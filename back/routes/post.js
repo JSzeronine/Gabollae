@@ -115,6 +115,14 @@ router.get( "/user/:id", async ( req, res, next ) => {
                 UserId : req.params.id
             },
 
+            include : [{
+                model : db.User,
+                attributes : [
+                    "id",
+                    "nickname",
+                ]
+            }],
+
             attributes : [ "id", "src", "title", "content" ]
         });
 
@@ -173,5 +181,41 @@ router.get( "/:id", async ( req, res, next ) => {
         next( error );
     }
 });
+
+
+router.get( "/hashtag/:tag", async ( req, res, next ) => {
+
+    console.log( req.params.id );
+
+    try{
+        hashtag = await db.Hashtag.findOne({
+            where : {
+                content : decodeURIComponent( req.params.tag ),
+            },
+
+            include:[{
+                model : db.Post,
+                attributes : [ "id", "title", "content", "src" ],
+
+                include : [{
+                    model : db.User,
+                    attributes : [
+                        "photo",
+                        "nickname",
+                        "id",
+                    ]
+                }]
+            }]
+        });
+
+        return res.status( 201 ).json( hashtag );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+
+
+})
 
 module.exports = router;

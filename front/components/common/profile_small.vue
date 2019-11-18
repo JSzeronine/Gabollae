@@ -1,7 +1,7 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : 'url(' + me.photo + ')'}"></a>
+            <a href="javascript:;" :style="{ backgroundImage : `url( http://localhost:3085/${ me.photo })` }"></a>
         </div>
         <div class="intro-bx">
             <div class="nickname">
@@ -24,6 +24,10 @@
     import { mapState } from "vuex";
 
     export default {
+        props : {
+            me : Object,
+        },
+
         data(){
             return{
 
@@ -31,8 +35,8 @@
         },
 
         computed : {
-            ...mapState( "user", [ 
-                "me" ])
+            // ...mapState( "user", [ 
+            //     "me" ])
         },
 
         mounted(){

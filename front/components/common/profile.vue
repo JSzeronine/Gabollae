@@ -1,19 +1,19 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <a v-if="other.photo" href="javascript:;" :style="{ backgroundImage : 'url(http://localhost:3085/' + other.photo + ')'}"></a>
+            <router-link v-if="other.photo" :to="`/user/${ other.id }`" :style="{ backgroundImage : 'url(http://localhost:3085/' + other.photo + ')'}">
+            </router-link>
         </div>
         <div class="intro-bx">
             <div class="nickname">
-                <a href="javascript:;">
+                <router-link :to="`/user/${ other.id }`">
                     {{ other.nickname }}
                     <span class="follow-value">
                         가이드 <span class="follow-count">9999+</span>
                     </span>
-                </a>
-
+                </router-link>
             </div>
-            <div class="intro" v-html="other.intro"></div>
+            <div class="intro" v-html="other.intro.replace(/(\n|\r\n)/g, '<br>')"></div>
             <div class="follow">
                 <a class="btn" href="javascript:;">여행 가이드 등록</a>
             </div>

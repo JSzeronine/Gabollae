@@ -15,12 +15,12 @@
                         {{ info.content }}
                     </dd>
                     <dd class="user">
-                        <a href="javascript:;">
-                            제로나인
+                        <router-link :to="`/user/${ info.User.id }`">
+                            {{ info.User.nickname }}
                             <span class="follow-value">
                                 가이드 <span class="follow-count">9999+</span>
                             </span>
-                        </a>
+                        </router-link>
                     </dd>
                     <dd class="like">
                         가볼래 <span>9999+</span>
@@ -34,13 +34,17 @@
 <script>
 export default {
     props : {
-        info : Object
+        info : Object,
     },
 
     data(){
         return{
 
         }
+    },
+
+    computed : {
+
     },
 
     mounted(){
@@ -63,7 +67,7 @@ export default {
                     dd{
                         white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px;
                         &.content{ font-size: 13px;
-                            height: 34px; white-space: normal; 
+                            height: 30px; white-space: normal; 
                             word-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
                         }
 

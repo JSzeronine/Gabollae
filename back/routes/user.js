@@ -8,6 +8,46 @@ const multer = require( "multer" );
 const fs = require( "fs" );
 const router = express.Router();
 
+
+router.get( "/", ( req, res, next ) => {
+    const user = req.user;
+    res.json( user );
+});
+
+router.get( "/:id", async ( req, res, next ) => {
+    try{
+        const other = await db.User.findOne({
+            where : {
+                id : req.params.id,
+            },
+
+            include : [{
+                model : db.Post,
+                as : "Posts",
+                attributes : [
+                    "id",
+                    "title",
+                    "content",
+                    "src"
+                ]
+            }],
+
+            attributes : [
+                "nickname",
+                "intro",
+                "photo",
+                "id"
+            ]
+        });
+
+        res.json( other );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
 const upload = multer({
     storage : multer.diskStorage({
         destination( req, file, done ){
@@ -40,7 +80,11 @@ router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) 
         const user = await db.User.findOne({
             where : {
                 id : req.user.id
-            }
+            },
+
+            attributes : [
+                "photo"
+            ]
         });
 
         res.send( user );
@@ -48,11 +92,6 @@ router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) 
         console.error( error );
         next( error );
     }
-});
-
-router.get( "/", ( req, res, next ) => {
-    const user = req.user;
-    res.json( user );
 });
 
 router.post( "/infochange", async ( req, res, next ) => {
@@ -82,7 +121,6 @@ router.post( "/infochange", async ( req, res, next ) => {
 
 router.post( "/signup", async ( req, res, next ) => {
     try{
-
         const exUser = await db.User.findOne({
             where : {
                 email : req.body.email
@@ -137,7 +175,11 @@ router.post( "/login", ( req, res, next ) => {
                 return next( error );
             }
 
-            return res.json( user );
+            const fullUser = await db.User.findOne({
+                where : { id : user.id },
+            });
+
+            return res.json( fullUser );
         });
 
     })( req, res, next );

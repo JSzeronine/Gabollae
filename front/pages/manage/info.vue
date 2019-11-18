@@ -3,7 +3,7 @@
         <div v-if="me" class="manage-info">
             <div class="profile-photo-bx">
 
-                <div v-if="me.photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + me.photo + ')' }"></div>
+                <div v-if="photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + photo + ')' }"></div>
                 <div v-else class="profile-photo">
                 </div>
 
@@ -16,7 +16,7 @@
 
             <div class="profile-text">
                 <h2>소개</h2>
-                <textarea v-model="me.intro" name="" id="" cols="30" rows="10">
+                <textarea v-model="intro" name="" id="" cols="30" rows="10">
                 </textarea>
             </div>
 
@@ -45,13 +45,14 @@ import Find from "@/plugins/find";
 export default {
     data(){
         return{
-
+            photo : null,
+            intro : null
         }
     },
 
     layout : "manage",
     components : {
-        Profile
+        Profile,
     },
 
     computed : {
@@ -60,12 +61,15 @@ export default {
                 return this.$router.push( "/login" );
             }
 
-            return { ...this.$store.state.user.me }
+            return this.$store.state.user.me;
         },
     },
 
     mounted(){
+        this.photo = this.me.photo;
+        this.intro = this.me.intro;
 
+        console.log( this.me.email );
     },
 
     methods : {
@@ -80,17 +84,20 @@ export default {
             let img = await Find.getLoadImage( input.files[ 0 ]);
             let data = img.toDataURL( 'image/jpeg', 1 );
 
-            // this.$store.dispatch( "user/photoChange", data );
-
             const imageForData = new FormData();
             imageForData.append( "image", await Find.dataURItoBlob( data ));
 
-            this.$store.dispatch( "user/uploadPhoto", imageForData );
+            vm.photo = await this.$store.dispatch( "user/uploadPhoto", imageForData )
         },
 
         changeUserInfo(){
-            this.$store.dispatch( "user/infoChange", this.me ).then(( result ) => {
+            const vm = this;
+            this.$store.dispatch( "user/infoChange", {
+                id : this.me.id,
+                intro : this.intro
+            }).then(( result ) => {
                 console.log( "변경 완료" );
+                vm.$router.push( `/user/${ this.me.id }` );
             }).catch(( error ) => {
                 console.error( error );
             })

@@ -36,7 +36,11 @@ export default {
             postId : params.id
         });
 
-        return await store.dispatch( "post/loadAllUserPost" )
+        await store.dispatch( "post/loadAllUserPost" );
+
+        return await store.dispatch( "post/loadComment", {
+            postId : params.id
+        });
     },
 
     computed : {
@@ -44,16 +48,40 @@ export default {
             return this.$refs.uploadImgSwiper.swiper;
         },
 
-        ...mapState( "post", [ 
-            "list",
-            "title", 
-            "content", 
-            "images", 
-            "hashtags" ]),
+        me(){
+            return this.$store.state.user.me;
+        },
+
+        other(){
+            return this.$store.state.post.content.User;
+        },
+
+        list(){
+            return this.$store.state.post.list;
+        },
+
+        post(){
+            return this.$store.state.post.content;
+        },
+
+        liked(){
+            return ( this.post.Likers || []).find( v => v.id === this.me.id );
+        },
+
+        likeText(){
+            let txt = "좋아요";
+            if( this.liked ) txt = "좋아요 취소";
+
+            return txt;
+        },
+
+        getTotalLikes(){
+            return this.post.Likers.length || 0;
+        }
     },
 
     mounted(){
-        console.log( this.hashtags );
+        console.log( this.post );
         let vm = this;
         window.onload = async () => {
 
@@ -72,6 +100,23 @@ export default {
     },
 
     methods : {
+        clickLike(){
+            if( !this.me ){
+                alert( "로그인 해주세요." );
+                return;
+            }
+
+            if( this.liked ){
+                this.$store.dispatch( "post/unlike", {
+                    postId : this.post.id
+               });
+            }else{
+                this.$store.dispatch( "post/like", {
+                    postId : this.post.id
+               });
+            }
+        },
+
         messageChange( $index ){
             this.showInfoWindow( $index );
         },
@@ -80,8 +125,8 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.images[ $index ].lat && this.images[ $index ].lng ){
-                this.map.panTo({ lat : this.images[ $index ].lat, lng : this.images[ $index ].lng });
+            if( this.post.Images[ $index ].lat && this.post.Images[ $index ].lng ){
+                this.map.panTo({ lat : this.post.Images[ $index ].lat, lng : this.post.Images[ $index ].lng });
 
                 this.markersList.forEach(( $item, $i ) => {
                     if( $index == $i ){
@@ -100,20 +145,20 @@ export default {
 
         dragMapComplete(){
             let vm = this;
-            let len = vm.images.length;
+            let len = vm.post.Images.length;
             let marker;
             let emoticon;
             for( let i = 0; i<len; i++ )
             {
                 marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( this.images[ i ].lat, this.images[ i ].lng ),
+                    position : new google.maps.LatLng( this.post.Images[ i ].lat, this.post.Images[ i ].lng ),
                     map : vm.map,
                 });
 
-                emoticon = this.images[ i ].emoticon;
+                emoticon = this.post.Images[ i ].emoticon;
 
                 if( emoticon ){
-                    marker.setIcon( '/images/emoticons/' + this.images[ i ].emoticon );
+                    marker.setIcon( '/images/emoticons/' + this.post.Images[ i ].emoticon );
                 }
 
                 this.markersList.push( marker );
@@ -132,7 +177,7 @@ export default {
 
         showInfoWindow( $index ){
             let marker = this.markersList[ $index ];
-            let message = this.images[ $index ].message;
+            let message = this.post.Images[ $index ].message;
 
             if( message ){
                 let messageTag = '<div class="info-window-style">';

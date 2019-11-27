@@ -7,6 +7,13 @@ export default class Find{
         return $parent.querySelectorAll( $className )[ 0 ];
     }
 
+    // 이메일 유효검사
+    static getCheckEmail(str) {
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (regExp.test(str)) return true;
+        else return false;
+    }
+
     static getMapPosition( $file ){
         return new Promise(( resolve, reject ) => {
             let file = $file;

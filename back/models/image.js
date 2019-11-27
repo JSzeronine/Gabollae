@@ -12,22 +12,22 @@ module.exports = ( sequelize, DataTypes ) => {
 
         message : {
             type : DataTypes.TEXT,
-            allowNull : false,
+            allowNull : true,
         },
 
         emoticon : {
             type : DataTypes.STRING( 200 ),
-            allowNull : false,
+            allowNull : true,
         },
 
         lat : {
             type : DataTypes.DOUBLE,
-            allowNull : false,
+            allowNull : true,
         },
 
         lng : {
             type : DataTypes.DOUBLE,
-            allowNull : false,
+            allowNull : true,
         }
 
     }, {

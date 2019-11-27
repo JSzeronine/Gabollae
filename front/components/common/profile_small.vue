@@ -1,20 +1,20 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : `url( http://localhost:3085/${ me.photo })` }"></a>
+            <a href="javascript:;" :style="{ backgroundImage : `url( http://localhost:3085/${ other.photo })` }"></a>
         </div>
         <div class="intro-bx">
             <div class="nickname">
-                <a href="javascript:;">
-                    {{ me.nickname }}
+                <router-link to="">
+                    <span>{{ other.nickname }}</span>
                     <span class="follow-value">
-                        가이드 <span class="follow-count">9999+</span>
+                        가이드 <span class="follow-count">{{ `: ${ totalGuider }명` }}</span>
                     </span>
-                </a>
-
+                </router-link>
             </div>
             <div class="follow">
-                <a class="btn" href="javascript:;">여행 가이드 등록</a>
+                <a v-if="onGuide" class="btn" @click="clickGuide" href="javascript:;">가이드 등록</a>
+                <a v-if="onUnGuide" class="btn" @click="clickUnGuide" href="javascript:;">가이드 끊기</a>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
 
     export default {
         props : {
-            me : Object,
+            other : Object,
         },
 
         data(){
@@ -35,18 +35,45 @@
         },
 
         computed : {
-            // ...mapState( "user", [ 
-            //     "me" ])
+            me(){
+                return this.$store.state.user.me;
+            },
+
+            onGuide(){
+                return this.me && this.me.id !== this.other.id && !this.me.Guiding.find( v => v.id === this.other.id );
+            },
+
+            onUnGuide(){
+                return this.me && this.me.id !== this.other.id && this.me.Guiding.find( v => v.id === this.other.id );
+            },
+
+            totalGuider(){
+                return this.other.Guider.length;
+            }
         },
 
         mounted(){
+            
+        },
 
+        methods : {
+            clickGuide(){
+                this.$store.dispatch( "user/guide", {
+                    userId : this.other.id
+                });
+            },
+
+            clickUnGuide(){
+                this.$store.dispatch( "user/unguide", {
+                    userId : this.other.id
+                });
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .profile{ overflow: hidden;
+    .profile{ overflow: hidden; min-height: 70px; height: 100%;
         .photo{ margin-right: 10px; position: absolute;
             a{ 
                 display: inline-block;
@@ -61,6 +88,7 @@
                     .follow-value{ font-size: 13px; color: #0d0d0d; }
                 }
             }
+
             .follow{ font-size: 13px; }
         }
     }

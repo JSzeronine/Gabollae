@@ -8,14 +8,9 @@
 
                 <div class="list-bx">
                     <ul>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
+                        <li v-for="( item, index ) in list" :key="index">
+                            <TravelList :mode="postMode" :info="item" :user="item.User" />
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -33,9 +28,33 @@ export default {
     layout : "manage",
     data(){
         return{
-
+            postMode : "revision"
         }
     },
+
+    fetch({ store }){
+        return store.dispatch( "post/loadAllMyPost", {
+            userId : store.state.user.me.id
+        });
+    },
+
+    computed : {
+        me(){
+            if( !this.$store.state.user.me ){
+                return this.$router.push( "/login" );
+            }
+
+            return this.$store.state.user.me;
+        },
+
+        list(){
+            return this.$store.state.post.list;
+        }
+    },
+
+    mounted(){
+
+    }
 }
 </script>
 

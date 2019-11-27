@@ -17,13 +17,10 @@
                     <dd class="user">
                         <router-link :to="`/user/${ info.User.id }`">
                             {{ info.User.nickname }}
-                            <span class="follow-value">
-                                가이드 <span class="follow-count">9999+</span>
-                            </span>
                         </router-link>
                     </dd>
                     <dd class="like">
-                        가볼래 <span>9999+</span>
+                        좋아요 <span>{{ getTotalLikes }}</span>
                     </dd>
                 </dl>
             </div>
@@ -44,7 +41,9 @@ export default {
     },
 
     computed : {
-
+        getTotalLikes(){
+            return this.info.Likers.length || 0;
+        }
     },
 
     mounted(){

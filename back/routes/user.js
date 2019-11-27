@@ -29,7 +29,21 @@ router.get( "/:id", async ( req, res, next ) => {
                     "title",
                     "content",
                     "src"
-                ]
+                ],
+
+                include : [{
+                    model : db.User,
+                    as : "Likers",
+                    attributes : [ "id" ]
+                }]
+            }, {
+                model : db.User,
+                as : "Guiding",
+                attributes : [ "id" ]
+            }, {
+                model : db.User,
+                as : "Guider",
+                attributes : [ "id" ]
             }],
 
             attributes : [
@@ -108,7 +122,17 @@ router.post( "/infochange", async ( req, res, next ) => {
         const user = await db.User.findOne({
             where : {
                 id : req.body.id
-            }
+            },
+
+            include : [{
+                model : db.User,
+                as : "Guiding",
+                attributes : [ "id" ],
+            }, {
+                model : db.User,
+                as : "Guider",
+                attributes : [ "id" ]
+            }]
         });
 
         res.json( user );
@@ -176,7 +200,23 @@ router.post( "/login", ( req, res, next ) => {
             }
 
             const fullUser = await db.User.findOne({
-                where : { id : user.id },
+                where : { 
+                    id : user.id 
+                },
+
+                include : [{
+                    model : db.User,
+                    as : "Guiding",
+                    attributes : [ "id" ]
+                }, {
+                    model : db.User,
+                    as : "Guider",
+                    attributes : [ "id" ]
+                }],
+
+                attributes : [
+                    "birth", "id", "intro", "nickname", "photo"
+                ]
             });
 
             return res.json( fullUser );
@@ -192,5 +232,101 @@ router.post( "/logout", ( req, res, next ) => {
         return res.status( 200 ).send( "로그아웃 되었습니다." );
     }
 });
+
+router.post( "/:id/guide", async ( req, res, next ) => {
+    try{
+
+        const user = await db.User.findOne({
+            where : {
+                id : req.user.id
+            }
+        });
+
+        await user.addGuiding( req.params.id );
+        res.send( req.params.id );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.delete( "/:id/unguide", async ( req, res, next ) => {
+    try{
+        const user = await db.User.findOne({
+            where : {
+                id : req.user.id
+            }
+        });
+
+        await user.removeGuiding( req.params.id );
+        res.send( req.params.id );
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.delete( "/:id/unguider", async ( req, res, next ) => {
+    try{
+        const user = await db.User.findOne({
+            where : {
+                id : req.user.id
+            }
+        });
+
+        await user.removeGuider( req.params.id );
+        res.send( req.params.id );
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.get( "/:id/guidings", async ( req, res, next ) => {
+    try{
+        const user = await db.User.findOne({
+            where : {
+                id : req.params.id
+            }
+        });
+
+        const guidings = await user.getGuiding({
+            attributes : [
+                "id", "nickname", "photo"
+            ]
+        });
+
+        res.json( guidings );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.get( "/:id/guiders", async ( req, res, next ) => {
+
+    try{
+        const user = await db.User.findOne({
+            where : {
+                id : req.params.id
+            }
+        });
+
+        const guiders = await user.getGuider({
+            attributes : [
+                "id", "nickname", "photo"
+            ]
+        });
+
+        res.json( guiders );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
 
 module.exports = router;

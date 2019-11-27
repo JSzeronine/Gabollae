@@ -1,5 +1,4 @@
 import Find from "@/plugins/find";
-
 export default {
     components : {
         
@@ -7,9 +6,6 @@ export default {
 
     data(){
         return{
-            title : "",
-            content : "",
-            message : "",
             hashTag : "",
             emoticons : [
                 '1_01.gif',
@@ -38,12 +34,8 @@ export default {
                 }
             },
 
-            mapCenter : { lat : 37.555184, lng : 126.970780 },
-            images : [
-                // { src : require( "@/assets/images/maps3/IMG_0134.JPG" ), w:450, message : "" }
-            ],
-
             markersPosition : [],
+            mapCenter : { lat : 37.555184, lng : 126.970780 },
             map : null,
             markersList : [],
             isMapLoad : false,
@@ -52,26 +44,40 @@ export default {
         }
     },
 
+    async fetch({ store, params}){
+        return await store.dispatch( "post/loadPost", {
+            postId : params.id
+        });
+    },
+
+    created(){
+
+    },
+
     computed : {
-        me(){
-            if( !this.$store.state.user.me ){
-                return this.$router.push( "/login" );
-            }
-
-            return { ...this.$store.state.user.me }
-        },
-
         swiper(){
             return this.$refs.uploadImgSwiper.swiper;
-        }
+        },
+
+        me(){
+            return this.$store.state.user.me;
+        },
+
+        other(){
+            return this.$store.state.post.content.User;
+        },
+
+        list(){
+            return this.$store.state.post.list;
+        },
+
+        post(){
+            return this.$store.state.post.content;
+        },
     },
 
     mounted(){
         let vm = this;
-        window.onload = async () => {
-            
-        }
-
         this.$refs.mapRef.$mapPromise.then(( $map ) => {
             vm.map = $map;
             vm.infoWindow = new google.maps.InfoWindow({
@@ -79,11 +85,9 @@ export default {
             });
 
             vm.isMapLoad = true;
+            vm.dragMapComplete();
+            vm.showHashtags();
         });
-    },
-
-    beforeDestroy(){
-
     },
 
     methods : {
@@ -96,17 +100,14 @@ export default {
 
         nextMove( $index ){
             let nextIndex = $index + 1;
-            if( nextIndex == this.images.length ) return;
+            if( nextIndex == this.post.Images.length ) return;
 
             this.moveImage( nextIndex, $index );
         },
 
         moveImage( $newIndex, $oldIndex ){
-            let image = this.images.splice( $oldIndex, 1 );
-            this.images.splice( $newIndex, 0, image[ 0 ] );
-
-            let position = this.markersPosition.splice( $oldIndex, 1 );
-            this.markersPosition.splice( $newIndex, 0, position[ 0 ] );
+            let image = this.post.Images.splice( $oldIndex, 1 );
+            this.post.Images.splice( $newIndex, 0, image[ 0 ] );
 
             let marker = this.markersList.splice( $oldIndex, 1 );
             this.markersList.splice( $newIndex, 0, marker[ 0 ] );
@@ -114,9 +115,14 @@ export default {
             this.markerClick( $newIndex );
         },
 
+        showHashtags(){
+            this.post.Hashtags.forEach(( v ) => {
+                this.hashTag += `#${ v.content } `;
+            });
+        },
+
         removeClick( $index ){
-            this.images.splice( $index, 1 );
-            this.markersPosition.splice( $index, 1 );
+            this.post.Images.splice( $index, 1 );
 
             this.markersList[ $index ].setMap( null );
             this.markersList.splice( $index, 1 );
@@ -130,10 +136,13 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.markersPosition[ $index ] ){
-                this.map.panTo( this.markersPosition[ $index ]);
+            if( this.post.Images[ $index ] ){
+                this.map.panTo({
+                    lat : this.post.Images[ $index ].lat,
+                    lng : this.post.Images[ $index ].lng
+                });
+
                 this.markersList.forEach(( $item, $i ) => {
-                    
                     if( $index == $i ){
                         $item.setZIndex( 101 );
                         $item.setAnimation( null );
@@ -186,13 +195,13 @@ export default {
                 let imgURL = await this.$store.dispatch( "post/uploadImages", imgFormData );
 
                 imgURL.data.forEach(( $src, $index ) => {
-                    vm.images.push({
+                    vm.post.Images.push({
                         src : $src,
                         w : ws[ $index ],
-                        emoticon : "",
+                        emoticon : null,
                         lat : vm.markersPosition[ $index ].lat,
                         lng : vm.markersPosition[ $index ].lng,
-                        message : "",
+                        message : null,                        
                     });
                 });
 
@@ -204,31 +213,52 @@ export default {
         },
 
         dragMapComplete(){
+            this.initMarker();
+
             let vm = this;
-            let len = this.markersPosition.length;
+            let len = this.post.Images.length;
             let position;
             let marker;
-
+            
             for( let i = 0; i<len; i++ )
             {
-                if( this.markersList[ i ] ) continue;
-
-                position = this.markersPosition[ i ];
-                marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( position.lat, position.lng ),
-                    map : vm.map,
-                });
+                position = this.post.Images[ i ];
+                marker = this.createMarker( position.lat, position.lng, this.post.Images[ i ].emoticon );
 
                 this.markersList.push( marker );
                 marker.addListener( "click", function( $e ){
                     vm.markerClick( i );
                 });
             }
+
+            vm.showInfoWindow( vm.slideIndex );
+        },
+
+        createMarker( $lat, $lng, $emoticon ){
+            let icon = null;
+            if( $emoticon ) icon = `/images/emoticons/${ $emoticon }`;
+
+            let marker = new google.maps.Marker({
+                position : new google.maps.LatLng( $lat, $lng ),
+                map : this.map,
+                icon : icon
+            });
+
+            return marker;
+        },
+
+        initMarker()
+        {
+            this.markersList.forEach(( $marker ) => {
+                $marker.setMap( null );
+            });
+
+            this.markersList.length = 0;
         },
 
         showInfoWindow( $index ){
             let marker = this.markersList[ $index ];
-            let message = this.images[ $index ].message;
+            let message = this.post.Images[ $index ].message;
 
             if( message ){
 
@@ -249,62 +279,37 @@ export default {
             this.markerClick( index );
         },
 
-        swiperSlideClick( $index ){
-            this.markerClick( $index );
-        },
-
         emoticonClick( $index ){
             let emoticon = this.emoticons[ $index ];
+            let sIndex = this.slideIndex;
 
-            this.images[ this.slideIndex ].emoticon = emoticon;
-            this.markersList[ this.slideIndex ].setIcon( "/images/emoticons/" + emoticon );
+            this.post.Images[ sIndex ].emoticon = emoticon;
+            this.markersList[ sIndex ].setIcon( `/images/emoticons/${ this.post.Images[ sIndex ].emoticon }` );
         },
 
-        postComplete(){
-            let vm = this;
-            let title = this.title;
-            let images = this.images;
+        revisionClick(){
+            this.post.Hashtags = this.hashTag;
 
-            let content = this.content;
-            let hashTag = this.hashTag;
-
-            this.$store.dispatch( "post/write", { title, images, content, hashTag })
-                .then(( $result ) => {
-                    console.log( "게시글 업로드 완료!" );
-                    console.log( $result );
-
-                    vm.$router.push( "/post/" + $result.data.postId );
-                })
-                .catch(( error ) => {
-                    console.error( error );
-                });
+            this.$store.dispatch( "post/revision", {
+                data : this.post
+            }).then(( $result ) => {
+                alert( $result.data );
+                this.$router.push( `/post/${ this.post.id }` );
+            }).catch(( error ) => {
+                console.error( error );
+            })
         },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        removePostClick(){
+            this.$store.dispatch( "post/remove", {
+                postId : this.post.id
+            }).then(( $result ) => {
+                alert( $result.data );
+                this.$router.push( "/" );
+            }).catch(( error ) => {
+                console.error( error );
+            })
+        },
 
         // 길찾기[ 그닥 쓰고 싶진 않지만..일단 갖고 있자 ]
         onComplete(){

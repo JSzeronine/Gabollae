@@ -11,23 +11,6 @@
                         <li v-for="( item, index ) in list" :key="index">
                             <TravelList :info="item" :user="item.User" />
                         </li>
-
-                        <!-- <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li>
-                        <li><TravelList /></li> -->
                     </ul>
                 </div>
             </div>
@@ -59,7 +42,7 @@ export default {
     },
 
     mounted(){
-        console.log( this.list );
+        
     }
     
 }

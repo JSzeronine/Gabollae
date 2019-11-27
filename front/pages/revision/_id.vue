@@ -6,7 +6,7 @@
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postwriteSwiper="postwriteSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
-                                <div class="swiper-slide image-view-list" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <div class="swiper-slide image-view-list" v-for="( image, index ) in post.Images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
                                             <div class="editor-bx">
@@ -30,7 +30,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="img-view" :style="{ backgroundImage : 'url( http://localhost:3085/' + image.src +  ')'}">
+                                    <div class="img-view" :style="{ backgroundImage : `url( http://localhost:3085/${ image.src })`}">
                                         <!-- <img :src="image.src" alt=""> -->
                                     </div>
                                 </div>
@@ -55,15 +55,15 @@
 
                     <div class="postwrite-write-bx">
                         <div class="postwrite-title">
-                            <input type="text" v-model="title" placeholder="제목을 입력해주세요.">
+                            <input type="text" v-model="post.title" placeholder="제목을 입력해주세요.">
                         </div>
 
                         <div class="postwrite-description">
-                            <textarea v-model="content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
+                            <textarea v-model="post.content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
                         </div>
 
                         <div class="hash-tag-bx">
-                            <input v-model="hashTag" type="text" placeholder="#강릉 #바다 #여행리뷰">
+                            <input type="text" v-model="hashTag" placeholder="#강릉 #바다 #여행리뷰">
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             <ul class="map-option__emoticon">
                                 <li class="map-option__emoticon-list" v-for="( emoticon, index ) in emoticons" :key="index">
                                     <a href="javascript:;" @click="emoticonClick( index )">
-                                        <img :src="'/images/emoticons/' + emoticon" alt="">
+                                        <img :src="`/images/emoticons/${ emoticon }`" alt="">
                                     </a>
                                 </li>
                             </ul>
@@ -95,12 +95,13 @@
 
             <div class="postwrite-complete">
                 <div>
-                    <a @click="postComplete" class="btn-complete" href="javascript:;">입력 완료</a>
+                    <a class="btn-complete" href="javascript:;" @click="revisionClick">수정 완료</a>
+                    <a class="btn-complete" href="javascript:;" @click="removePostClick">삭제</a>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script src="@/assets/js/pages/postwrite.js"></script>
-<style lang="scss" src="@/assets/scss/pages/postwrite.scss"></style>
+<script src="@/assets/js/pages/revision.js"></script>
+<style lang="scss" src="@/assets/scss/pages/revision.scss"></style>

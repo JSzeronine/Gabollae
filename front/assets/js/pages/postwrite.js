@@ -89,8 +89,6 @@ export default {
 
     methods : {
         viewChange( $index ){
-            console.log( $index );
-            
             let data = this.images[ $index ];
             let marker = this.markersList[ $index ];
             
@@ -244,6 +242,11 @@ export default {
         },
 
         showInfoWindow( $index ){
+            if( !this.images[ $index ].view ){
+                this.infoWindow.close();
+                return;
+            }
+
             let marker = this.markersList[ $index ];
             let message = this.images[ $index ].message;
 

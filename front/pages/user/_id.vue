@@ -1,7 +1,7 @@
 <template>
     <div class="user-bx">
         <div class="user-visual">
-            <!-- <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div> -->
+            <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
             <ProfileSmall :other="other" />
         </div>
 

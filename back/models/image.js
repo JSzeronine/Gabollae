@@ -28,6 +28,11 @@ module.exports = ( sequelize, DataTypes ) => {
         lng : {
             type : DataTypes.DOUBLE,
             allowNull : true,
+        },
+
+        view : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false
         }
 
     }, {

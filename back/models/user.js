@@ -6,6 +6,11 @@ module.exports = ( sequelize, DataTypes ) => {
             unique : true
         },
 
+        visual : {
+            type : DataTypes.STRING( 200 ),
+            allowNull : true,
+        },
+
         photo : {
             type : DataTypes.STRING( 200 ),
             allowNull : true,

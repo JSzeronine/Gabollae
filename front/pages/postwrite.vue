@@ -15,6 +15,15 @@
                                                 </div>
                                                 <div class="emoticon-bx">
                                                     <img v-if="image.emoticon" :src="`/images/emoticons/${ image.emoticon }`" alt="">
+
+                                                    <div class="agree-check">
+                                                        <input type="checkbox" @change="viewChange( index )" :id="`checkbx-id-${ index }`" v-model="image.view">
+                                                        <label :for="`checkbx-id-${ index }`">
+                                                            <span class="icon-checkbx"></span>
+                                                            <span class="text-checkbx">위치 숨기기</span>
+                                                        </label>
+                                                    </div>
+
                                                 </div>
                                             </div>
 
@@ -22,11 +31,12 @@
                                                 <a class="prev-move btn" @click="prevMove( index )" href="javascript:;">뒤로</a>
                                                 <a class="next-move btn" @click="nextMove( index )" href="javascript:;">앞으로</a>
                                             </div>
+
+
                                         </div>
 
                                         <div class="message-bx">
                                             <textarea v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
-                                            <!-- <input v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기"> -->
                                         </div>
                                     </div>
 

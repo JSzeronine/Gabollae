@@ -59,6 +59,7 @@ router.post( "/write", async ( req, res, next ) => {
                         lat : image.lat,
                         lng : image.lng,
                         message : image.message,
+                        view : image.view,
                         PostId : newPost.id
                     })
                 }));
@@ -70,6 +71,7 @@ router.post( "/write", async ( req, res, next ) => {
                     lat : image.lat,
                     lng : image.lng,
                     message : image.message,
+                    view : image.view,
                     PostId : newPost.id
                 });
             }
@@ -258,6 +260,7 @@ router.get( "/:id", async ( req, res, next ) => {
                     "w",
                     "message",
                     "emoticon",
+                    "view",
                     "lat",
                     "lng"
                 ],
@@ -457,6 +460,7 @@ router.post( "/:id/revision", async ( req, res, next ) => {
                         emoticon : image.emoticon,
                         lat : image.lat,
                         lng : image.lng,
+                        view : image.view,
                         message : image.message,
                         PostId : post.id
                     })
@@ -468,6 +472,7 @@ router.post( "/:id/revision", async ( req, res, next ) => {
                     emoticon : image.emoticon,
                     lat : image.lat,
                     lng : image.lng,
+                    view : image.view,
                     message : image.message,
                     PostId : post.id
                 });

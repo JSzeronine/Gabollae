@@ -146,25 +146,31 @@ export default {
         dragMapComplete(){
             let vm = this;
             let len = vm.post.Images.length;
-            let marker;
+            let marker = null;
             let emoticon;
+            let image;
             for( let i = 0; i<len; i++ )
             {
-                marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( this.post.Images[ i ].lat, this.post.Images[ i ].lng ),
-                    map : vm.map,
-                });
+                image = this.post.Images[ i ];
 
-                emoticon = this.post.Images[ i ].emoticon;
-
-                if( emoticon ){
-                    marker.setIcon( '/images/emoticons/' + this.post.Images[ i ].emoticon );
+                if( image.view ){
+                    marker = new google.maps.Marker({
+                        position : new google.maps.LatLng( image.lat, image.lng ),
+                        map : vm.map,
+                    });
+    
+                    emoticon = image.emoticon;
+    
+                    if( emoticon ){
+                        marker.setIcon( '/images/emoticons/' + image.emoticon );
+                    }
+    
+                    marker.addListener( "click", function( $e ){
+                        vm.markerClick( i );
+                    });
                 }
 
                 this.markersList.push( marker );
-                marker.addListener( "click", function( $e ){
-                    vm.markerClick( i );
-                });
             }
 
             //     let bounds0 = new google.maps.LatLngBounds( new google.maps.LatLng( this.images[ $index ].position.lat, this.images[ $index ].position.lng ) );
@@ -180,9 +186,10 @@ export default {
             let message = this.post.Images[ $index ].message;
 
             if( message ){
-                let messageTag = '<div class="info-window-style">';
-                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '<br />');
-                messageTag += '</div>';
+                let messageTag = '<pre class="info-window-style">';
+                message = message.replace("<", "&lt;");
+                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '\n');
+                messageTag += '</pre>';
 
                 this.infoWindow.setContent( messageTag );
                 this.infoWindow.open( this.map, marker );

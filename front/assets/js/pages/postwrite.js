@@ -12,6 +12,7 @@ export default {
             message : "",
             hashTag : "",
             emoticons : [
+                'default.png',
                 '1_01.gif',
                 '1_02.gif',
                 '1_03.gif',
@@ -87,6 +88,15 @@ export default {
     },
 
     methods : {
+        viewChange( $index ){
+            console.log( $index );
+            
+            let data = this.images[ $index ];
+            let marker = this.markersList[ $index ];
+            
+            ( data.view ) ? marker.setMap( this.map ) : marker.setMap( null );
+        },
+
         prevMove( $index ){
             let prevIndex = $index - 1;
             if( prevIndex < 0 ) return;
@@ -170,11 +180,16 @@ export default {
                 let img;
                 let imgFormData = new FormData();
                 let ws = [];
+                let position;
+                let positionFirst;
 
                 for( i; i<len; i++ )
                 {
                     file = list[ i ];
-                    vm.markersPosition.push( await Find.getMapPosition( file ));
+                    position = await Find.getMapPosition( file )
+                    vm.markersPosition.push( position );
+
+                    if( i == 0 ) positionFirst = position;
 
                     img = await Find.getLoadImage( file );
                     ws.push( img.width );
@@ -189,14 +204,15 @@ export default {
                     vm.images.push({
                         src : $src,
                         w : ws[ $index ],
-                        emoticon : "",
+                        emoticon : "default.png",
                         lat : vm.markersPosition[ $index ].lat,
                         lng : vm.markersPosition[ $index ].lng,
                         message : "",
+                        view : true
                     });
                 });
 
-                vm.mapCenter = vm.markersPosition[ 0 ];
+                vm.mapCenter = positionFirst;
 
                 vm.postwriteSwiper.update();
                 vm.dragMapComplete();
@@ -217,6 +233,7 @@ export default {
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( position.lat, position.lng ),
                     map : vm.map,
+                    icon : `/images/emoticons/${ vm.images[ i ].emoticon }`
                 });
 
                 this.markersList.push( marker );
@@ -232,9 +249,10 @@ export default {
 
             if( message ){
 
-                let messageTag = '<div class="info-window-style">';
-                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '<br />');
-                messageTag += '</div>';
+                let messageTag = '<pre class="info-window-style">';
+                message = message.replace("<", "&lt;");
+                messageTag += message.replace(/(?:\r\n|\r|\n)/g, '\n');
+                messageTag += '</pre>';
 
                 this.infoWindow.setContent( messageTag );
                 this.infoWindow.open( this.map, marker );

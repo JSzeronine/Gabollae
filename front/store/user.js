@@ -81,9 +81,10 @@ export const actions = {
             }, {
                 withCredentials : true
             }).then(( $result ) => {
+                console.log( $result );
                 resolve();
             }).catch(( error ) => {
-                console.error( error );
+                console.error( error.message );
             });
         })
     },

@@ -125,17 +125,32 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.post.Images[ $index ].lat && this.post.Images[ $index ].lng ){
-                this.map.panTo({ lat : this.post.Images[ $index ].lat, lng : this.post.Images[ $index ].lng });
+            var imageData = this.post.Images[ $index ];
+
+            if( !imageData.view || !imageData.marker ){
+                this.infoWindow.close();
+                this.markersList.forEach(( $item ) => {
+                    $item.setOpacity( 0.3 );
+                });
+
+                return;
+            }
+
+            if( imageData.view ){
+                this.map.panTo({ lat : imageData.lat, lng : imageData.lng });
 
                 this.markersList.forEach(( $item, $i ) => {
-                    if( $index == $i ){
-                        $item.setZIndex( 101 );
-                        $item.setAnimation( null );
-                        $item.setAnimation( google.maps.Animation.BOUNCE );
-                    }else{
-                        $item.setZIndex( 100 );
-                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                    if( $item ){
+                        if( $index == $i ){
+                            $item.setZIndex( 101 );
+                            $item.setOpacity( 1 );
+                            $item.setAnimation( null );
+                            $item.setAnimation( google.maps.Animation.BOUNCE );
+                        }else{
+                            $item.setZIndex( 100 );
+                            $item.setOpacity( 0.2 );
+                            if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                        }
                     }
                 });
     
@@ -153,22 +168,20 @@ export default {
             {
                 image = this.post.Images[ i ];
 
-                if( image.view ){
-                    marker = new google.maps.Marker({
-                        position : new google.maps.LatLng( image.lat, image.lng ),
-                        map : vm.map,
-                    });
-    
-                    emoticon = image.emoticon;
-    
-                    if( emoticon ){
-                        marker.setIcon( '/images/emoticons/' + image.emoticon );
-                    }
-    
-                    marker.addListener( "click", function( $e ){
-                        vm.markerClick( i );
-                    });
+                marker = new google.maps.Marker({
+                    position : new google.maps.LatLng( image.lat, image.lng ),
+                    map : vm.map,
+                });
+
+                emoticon = image.emoticon;
+
+                if( emoticon ){
+                    marker.setIcon( '/images/emoticons/' + image.emoticon );
                 }
+
+                marker.addListener( "click", function( $e ){
+                    vm.markerClick( i );
+                });
 
                 this.markersList.push( marker );
             }

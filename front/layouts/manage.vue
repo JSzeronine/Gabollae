@@ -23,7 +23,12 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import Header from '@/components/header';
+    import Global from '@/plugins/global';
+
+    Vue.use( Global );
+
     export default {
         components: {
             Header,

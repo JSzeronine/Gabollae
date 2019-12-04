@@ -2,7 +2,7 @@
     <div class="travel-list-item" @mouseenter="mOver" @mouseleave="mOut">
         <div class="img-bx">
             <router-link @click.native="postClick" to="">
-                <div class="photo_travel" :style="{ backgroundImage:`url( http://localhost:3085/${ info.src })` }"></div>
+                <div class="photo_travel" :style="{ backgroundImage:`url( ${ getResourceURL }${ info.src })` }"></div>
                 <div class="photo_map" style="background-image:url( /images/common/map_sample.jpg );"></div>
             </router-link>
         </div>

@@ -33,6 +33,11 @@ module.exports = ( sequelize, DataTypes ) => {
         view : {
             type : DataTypes.BOOLEAN,
             allowNull : false
+        },
+
+        marker : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false
         }
 
     }, {

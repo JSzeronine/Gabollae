@@ -1,7 +1,7 @@
 <template>
     <div class="profile">
         <div class="photo">
-            <router-link v-if="other.photo" :to="`/user/${ other.id }`" :style="{ backgroundImage : 'url(http://localhost:3085/' + other.photo + ')'}"></router-link>
+            <router-link v-if="other.photo" :to="`/user/${ other.id }`" :style="{ backgroundImage : `url(${ getResourceURL }${ other.photo })`}"></router-link>
         </div>
         <div class="intro-bx">
             <div class="nickname">

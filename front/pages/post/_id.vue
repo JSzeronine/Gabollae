@@ -8,12 +8,11 @@
                             <div ref="imgContainer" class="swiper-wrapper">
                                 <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in post.Images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
-                                        <div class="option-bx">
+                                        <div class="option-bx" v-if="image.view">
                                             <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
                                         </div>
                                     </div>
-
-                                    <div class="img-view" :style="{ backgroundImage : 'url(http://localhost:3085/' + image.src + ')'}"></div>
+                                    <div class="img-view" :style="{ backgroundImage : `url(${ getResourceURL }${ image.src  })`}"></div>
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -55,9 +54,6 @@
                                 <router-link :to="`/hashtag/${ tag.content }`">
                                     {{ `#${ tag.content }` }}
                                 </router-link>
-                                <!-- <a @click="hashtagClick( index )" href="javascript:;">
-                                    
-                                </a> -->
                             </li>
                         </ul>
                     </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="following-bx">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : `url( http://localhost:3085/${ other.photo })`}"></a>
+            <a href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })`}"></a>
         </div>
 
         <div class="intro-bx">

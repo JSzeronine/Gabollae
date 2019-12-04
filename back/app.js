@@ -20,6 +20,7 @@ passportConfig();
 
 app.use( morgan( "dev" ) );
 app.use( cors({
+    // origin : "http://10.105.157.58:3080",
     origin : "http://localhost:3080",
     credentials : true,
 }));

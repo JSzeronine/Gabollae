@@ -9,7 +9,6 @@ export default {
         return{
             title : "",
             content : "",
-            message : "",
             hashTag : "",
             emoticons : [
                 'default.png',
@@ -40,9 +39,7 @@ export default {
             },
 
             mapCenter : { lat : 37.555184, lng : 126.970780 },
-            images : [
-                // { src : require( "@/assets/images/maps3/IMG_0134.JPG" ), w:450, message : "" }
-            ],
+            images : [],
 
             markersPosition : [],
             map : null,
@@ -91,8 +88,14 @@ export default {
         viewChange( $index ){
             let data = this.images[ $index ];
             let marker = this.markersList[ $index ];
-            
-            ( data.view ) ? marker.setMap( this.map ) : marker.setMap( null );
+
+            if( data.view ){
+                marker.setVisible( true );
+                this.showInfoWindow( $index );
+            }else{
+                marker.setVisible( false );
+                this.infoWindow.close();
+            }
         },
 
         prevMove( $index ){
@@ -113,9 +116,6 @@ export default {
             let image = this.images.splice( $oldIndex, 1 );
             this.images.splice( $newIndex, 0, image[ 0 ] );
 
-            let position = this.markersPosition.splice( $oldIndex, 1 );
-            this.markersPosition.splice( $newIndex, 0, position[ 0 ] );
-
             let marker = this.markersList.splice( $oldIndex, 1 );
             this.markersList.splice( $newIndex, 0, marker[ 0 ] );
 
@@ -124,7 +124,6 @@ export default {
 
         removeClick( $index ){
             this.images.splice( $index, 1 );
-            this.markersPosition.splice( $index, 1 );
 
             this.markersList[ $index ].setMap( null );
             this.markersList.splice( $index, 1 );
@@ -138,22 +137,39 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.markersPosition[ $index ] ){
-                this.map.panTo( this.markersPosition[ $index ]);
-                this.markersList.forEach(( $item, $i ) => {
-                    
-                    if( $index == $i ){
-                        $item.setZIndex( 101 );
-                        $item.setAnimation( null );
-                        $item.setAnimation( google.maps.Animation.BOUNCE );
-                    }else{
-                        $item.setZIndex( 100 );
-                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
-                    }
+            let imageData = this.images[ $index ];
+
+            if( !imageData ) return;
+
+            if( !imageData.view || !imageData.marker ){
+                this.infoWindow.close();
+                this.markersList.forEach(( $item ) => {
+                    $item.setOpacity( 0.3 );
                 });
-    
-                this.showInfoWindow( $index );
+
+                return;
             }
+
+            this.map.panTo({
+                lat : imageData.lat,
+                lng : imageData.lng
+            });
+
+            this.markersList.forEach(( $item, $i ) => {
+                
+                if( $index == $i ){
+                    $item.setZIndex( 101 );
+                    $item.setOpacity( 1 );
+                    $item.setAnimation( google.maps.Animation.BOUNCE );
+                    $item.visible = true;
+                }else{
+                    $item.setZIndex( 100 );
+                    $item.setOpacity( 0.2 );
+                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                }
+            });
+
+            this.showInfoWindow( $index );
         },
 
         onImageUpload( $e ){
@@ -178,21 +194,20 @@ export default {
                 let img;
                 let imgFormData = new FormData();
                 let ws = [];
-                let position;
-                let positionFirst;
+                let pos;
+                let positions = [];
 
                 for( i; i<len; i++ )
                 {
                     file = list[ i ];
-                    position = await Find.getMapPosition( file )
-                    vm.markersPosition.push( position );
-
-                    if( i == 0 ) positionFirst = position;
+                    pos = await Find.getMapPosition( file );
 
                     img = await Find.getLoadImage( file );
                     ws.push( img.width );
 
-                    let imgData = img.toDataURL( 'image/jpeg', 1 );
+                    positions.push( pos );
+
+                    let imgData = await img.toDataURL( 'image/jpeg', 1 );
                     imgFormData.append( "image", await Find.dataURItoBlob( imgData ));
                 }
 
@@ -203,14 +218,13 @@ export default {
                         src : $src,
                         w : ws[ $index ],
                         emoticon : "default.png",
-                        lat : vm.markersPosition[ $index ].lat,
-                        lng : vm.markersPosition[ $index ].lng,
-                        message : "",
-                        view : true
+                        lat : positions[ $index ].lat,
+                        lng : positions[ $index ].lng,
+                        message : null,
+                        view : ( positions[ $index ].lat ) ? true : false,
+                        marker : ( positions[ $index ].lat ) ? true : false,
                     });
                 });
-
-                vm.mapCenter = positionFirst;
 
                 vm.postwriteSwiper.update();
                 vm.dragMapComplete();
@@ -218,27 +232,36 @@ export default {
         },
 
         dragMapComplete(){
+
             let vm = this;
-            let len = this.markersPosition.length;
-            let position;
+            let len = this.images.length;
             let marker;
+            let isInit = false;
+            let index = 0;
+            let imageData;
 
             for( let i = 0; i<len; i++ )
             {
                 if( this.markersList[ i ] ) continue;
+                if( !isInit ) index = i;
 
-                position = this.markersPosition[ i ];
+                imageData = this.images[ i ];
+
                 marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( position.lat, position.lng ),
+                    position : new google.maps.LatLng( imageData.lat, imageData.lng ),
                     map : vm.map,
-                    icon : `/images/emoticons/${ vm.images[ i ].emoticon }`
+                    icon : `/images/emoticons/${ imageData.emoticon }`
                 });
 
                 this.markersList.push( marker );
                 marker.addListener( "click", function( $e ){
                     vm.markerClick( i );
                 });
+
+                isInit = true;
             }
+
+            this.markerClick( index );
         },
 
         showInfoWindow( $index ){
@@ -283,17 +306,30 @@ export default {
 
         postComplete(){
             let vm = this;
-            let title = this.title;
-            let images = this.images;
 
+            let title = this.title;
             let content = this.content;
             let hashTag = this.hashTag;
+            let images = this.images;
+
+            if( images.length == 0 ){
+                alert( "이미지를 등록해주세요." );
+                return;
+            }
+
+            if( title == "" ){
+                alert( "제목을 입력해주세요." );
+                return;
+            }
+
+            if( content == "" ){
+                alert( "내용을 입력해주세요." );
+                return;
+            }
 
             this.$store.dispatch( "post/write", { title, images, content, hashTag })
                 .then(( $result ) => {
                     console.log( "게시글 업로드 완료!" );
-                    console.log( $result );
-
                     vm.$router.push( "/post/" + $result.data.postId );
                 })
                 .catch(( error ) => {
@@ -369,7 +405,7 @@ export default {
             }
 
             let i = 0;
-            let len = this.markersPosition.length - 1;
+            let len = this.images.length - 1;
 
             for( i; i<len; i++ )
             {

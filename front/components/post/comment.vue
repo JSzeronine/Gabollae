@@ -20,7 +20,7 @@
             <ul class="comment-list">
                 <li v-for="( item, index ) in comments" :key="index">
                     <div class="photo">
-                        <a href="javascript:;" :style="{ backgroundImage : `url(http://localhost:3085/${ item.User.photo })`}"></a>
+                        <a href="javascript:;" :style="{ backgroundImage : `url(${ getResourceURL }${ item.User.photo })`}"></a>
                     </div>
 
                     <div class="intro-bx">

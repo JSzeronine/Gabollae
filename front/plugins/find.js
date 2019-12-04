@@ -119,6 +119,11 @@ export default class Find{
 
             reader.onload = function(){
                 let data = EXIF.readFromBinaryFile( this.result );
+
+                if( !data.GPSLatitude ){
+                    resolve({ lat : null, lng : null });
+                    return;
+                }
     
                 var latDegree = data.GPSLatitude[0].numerator;
                 var latMinute = data.GPSLatitude[1].numerator;

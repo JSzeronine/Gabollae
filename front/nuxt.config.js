@@ -1,4 +1,3 @@
-const axios = require( "axios" );
 
 module.exports = {
     mode: 'universal', // 렌더링 모드 선택 : 'universal' | 'spa'
@@ -48,12 +47,15 @@ module.exports = {
     },
 
     axios : {
+        // browserBaseURL : "http://10.105.157.58:3085",
+        // baseURL : "http://10.105.157.58:3085",
         browserBaseURL : "http://localhost:3085",
         baseURL : "http://localhost:3085",
         https : false,
     },
     
     server : {
+        // host : '10.105.157.58',
         port : 3080,
     }
 }

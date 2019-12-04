@@ -3,7 +3,7 @@
         <div v-if="me" class="manage-info">
             <div class="profile-photo-bx">
 
-                <div v-if="photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + photo + ')' }"></div>
+                <div v-if="photo" class="profile-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ photo })` }"></div>
                 <div v-else class="profile-photo"></div>
 
                 <div class="profile-nickname">{{ me.nickname }}</div>
@@ -15,8 +15,7 @@
 
             <div class="profile-text">
                 <h2>소개</h2>
-                <textarea v-model="intro" name="" id="" cols="30" rows="10">
-                </textarea>
+                <textarea v-model="intro" name="" id="" cols="30" rows="10"></textarea>
             </div>
 
             <!-- <div class="profile-password">

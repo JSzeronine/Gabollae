@@ -92,6 +92,18 @@ export default {
     },
 
     methods : {
+        viewChange( $index ){
+            let data = this.post.Images[ $index ];
+            let marker = this.markersList[ $index ];
+            
+            if( data.view ){
+                marker.setMap( this.map );
+                this.showInfoWindow( $index );
+            }else{
+                marker.setMap( null );
+            }
+        },
+
         prevMove( $index ){
             let prevIndex = $index - 1;
             if( prevIndex < 0 ) return;
@@ -137,10 +149,17 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            if( this.post.Images[ $index ] ){
+            let imageData = this.post.Images[ $index ];
+
+            if( imageData ){
+                if( !imageData.view ){
+                    this.infoWindow.close();
+                    return;
+                }
+    
                 this.map.panTo({
-                    lat : this.post.Images[ $index ].lat,
-                    lng : this.post.Images[ $index ].lng
+                    lat : imageData.lat,
+                    lng : imageData.lng
                 });
 
                 this.markersList.forEach(( $item, $i ) => {
@@ -180,21 +199,20 @@ export default {
                 let img;
                 let imgFormData = new FormData();
                 let ws = [];
-                let position;
-                let positionFirst;
+                let pos;
+                let positions = [];
 
                 for( i; i<len; i++ )
                 {
                     file = list[ i ];
-                    position = await Find.getMapPosition( file );
-                    vm.markersPosition.push( position );
-
-                    if( i == 0 ) positionFirst = position;
+                    pos = await Find.getMapPosition( file );
 
                     img = await Find.getLoadImage( file );
                     ws.push( img.width );
 
-                    let imgData = img.toDataURL( 'image/jpeg', 1 );
+                    positions.push( pos );
+
+                    let imgData = await img.toDataURL( 'image/jpeg', 1 );
                     imgFormData.append( "image", await Find.dataURItoBlob( imgData ));
                 }
 
@@ -205,13 +223,13 @@ export default {
                         src : $src,
                         w : ws[ $index ],
                         emoticon : null,
-                        lat : vm.markersPosition[ $index ].lat,
-                        lng : vm.markersPosition[ $index ].lng,
-                        message : null,                        
+                        lat : positions[ $index ].lat,
+                        lng : positions[ $index ].lng,
+                        message : null,
+                        view : ( positions[ $index ].lat ) ? true : false,
+                        marker : ( positions[ $index ].lat ) ? true : false,
                     });
                 });
-
-                vm.mapCenter = positionFirst;
 
                 vm.postwriteSwiper.update();
                 vm.dragMapComplete();
@@ -219,49 +237,35 @@ export default {
         },
 
         dragMapComplete(){
-            this.initMarker();
-
             let vm = this;
             let len = this.post.Images.length;
-            let position;
             let marker;
+            let isInit = false;
+            let index = 0;
+            let imageData;
             
             for( let i = 0; i<len; i++ )
             {
                 if( this.markersList[ i ] ) continue;
+                if( !isInit ) index = i;
 
-                position = this.post.Images[ i ];
-                marker = this.createMarker( position.lat, position.lng, this.post.Images[ i ].emoticon );
+                imageData = this.post.Images[ i ];
+
+                marker = new google.maps.Marker({
+                    position : new google.maps.LatLng( imageData.lat, imageData.lng ),
+                    map : vm.map,
+                    icon : `/images/emoticons/${ imageData.emoticon }`
+                });
 
                 this.markersList.push( marker );
                 marker.addListener( "click", function( $e ){
                     vm.markerClick( i );
                 });
+
+                isInit = true;
             }
 
-            vm.showInfoWindow( vm.slideIndex );
-        },
-
-        createMarker( $lat, $lng, $emoticon ){
-            let icon = null;
-            if( $emoticon ) icon = `/images/emoticons/${ $emoticon }`;
-
-            let marker = new google.maps.Marker({
-                position : new google.maps.LatLng( $lat, $lng ),
-                map : this.map,
-                icon : icon
-            });
-
-            return marker;
-        },
-
-        initMarker()
-        {
-            this.markersList.forEach(( $marker ) => {
-                $marker.setMap( null );
-            });
-
-            this.markersList.length = 0;
+            this.markerClick( index );
         },
 
         showInfoWindow( $index ){

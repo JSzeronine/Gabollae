@@ -60,6 +60,7 @@ router.post( "/write", async ( req, res, next ) => {
                         lng : image.lng,
                         message : image.message,
                         view : image.view,
+                        marker : image.marker,
                         PostId : newPost.id
                     })
                 }));
@@ -72,6 +73,7 @@ router.post( "/write", async ( req, res, next ) => {
                     lng : image.lng,
                     message : image.message,
                     view : image.view,
+                    marker : image.marker,
                     PostId : newPost.id
                 });
             }
@@ -261,6 +263,7 @@ router.get( "/:id", async ( req, res, next ) => {
                     "message",
                     "emoticon",
                     "view",
+                    "marker",
                     "lat",
                     "lng"
                 ],

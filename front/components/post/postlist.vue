@@ -2,7 +2,7 @@
     <div class="postlist-bx">
         <div class="bx">
             <router-link :to="`/post/${ info.id }`">
-                <div class="thumbnail" :style="{ backgroundImage : `url( http://localhost:3085/${ info.src })` }">
+                <div class="thumbnail" :style="{ backgroundImage : `url( ${ getResourceURL }${ info.src })` }">
                 </div>
             </router-link>
 

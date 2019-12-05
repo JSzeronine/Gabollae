@@ -17,7 +17,7 @@
         </div>
 
         <div class="user-info">
-            <div v-html="other.intro.replace(/(\n|\r\n)/g, '<br>')"></div>
+            <div v-if="other.intro" v-html="other.intro.replace(/(\n|\r\n)/g, '<br>')"></div>
         </div>
 
         <div class="travel-list-bx">

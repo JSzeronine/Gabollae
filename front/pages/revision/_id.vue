@@ -6,24 +6,38 @@
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postwriteSwiper="postwriteSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
-                                <div class="swiper-slide image-view-list" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <div class="swiper-slide image-view-list" v-for="( image, index ) in post.Images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
-                                            <div class="editor" @click="removeClick( index )">
-                                                <a class="btn" href="javascript:;">삭제</a>
+                                            <div class="editor-bx">
+                                                <div class="editor" @click="removeClick( index )">
+                                                    <a class="btn" href="javascript:;">삭제</a>
+                                                </div>
+                                                <div v-if="image.marker" class="emoticon-bx">
+                                                    <img v-if="image.emoticon" :src="`/images/emoticons/${ image.emoticon }`" alt="">
+
+                                                    <div class="agree-check">
+                                                        <input type="checkbox" @change="viewChange( index )" :id="`checkbx-id-${ index }`" v-model="image.view">
+                                                        <label :for="`checkbx-id-${ index }`">
+                                                            <span class="icon-checkbx"></span>
+                                                            <span class="text-checkbx btn">위치 표시</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="emoticon-bx">
-                                                <img v-if="image.emoticon" :src="image.emoticon" alt="">
+
+                                            <div class="move-bx">
+                                                <a class="prev-move btn" @click="prevMove( index )" href="javascript:;">뒤로</a>
+                                                <a class="next-move btn" @click="nextMove( index )" href="javascript:;">앞으로</a>
                                             </div>
                                         </div>
 
                                         <div class="message-bx">
-                                            <textarea v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
-                                            <!-- <input v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기"> -->
+                                            <textarea v-if="image.view && image.marker" v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
                                         </div>
                                     </div>
 
-                                    <div class="img-view" :style="{ backgroundImage : 'url(' + image.src +  ')'}">
+                                    <div class="img-view" :style="{ backgroundImage : `url( ${ getResourceURL }${ image.src })`}">
                                         <!-- <img :src="image.src" alt=""> -->
                                     </div>
                                 </div>
@@ -48,11 +62,11 @@
 
                     <div class="postwrite-write-bx">
                         <div class="postwrite-title">
-                            <input type="text" v-model="title" placeholder="제목을 입력해주세요.">
+                            <input type="text" v-model="post.title" placeholder="제목을 입력해주세요.">
                         </div>
 
                         <div class="postwrite-description">
-                            <textarea v-model="content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
+                            <textarea v-model="post.content" name="" id="" cols="30" rows="10">내용을 입력해주세요.</textarea>
                         </div>
 
                         <div class="hash-tag-bx">
@@ -77,7 +91,7 @@
                             <ul class="map-option__emoticon">
                                 <li class="map-option__emoticon-list" v-for="( emoticon, index ) in emoticons" :key="index">
                                     <a href="javascript:;" @click="emoticonClick( index )">
-                                        <img :src="emoticon" alt="">
+                                        <img :src="`/images/emoticons/${ emoticon }`" alt="">
                                     </a>
                                 </li>
                             </ul>
@@ -88,12 +102,13 @@
 
             <div class="postwrite-complete">
                 <div>
-                    <a class="btn-complete" href="javascript:;" @click="modificationClick">수정 완료</a>
+                    <a class="btn-complete" href="javascript:;" @click="revisionClick">수정 완료</a>
+                    <a class="btn-complete" href="javascript:;" @click="removePostClick">삭제</a>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script src="@/assets/js/pages/modification.js"></script>
-<style lang="scss" src="@/assets/scss/pages/modification.scss"></style>
+<script src="@/assets/js/pages/revision.js"></script>
+<style lang="scss" src="@/assets/scss/pages/revision.scss"></style>

@@ -3,9 +3,8 @@
         <div v-if="me" class="manage-info">
             <div class="profile-photo-bx">
 
-                <div v-if="photo" class="profile-photo" :style="{ backgroundImage : 'url( http://localhost:3085/' + photo + ')' }"></div>
-                <div v-else class="profile-photo">
-                </div>
+                <div v-if="photo" class="profile-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ photo })` }"></div>
+                <div v-else class="profile-photo"></div>
 
                 <div class="profile-nickname">{{ me.nickname }}</div>
                 <div class="profile-photo-btn">
@@ -16,11 +15,10 @@
 
             <div class="profile-text">
                 <h2>소개</h2>
-                <textarea v-model="intro" name="" id="" cols="30" rows="10">
-                </textarea>
+                <textarea v-model="intro" name="" id="" cols="30" rows="10"></textarea>
             </div>
 
-            <div class="profile-password">
+            <!-- <div class="profile-password">
                 <h2>비밀번호 변경</h2>
                 <div>
                     <input class="default-input" type="password" placeholder="현재 비밀번호">
@@ -28,9 +26,9 @@
                 
                 <div><input class="default-input" type="password" placeholder="변경할 비밀번호"></div>
                 <div><input class="default-input" type="password" placeholder="변경할 비밀번호 확인"></div>
-            </div>
+            </div> -->
 
-            <div class="">
+            <div>
                 <a @click="changeUserInfo" class="btn-default" href="javascript:;">변경 완료</a>
             </div>
         </div>
@@ -68,8 +66,6 @@ export default {
     mounted(){
         this.photo = this.me.photo;
         this.intro = this.me.intro;
-
-        console.log( this.me.email );
     },
 
     methods : {

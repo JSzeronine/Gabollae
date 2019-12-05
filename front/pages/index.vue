@@ -7,7 +7,7 @@
             <div class="travel-list-bx">
                 <div class="travel-list-content">
                     <div class="list-title">
-                        <!-- <h2>최신 여행지</h2> -->
+                        <h2>최신 여행지</h2>
                         <div class="btn_more">
                             <router-link to="">더보기</router-link>
                         </div>
@@ -57,7 +57,7 @@ export default {
     },
 
     mounted(){
-        console.log( this.all );
+        
     },
 
     methods : {

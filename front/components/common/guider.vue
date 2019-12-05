@@ -1,16 +1,18 @@
 <template>
-    <div class="following-bx">
+    <div class="follower-bx">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : 'url( /images/common/profile.png )'}"></a>
+            <a href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })`}"></a>
         </div>
 
         <div class="intro-bx">
             <div class="nickname">
-                <a href="javascript:;">Zeronine</a>
+                <a href="javascript:;">
+                    {{ other.nickname }}
+                </a>
             </div>
             
             <div class="btn-group">
-                <a class="btn" href="javascript:;">가이드 끊기</a>
+                <a v-if="onUnGuide" class="btn" @click="clickUnGuide" href="javascript:;">가이드 거절</a>
             </div>
         </div>
     </div>
@@ -18,12 +20,36 @@
 
 <script>
 export default {
-    
+    props : {
+        other : Object
+    },
+
+    computed : {
+        me(){
+            return this.$store.state.user.me;
+        },
+
+        onUnGuide(){
+            return this.me && this.me.id !== this.other.id && this.me.Guider.find( v => v.id === this.other.id );
+        }
+    },
+
+    mounted(){
+        console.log( this.other );
+    },
+
+    methods : {
+        clickUnGuide(){
+            this.$store.dispatch( "user/unguider", {
+                otherId : this.other.id
+            });
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-    .following-bx{ padding: 15px 10px; border: 1px solid #e0e5ee; display: inline-block; width: 300px;
+    .follower-bx{ padding: 15px 10px; border: 1px solid #e0e5ee; display: inline-block; width: 300px;
         .photo{ position: absolute; margin-right: 10px; 
             a{ 
                 display: inline-block; width: 50px; height: 50px; background-color: #d3d3d3; border: 1px solid #d3d3d3; border-radius: 100%; overflow: hidden; 

@@ -6,6 +6,11 @@ module.exports = ( sequelize, DataTypes ) => {
             unique : true
         },
 
+        visual : {
+            type : DataTypes.STRING( 200 ),
+            allowNull : true,
+        },
+
         photo : {
             type : DataTypes.STRING( 200 ),
             allowNull : true,
@@ -49,6 +54,9 @@ module.exports = ( sequelize, DataTypes ) => {
     User.associate = ( db ) => {
         db.User.hasMany( db.Post );
         db.User.hasMany( db.Comment );
+        db.User.belongsToMany( db.Post, { through : "Like", as : "Liked" });
+        db.User.belongsToMany( db.User, { through : "Guide", as : "Guider", foreignKey : "GuidingId" });
+        db.User.belongsToMany( db.User, { through : "Guide", as : "Guiding", foreignKey : "GuiderId" });
     };
 
     return User;

@@ -1,6 +1,8 @@
 export const state = () => ({
     me : null,
     other : null,
+    Guidings : [],
+    Guiders : []
 });
 
 export const mutations = {
@@ -35,6 +37,35 @@ export const mutations = {
     loadOther( state, $data ){
         state.other = $data;
     },
+
+    guide( state, $data ){
+        state.me.Guiding.push({
+            id : $data
+        });
+    },
+
+    unguide( state, $data ){
+        const index = state.me.Guiding.findIndex( v => v.id === $data );
+        state.me.Guiding.splice( index, 1 );
+    },
+
+    unguider( state, $data ){
+        const index = state.me.Guider.findIndex( v => v.id === $data );
+        state.me.Guider.splice( index, 1 );
+    },
+
+    setGuidings( state, $data ){
+        state.Guidings = $data;
+    },
+
+    setGuiders( state, $data ){
+        state.Guiders = $data;
+    },
+
+    removeGuiders( state, $data ){
+        const index = state.Guiders.findIndex( v => v.id === $data );
+        state.Guiders.splice( index, 1 );
+    }
 }
 
 export const actions = {
@@ -53,7 +84,7 @@ export const actions = {
                 console.log( $result );
                 resolve();
             }).catch(( error ) => {
-                console.error( error );
+                console.error( error.message );
             });
         })
     },
@@ -67,11 +98,11 @@ export const actions = {
             }, {
                 withCredentials : true
             }).then(( $result ) => {
-                console.log( "로그인 성공? : ", $result );
                 commit( "login", $result.data );
                 resolve();
             }).catch(( error ) => {
                 console.error( error );
+                reject();
             });
         });
     },
@@ -90,9 +121,7 @@ export const actions = {
             const result = await this.$axios.get( "/user", { withCredentials : true });
             commit( "loadUser", result.data );
         }catch( error ){
-
             console.log( "유저 없음" );
-            console.log( this );
             console.error( error );
         }
     },
@@ -104,14 +133,20 @@ export const actions = {
     },
 
     infoChange({ commit }, $data ){
-        this.$axios.post( "/user/infochange", {
-            id : $data.id,
-            intro : $data.intro
-        }, { 
-            withCredentials : true 
-        }).then(( $result ) => {
-            console.log( "변경 완료!", $result.data );
-            commit( "infoChange", $result.data );
+        return new Promise(( resolve, reject ) => {
+            this.$axios.post( "/user/infochange", {
+                id : $data.id,
+                intro : $data.intro
+            }, { 
+                withCredentials : true 
+            }).then(( $result ) => {
+                commit( "infoChange", $result.data );
+                resolve();
+
+            }).catch(( error ) => {
+                console.error( error );
+                reject();
+            })
         });
     },
 
@@ -121,13 +156,86 @@ export const actions = {
 
     uploadPhoto({ commit }, $data ){
         return new Promise(( resolve, reject ) => {
-            this.$axios.post( "user/uploadPhoto", $data, {
+            this.$axios.post( "/user/uploadPhoto", $data, {
                 withCredentials : true
             }).then(( $result ) => {
                 resolve( $result.data.photo );
             }).catch(( error ) => {
+                reject();
                 console.error( error );
             });
         })
     },
+
+    async guide({ commit }, $data ){
+
+        try{
+            const userId = await this.$axios.post( `/user/${ $data.userId }/guide`, {
+
+            }, {
+                withCredentials : true
+            });
+
+            commit( "guide", userId.data );
+    
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async unguide({ commit }, $data ){
+
+        try{
+            const userId = await this.$axios.delete( `/user/${ $data.userId }/unguide`, {
+                withCredentials : true
+            });
+
+            commit( "unguide", userId.data );
+
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async unguider({ commit }, $data ){
+
+        try{
+            const otherId = await this.$axios.delete( `/user/${ $data.otherId }/unguider`, {
+                withCredentials : true
+            });
+
+            const data = otherId.data;
+
+            commit( "unguider", data );
+            // commit( "removeGuiders", data );
+
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async loadGuiding({ commit }, $data ){
+        try{
+            const guidings = await this.$axios.get( `/user/${ $data.userId }/guidings`, {
+                withCredentials : true
+            });
+
+            commit( "setGuidings", guidings.data );
+        }
+        catch( error ){
+            console.error( error );
+        }
+    },
+
+    async loadGuider({ commit }, $data ){
+        try{
+            const guiders = await this.$axios.get( `/user/${ $data.userId }/guiders`, {
+                withCredentials : true
+            });
+
+            commit( "setGuiders", guiders.data );
+        }catch( error ){
+            console.error( error );
+        }
+    }
 }

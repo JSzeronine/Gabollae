@@ -1,5 +1,4 @@
 import Find from "@/plugins/find";
-
 export default {
     components : {
         
@@ -7,8 +6,6 @@ export default {
 
     data(){
         return{
-            title : "",
-            content : "",
             hashTag : "",
             emoticons : [
                 'default.png',
@@ -38,10 +35,8 @@ export default {
                 }
             },
 
-            mapCenter : { lat : 37.555184, lng : 126.970780 },
-            images : [],
-
             markersPosition : [],
+            mapCenter : { lat : 37.555184, lng : 126.970780 },
             map : null,
             markersList : [],
             isMapLoad : false,
@@ -50,26 +45,40 @@ export default {
         }
     },
 
+    async fetch({ store, params}){
+        return await store.dispatch( "post/loadPost", {
+            postId : params.id
+        });
+    },
+
+    created(){
+
+    },
+
     computed : {
-        me(){
-            if( !this.$store.state.user.me ){
-                return this.$router.push( "/login" );
-            }
-
-            return { ...this.$store.state.user.me }
-        },
-
         swiper(){
             return this.$refs.uploadImgSwiper.swiper;
-        }
+        },
+
+        me(){
+            return this.$store.state.user.me;
+        },
+
+        other(){
+            return this.$store.state.post.content.User;
+        },
+
+        list(){
+            return this.$store.state.post.list;
+        },
+
+        post(){
+            return this.$store.state.post.content;
+        },
     },
 
     mounted(){
         let vm = this;
-        window.onload = async () => {
-            
-        }
-
         this.$refs.mapRef.$mapPromise.then(( $map ) => {
             vm.map = $map;
             vm.infoWindow = new google.maps.InfoWindow({
@@ -77,24 +86,21 @@ export default {
             });
 
             vm.isMapLoad = true;
+            vm.dragMapComplete();
+            vm.showHashtags();
         });
-    },
-
-    beforeDestroy(){
-
     },
 
     methods : {
         viewChange( $index ){
-            let data = this.images[ $index ];
+            let data = this.post.Images[ $index ];
             let marker = this.markersList[ $index ];
-
+            
             if( data.view ){
-                marker.setVisible( true );
+                marker.setMap( this.map );
                 this.showInfoWindow( $index );
             }else{
-                marker.setVisible( false );
-                this.infoWindow.close();
+                marker.setMap( null );
             }
         },
 
@@ -107,14 +113,14 @@ export default {
 
         nextMove( $index ){
             let nextIndex = $index + 1;
-            if( nextIndex == this.images.length ) return;
+            if( nextIndex == this.post.Images.length ) return;
 
             this.moveImage( nextIndex, $index );
         },
 
         moveImage( $newIndex, $oldIndex ){
-            let image = this.images.splice( $oldIndex, 1 );
-            this.images.splice( $newIndex, 0, image[ 0 ] );
+            let image = this.post.Images.splice( $oldIndex, 1 );
+            this.post.Images.splice( $newIndex, 0, image[ 0 ] );
 
             let marker = this.markersList.splice( $oldIndex, 1 );
             this.markersList.splice( $newIndex, 0, marker[ 0 ] );
@@ -122,8 +128,14 @@ export default {
             this.markerClick( $newIndex );
         },
 
+        showHashtags(){
+            this.post.Hashtags.forEach(( v ) => {
+                this.hashTag += `#${ v.content } `;
+            });
+        },
+
         removeClick( $index ){
-            this.images.splice( $index, 1 );
+            this.post.Images.splice( $index, 1 );
 
             this.markersList[ $index ].setMap( null );
             this.markersList.splice( $index, 1 );
@@ -137,39 +149,32 @@ export default {
             this.slideIndex = $index;
             this.swiper.slideTo( $index );
 
-            let imageData = this.images[ $index ];
+            let imageData = this.post.Images[ $index ];
 
-            if( !imageData ) return;
-
-            if( !imageData.view || !imageData.marker ){
-                this.infoWindow.close();
-                this.markersList.forEach(( $item ) => {
-                    $item.setOpacity( 0.3 );
+            if( imageData ){
+                if( !imageData.view ){
+                    this.infoWindow.close();
+                    return;
+                }
+    
+                this.map.panTo({
+                    lat : imageData.lat,
+                    lng : imageData.lng
                 });
 
-                return;
+                this.markersList.forEach(( $item, $i ) => {
+                    if( $index == $i ){
+                        $item.setZIndex( 101 );
+                        $item.setAnimation( null );
+                        $item.setAnimation( google.maps.Animation.BOUNCE );
+                    }else{
+                        $item.setZIndex( 100 );
+                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                    }
+                });
+    
+                this.showInfoWindow( $index );
             }
-
-            this.map.panTo({
-                lat : imageData.lat,
-                lng : imageData.lng
-            });
-
-            this.markersList.forEach(( $item, $i ) => {
-                
-                if( $index == $i ){
-                    $item.setZIndex( 101 );
-                    $item.setOpacity( 1 );
-                    $item.setAnimation( google.maps.Animation.BOUNCE );
-                    $item.visible = true;
-                }else{
-                    $item.setZIndex( 100 );
-                    $item.setOpacity( 0.2 );
-                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
-                }
-            });
-
-            this.showInfoWindow( $index );
         },
 
         onImageUpload( $e ){
@@ -214,10 +219,10 @@ export default {
                 let imgURL = await this.$store.dispatch( "post/uploadImages", imgFormData );
 
                 imgURL.data.forEach(( $src, $index ) => {
-                    vm.images.push({
+                    vm.post.Images.push({
                         src : $src,
                         w : ws[ $index ],
-                        emoticon : "default.png",
+                        emoticon : null,
                         lat : positions[ $index ].lat,
                         lng : positions[ $index ].lng,
                         message : null,
@@ -232,20 +237,19 @@ export default {
         },
 
         dragMapComplete(){
-
             let vm = this;
-            let len = this.images.length;
+            let len = this.post.Images.length;
             let marker;
             let isInit = false;
             let index = 0;
             let imageData;
-
+            
             for( let i = 0; i<len; i++ )
             {
                 if( this.markersList[ i ] ) continue;
                 if( !isInit ) index = i;
 
-                imageData = this.images[ i ];
+                imageData = this.post.Images[ i ];
 
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng( imageData.lat, imageData.lng ),
@@ -265,13 +269,8 @@ export default {
         },
 
         showInfoWindow( $index ){
-            if( !this.images[ $index ].view ){
-                this.infoWindow.close();
-                return;
-            }
-
             let marker = this.markersList[ $index ];
-            let message = this.images[ $index ].message;
+            let message = this.post.Images[ $index ].message;
 
             if( message ){
 
@@ -293,75 +292,37 @@ export default {
             this.markerClick( index );
         },
 
-        swiperSlideClick( $index ){
-            this.markerClick( $index );
-        },
-
         emoticonClick( $index ){
             let emoticon = this.emoticons[ $index ];
+            let sIndex = this.slideIndex;
 
-            this.images[ this.slideIndex ].emoticon = emoticon;
-            this.markersList[ this.slideIndex ].setIcon( "/images/emoticons/" + emoticon );
+            this.post.Images[ sIndex ].emoticon = emoticon;
+            this.markersList[ sIndex ].setIcon( `/images/emoticons/${ this.post.Images[ sIndex ].emoticon }` );
         },
 
-        postComplete(){
-            let vm = this;
+        revisionClick(){
+            this.post.Hashtags = this.hashTag;
 
-            let title = this.title;
-            let content = this.content;
-            let hashTag = this.hashTag;
-            let images = this.images;
-
-            if( images.length == 0 ){
-                alert( "이미지를 등록해주세요." );
-                return;
-            }
-
-            if( title == "" ){
-                alert( "제목을 입력해주세요." );
-                return;
-            }
-
-            if( content == "" ){
-                alert( "내용을 입력해주세요." );
-                return;
-            }
-
-            this.$store.dispatch( "post/write", { title, images, content, hashTag })
-                .then(( $result ) => {
-                    console.log( "게시글 업로드 완료!" );
-                    vm.$router.push( "/post/" + $result.data.postId );
-                })
-                .catch(( error ) => {
-                    console.error( error );
-                });
+            this.$store.dispatch( "post/revision", {
+                data : this.post
+            }).then(( $result ) => {
+                alert( $result.data );
+                this.$router.push( `/post/${ this.post.id }` );
+            }).catch(( error ) => {
+                console.error( error );
+            })
         },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        removePostClick(){
+            this.$store.dispatch( "post/remove", {
+                postId : this.post.id
+            }).then(( $result ) => {
+                alert( $result.data );
+                this.$router.push( "/" );
+            }).catch(( error ) => {
+                console.error( error );
+            })
+        },
 
         // 길찾기[ 그닥 쓰고 싶진 않지만..일단 갖고 있자 ]
         onComplete(){
@@ -405,7 +366,7 @@ export default {
             }
 
             let i = 0;
-            let len = this.images.length - 1;
+            let len = this.markersPosition.length - 1;
 
             for( i; i<len; i++ )
             {

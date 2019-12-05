@@ -9,16 +9,35 @@
                                 <div class="swiper-slide image-view-list" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx">
-                                            <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
+                                            <div class="editor-bx">
+                                                <div class="editor" @click="removeClick( index )">
+                                                    <a class="btn" href="javascript:;">삭제</a>
+                                                </div>
+                                                <div v-if="image.marker" class="emoticon-bx">
+                                                    <img v-if="image.emoticon" :src="`/images/emoticons/${ image.emoticon }`" alt="">
+
+                                                    <div class="agree-check">
+                                                        <input type="checkbox" @change="viewChange( index )" :id="`checkbx-id-${ index }`" v-model="image.view">
+                                                        <label :for="`checkbx-id-${ index }`">
+                                                            <span class="icon-checkbx"></span>
+                                                            <span class="text-checkbx btn">위치 표시</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="move-bx">
+                                                <a class="prev-move btn" @click="prevMove( index )" href="javascript:;">뒤로</a>
+                                                <a class="next-move btn" @click="nextMove( index )" href="javascript:;">앞으로</a>
+                                            </div>
                                         </div>
 
                                         <div class="message-bx">
-                                            <textarea v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
-                                            <!-- <input v-model="image.message" type="text" placeholder="말풍선 메세지 한줄 남기기"> -->
+                                            <textarea v-if="image.view && image.marker" v-on:input="messageChange( index )" v-model="image.message" name="" id="" cols="30" rows="3"></textarea>
                                         </div>
                                     </div>
 
-                                    <div class="img-view" :style="{ backgroundImage : 'url( http://localhost:3085/' + image.src +  ')'}">
+                                    <div class="img-view" :style="{ backgroundImage : `url( ${ getResourceURL }${ image.src })`}">
                                         <!-- <img :src="image.src" alt=""> -->
                                     </div>
                                 </div>

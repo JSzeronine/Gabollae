@@ -6,14 +6,13 @@
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
                             <div ref="imgContainer" class="swiper-wrapper">
-                                <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in images" :key="index" :style="{ width:image.w + 'px' }">
+                                <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in post.Images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
-                                        <div class="option-bx">
+                                        <div class="option-bx" v-if="image.view">
                                             <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
                                         </div>
                                     </div>
-
-                                    <div class="img-view" :style="{ backgroundImage : 'url(http://localhost:3085/' + image.src + ')'}"></div>
+                                    <div class="img-view" :style="{ backgroundImage : `url(${ getResourceURL }${ image.src  })`}"></div>
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -32,29 +31,29 @@
             <div class="post-content">
                 <div class="post-write-bx">
                     <div class="post-title">
-                        <p>{{ title }}</p>
+                        <p>{{ post.title }}</p>
                     </div>
 
                     <div>
-                        <a class="btn" href="javascript:;">
-                            가볼래
-                            <span>9999+</span>
+                        <a class="btn" @click="clickLike" href="javascript:;">
+                            {{ likeText }}
                         </a>
+                        <span>
+                            좋아요
+                            <span>{{ getTotalLikes }}</span>
+                        </span>
                     </div>
 
                     <div class="post-description">
-                        <p v-html="content.replace(/(\n|\r\n)/g, '<br>')"></p>
+                        <p v-html="post.content.replace(/(\n|\r\n)/g, '<br>')"></p>
                     </div>
 
                     <div class="hash-tag-bx">
                         <ul>
-                            <li v-for="( tag, index ) in hashtags" :key="index">
+                            <li v-for="( tag, index ) in post.Hashtags" :key="index">
                                 <router-link :to="`/hashtag/${ tag.content }`">
                                     {{ `#${ tag.content }` }}
                                 </router-link>
-                                <!-- <a @click="hashtagClick( index )" href="javascript:;">
-                                    
-                                </a> -->
                             </li>
                         </ul>
                     </div>
@@ -71,7 +70,7 @@
                         <h3>다른 여행~!</h3>
                         <ul>
                             <li v-for="( item, index ) in list" :key="index">
-                                <PostList :info="item" />
+                                <PostList v-if="item.id !== post.id" :info="item" />
                             </li>
                         </ul>
                     </div>

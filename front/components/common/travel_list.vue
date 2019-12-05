@@ -1,8 +1,8 @@
 <template>
     <div class="travel-list-item" @mouseenter="mOver" @mouseleave="mOut">
         <div class="img-bx">
-            <router-link :to="`/post/${ info.id }`">
-                <div class="photo_travel" :style="{ backgroundImage:`url( http://localhost:3085/${ info.src })` }"></div>
+            <router-link @click.native="postClick" to="">
+                <div class="photo_travel" :style="{ backgroundImage:`url( ${ getResourceURL }${ info.src })` }"></div>
                 <div class="photo_map" style="background-image:url( /images/common/map_sample.jpg );"></div>
             </router-link>
         </div>
@@ -23,9 +23,13 @@
                 </router-link>
                 <span>|</span>
                 <span class="gabollae">
-                    가볼래
-                    <span>9999+</span>
+                    좋아요
+                    <span>{{ getTotalLike }}</span>
                 </span>
+            </div>
+
+            <div>
+                <span>{{ info.createdAt }}</span>
             </div>
         </div>
     </div>
@@ -38,12 +42,19 @@ import TweenMax from "gsap";
 export default {
     props : {
         info : Object,
-        user : Object
+        user : Object,
+        mode : String,
     },
 
     data(){
         return{
-            
+            REVISION : "revision"
+        }
+    },
+
+    computed : {
+        getTotalLike(){
+            return this.info.Likers.length || 0;
         }
     },
 
@@ -52,6 +63,17 @@ export default {
     },
 
     methods : {
+        postClick(){
+            switch( this.mode ){
+                case this.REVISION : 
+                    this.$router.push( `/revision/${ this.info.id }` );
+                break;
+                
+                default : 
+                    this.$router.push( `/post/${ this.info.id }` );
+            }
+        },
+
         mOver( $e ){
             let item = $e.target;
             let map = Find.get( item, ".photo_map" );

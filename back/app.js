@@ -20,6 +20,7 @@ passportConfig();
 
 app.use( morgan( "dev" ) );
 app.use( cors({
+    // origin : "http://10.105.157.58:3080",
     origin : "http://localhost:3080",
     credentials : true,
 }));
@@ -41,13 +42,13 @@ app.use( session({
 app.use( passport.initialize() );
 app.use( passport.session() );
 
-app.use( "/user", userRouter );
-app.use( "/post", postRouter );
-app.use( "/other", otherRouter );
-
 app.get( "/", ( req, res ) => {
     res.send( "안녕 시퀄라이즈" );
 });
+
+app.use( "/user", userRouter );
+app.use( "/post", postRouter );
+app.use( "/other", otherRouter );
 
 app.listen( 3085, () => {
     console.log( `백엔드 서버 ${ 3085 }번 포트에서 작동중.`)

@@ -81,7 +81,6 @@ export default {
     },
 
     mounted(){
-        console.log( this.post );
         let vm = this;
         window.onload = async () => {
 
@@ -94,7 +93,6 @@ export default {
             });
 
             vm.isMapLoad = true;
-
             vm.dragMapComplete();
         });
     },
@@ -163,20 +161,24 @@ export default {
             let len = vm.post.Images.length;
             let marker = null;
             let emoticon;
-            let image;
+            let imageData;
             for( let i = 0; i<len; i++ )
             {
-                image = this.post.Images[ i ];
+                imageData = this.post.Images[ i ];
 
                 marker = new google.maps.Marker({
-                    position : new google.maps.LatLng( image.lat, image.lng ),
+                    position : new google.maps.LatLng( imageData.lat, imageData.lng ),
                     map : vm.map,
                 });
 
-                emoticon = image.emoticon;
+                if( !imageData.view || !imageData.marker ){
+                    marker.setVisible( false );
+                }
+
+                emoticon = imageData.emoticon;
 
                 if( emoticon ){
-                    marker.setIcon( '/images/emoticons/' + image.emoticon );
+                    marker.setIcon( '/images/emoticons/' + imageData.emoticon );
                 }
 
                 marker.addListener( "click", function( $e ){

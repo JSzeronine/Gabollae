@@ -13,7 +13,7 @@
                     </router-link>
                 </li>
 
-                <li v-if="me.id == other.id">
+                <li v-if="me && me.id == other.id">
                     <router-link to="/manage/info/" class="btn">설정</router-link>
                 </li>
             </ul>

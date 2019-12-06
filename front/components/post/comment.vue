@@ -20,7 +20,8 @@
             <ul class="comment-list">
                 <li v-for="( item, index ) in comments" :key="index">
                     <div class="photo">
-                        <a href="javascript:;" :style="{ backgroundImage : `url(${ getResourceURL }${ item.User.photo })`}"></a>
+                        <a v-if="item.User.photo" href="javascript:;" :style="{ backgroundImage : `url(${ getResourceURL }${ item.User.photo })`}"></a>
+                        <a v-else href="javascript:;"></a>
                     </div>
 
                     <div class="intro-bx">

@@ -35,7 +35,6 @@ export default {
                 }
             },
 
-            markersPosition : [],
             mapCenter : { lat : 37.555184, lng : 126.970780 },
             map : null,
             markersList : [],
@@ -97,10 +96,11 @@ export default {
             let marker = this.markersList[ $index ];
             
             if( data.view ){
-                marker.setMap( this.map );
+                marker.setVisible( true );
                 this.showInfoWindow( $index );
             }else{
-                marker.setMap( null );
+                marker.setVisible( false );
+                this.infoWindow.close();
             }
         },
 
@@ -151,30 +151,36 @@ export default {
 
             let imageData = this.post.Images[ $index ];
 
-            if( imageData ){
-                if( !imageData.view ){
-                    this.infoWindow.close();
-                    return;
-                }
-    
-                this.map.panTo({
-                    lat : imageData.lat,
-                    lng : imageData.lng
+            if( !imageData ) return;
+
+            if( !imageData.view ){
+                this.infoWindow.close();
+                this.markersList.forEach(( $item ) => {
+                    $item.setOpacity( 0.3 );
                 });
 
-                this.markersList.forEach(( $item, $i ) => {
-                    if( $index == $i ){
-                        $item.setZIndex( 101 );
-                        $item.setAnimation( null );
-                        $item.setAnimation( google.maps.Animation.BOUNCE );
-                    }else{
-                        $item.setZIndex( 100 );
-                        if( $item.getAnimation() !== null ) $item.setAnimation( null );
-                    }
-                });
-    
-                this.showInfoWindow( $index );
+                return;
             }
+
+            this.map.panTo({
+                lat : imageData.lat,
+                lng : imageData.lng
+            });
+
+            this.markersList.forEach(( $item, $i ) => {
+                if( $index == $i ){
+                    $item.setZIndex( 101 );
+                    $item.setAnimation( null );
+                    $item.setAnimation( google.maps.Animation.BOUNCE );
+                    $item.setOpacity( 1 );
+                }else{
+                    $item.setZIndex( 100 );
+                    if( $item.getAnimation() !== null ) $item.setAnimation( null );
+                    $item.setOpacity( 0.3 );
+                }
+            });
+
+            this.showInfoWindow( $index );
         },
 
         onImageUpload( $e ){
@@ -222,7 +228,7 @@ export default {
                     vm.post.Images.push({
                         src : $src,
                         w : ws[ $index ],
-                        emoticon : null,
+                        emoticon : "default.png",
                         lat : positions[ $index ].lat,
                         lng : positions[ $index ].lng,
                         message : null,
@@ -243,7 +249,7 @@ export default {
             let isInit = false;
             let index = 0;
             let imageData;
-            
+
             for( let i = 0; i<len; i++ )
             {
                 if( this.markersList[ i ] ) continue;
@@ -256,6 +262,8 @@ export default {
                     map : vm.map,
                     icon : `/images/emoticons/${ imageData.emoticon }`
                 });
+
+                if( !imageData.view || !imageData.marker ) marker.setVisible( false );
 
                 this.markersList.push( marker );
                 marker.addListener( "click", function( $e ){
@@ -300,17 +308,34 @@ export default {
             this.markersList[ sIndex ].setIcon( `/images/emoticons/${ this.post.Images[ sIndex ].emoticon }` );
         },
 
-        revisionClick(){
+        async revisionClick(){
             this.post.Hashtags = this.hashTag;
 
-            this.$store.dispatch( "post/revision", {
-                data : this.post
-            }).then(( $result ) => {
-                alert( $result.data );
-                this.$router.push( `/post/${ this.post.id }` );
-            }).catch(( error ) => {
+            if( this.post.Images.length == 0 ){
+                alert( "이미지를 등록해주세요." );
+                return;
+            }
+
+            if( this.post.title == "" ){
+                alert( "제목을 입력해주세요." );
+                return;
+            }
+
+            if( this.post.content == "" ){
+                alert( "내용을 입력해주세요." );
+                return;
+            }
+
+            try{
+                let result = await this.$store.dispatch( "post/revision", {
+                    data : this.post
+                });
+
+                alert( result.data );
+                this.$router.push( `/post/${ this.post.id }`);
+            }catch( error ){
                 console.error( error );
-            })
+            }
         },
 
         removePostClick(){
@@ -323,6 +348,23 @@ export default {
                 console.error( error );
             })
         },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // 길찾기[ 그닥 쓰고 싶진 않지만..일단 갖고 있자 ]
         onComplete(){

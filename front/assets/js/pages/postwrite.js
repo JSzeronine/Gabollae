@@ -196,19 +196,21 @@ export default {
                 let ws = [];
                 let pos;
                 let positions = [];
+                let blob;
 
                 for( i; i<len; i++ )
                 {
                     file = list[ i ];
                     pos = await Find.getMapPosition( file );
+                    positions.push( pos );
 
                     img = await Find.getLoadImage( file );
                     ws.push( img.width );
 
-                    positions.push( pos );
-
                     let imgData = await img.toDataURL( 'image/jpeg', 1 );
-                    imgFormData.append( "image", await Find.dataURItoBlob( imgData ));
+
+                    blob = await Find.dataURItoBlob( imgData );
+                    await imgFormData.append( "image", blob );
                 }
 
                 let imgURL = await this.$store.dispatch( "post/uploadImages", imgFormData );
@@ -221,8 +223,8 @@ export default {
                         lat : positions[ $index ].lat,
                         lng : positions[ $index ].lng,
                         message : null,
-                        view : ( positions[ $index ].lat ) ? true : false,
-                        marker : ( positions[ $index ].lat ) ? true : false,
+                        view : ( positions[ $index ].lat || positions[ $index ].lng ) ? true : false,
+                        marker : ( positions[ $index ].lat || positions[ $index ].lng ) ? true : false,
                     });
                 });
 
@@ -232,7 +234,6 @@ export default {
         },
 
         dragMapComplete(){
-
             let vm = this;
             let len = this.images.length;
             let marker;

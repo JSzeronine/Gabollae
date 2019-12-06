@@ -3,11 +3,13 @@ const multer = require( "multer" );
 const router = express.Router();
 const path = require( "path" );
 const db = require( "../models" );
+const fs = require( "fs" );
 
 
 const upload = multer({
     storage : multer.diskStorage({
         destination( req, file, done ){
+            console.log( "업로드 시작" );
             done( null, "uploads" );
         },
 
@@ -26,9 +28,7 @@ router.post( "/images", upload.array( "image" ), ( req, res ) => {
 });
 
 router.post( "/write", async ( req, res, next ) => {
-
     try{
-
         const newPost = await db.Post.create({
             title : req.body.title,
             content : req.body.content,
@@ -405,6 +405,15 @@ router.delete( "/:id/remove", async ( req, res, next ) => {
             ]
         });
 
+        let i = 0;
+        let len = post.Images.length;
+        let image;
+
+        for( i; i<len; i++ ){
+            image = post.Images[ i ];
+            await fs.unlinkSync( `./uploads/${ image.src }` );
+        }
+
         await post.Images.map( v => v.destroy() );
         await post.Hashtags.map( v => v.PostHashtag.destroy() );
         await post.removeLiker( req.user.id );
@@ -433,9 +442,10 @@ router.post( "/:id/revision", async ( req, res, next ) => {
             }],
         });
 
-        post.update({
+        await post.update({
             title : req.body.data.title,
-            content : req.body.data.content
+            content : req.body.data.content,
+            src : req.body.data.Images[ 0 ].src
         });
 
         await post.Images.map( v => v.destroy() );
@@ -465,6 +475,7 @@ router.post( "/:id/revision", async ( req, res, next ) => {
                         lng : image.lng,
                         view : image.view,
                         message : image.message,
+                        marker : image.marker,
                         PostId : post.id
                     })
                 }));
@@ -477,6 +488,7 @@ router.post( "/:id/revision", async ( req, res, next ) => {
                     lng : image.lng,
                     view : image.view,
                     message : image.message,
+                    marker : image.marker,
                     PostId : post.id
                 });
             }

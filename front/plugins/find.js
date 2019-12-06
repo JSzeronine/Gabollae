@@ -192,16 +192,22 @@ export default class Find{
     static dataURItoBlob( dataURI )
     {
         return new Promise(( resolve, reject ) => {
-            let byteString = atob(dataURI.split(',')[1]);
-            let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-            let ab = new ArrayBuffer(byteString.length);
-            let ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++)
-            {
+            let byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            let ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
                 ia[i] = byteString.charCodeAt(i);
             }
-            
-            let bb = new Blob([ab], { "type": mimeString });            
+
+            let bb = new Blob([ia], {type:mimeString});         
             resolve( bb );
         });
 

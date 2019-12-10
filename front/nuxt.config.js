@@ -1,14 +1,27 @@
 
 module.exports = {
-    mode: 'universal', // 렌더링 모드 선택 : 'universal' | 'spa'
     build : {
         vendor : [
             "gsap",
             "vue2-google-maps",
             "exif-js"
         ],
-
+        
         transpile: [/^vue2-google-maps($|\/)/],
+        analyze : false,
+        extend( config, { isClient, isServer }){
+            if( isServer && config.mode === "production" ){
+                config.devtool = "hidden-source-map";
+            }
+        }
+    },
+
+    buildModules : [
+        "@nuxtjs/moment"
+    ],
+
+    moment : {
+        locales : [ "ko" ]
     },
 
     plugins : [
@@ -49,13 +62,13 @@ module.exports = {
     axios : {
         // browserBaseURL : "http://10.105.157.58:3085",
         // baseURL : "http://10.105.157.58:3085",
-        browserBaseURL : "http://localhost:3085",
-        baseURL : "http://localhost:3085",
+        browserBaseURL : process.env.NODE_ENV === "production" ? "https://api.gagoboja.com" : "http://localhost:3085",
+        baseURL : process.env.NODE_ENV === "production" ? "https://api.gagoboja.com" : "http://localhost:3085",
         https : false,
     },
     
     server : {
         // host : '10.105.157.58',
-        port : 3080,
+        port : process.env.PORT || 3080,
     }
 }

@@ -29,7 +29,7 @@
             </div>
 
             <div>
-                <span>{{ info.createdAt }}</span>
+                <span>{{ $moment( info.createdAt ).fromNow() }}</span>
             </div>
         </div>
     </div>

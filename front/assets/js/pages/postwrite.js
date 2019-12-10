@@ -65,6 +65,7 @@ export default {
     },
 
     mounted(){
+        console.log( this.me );
         let vm = this;
         window.onload = async () => {
             

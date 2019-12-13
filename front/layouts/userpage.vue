@@ -1,5 +1,7 @@
 <template>
     <div class="user-bx">
+        <Header/>
+
         <div class="user-visual">
             <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
             <ProfileSmall :other="other" />
@@ -13,66 +15,26 @@
                     </router-link>
                 </li>
 
-                <li v-if="me && me.id == other.id">
+                <li v-if="me && other && me.id == other.id">
                     <router-link to="/manage/info/" class="btn">설정</router-link>
                 </li>
             </ul>
         </div>
 
-        <div v-if="links[ 0 ].isActive" class="user-info">
-            <div v-if="other.intro" v-html="other.intro.replace(/(\n|\r\n)/g, '<br>')"></div>
-        </div>
-
-        <div v-if="links[ 1 ].isActive" class="travel-list-bx">
-            <div class="travel-list-content">
-                <div class="list-title">
-                    <h2>최신 여행지</h2>
-                </div>
-
-                <div class="list-bx">
-                    <ul>
-                        <li v-for="( item, index ) in other.Posts" :key="index">
-                            <TravelList :info="item" :user="other" />
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="links[ 2 ].isActive" class="travel-list-bx">
-            <div class="travel-list-content">
-                <div class="list-title">
-                    <h2>최신 여행지</h2>
-                </div>
-
-                <div class="list-bx">
-                    <ul>
-                        <li v-for="( item, index ) in other.Shared" :key="index">
-                            <TravelList :info="item" :user="other" />
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="links[ 3 ].isActive" class="following-list-bx">
-            <ul>
-                <li v-for="( item, index ) in guidings" :key="index">
-                    <Guiding :other="item" />
-                </li>
-            </ul>
-        </div>
+        <nuxt />
     </div>
 </template>
 
 <script>
-import Guiding from "@/components/common/guiding";
+import Header from "@/components/header";
 import ProfileSmall from "@/components/common/profile_small";
-import TravelList from "@/components/common/travel_list";
-
-import { mapState } from "vuex";
 
 export default {
+    components : {
+        Header,
+        ProfileSmall
+    },
+
     data(){
         return{
             links : [
@@ -100,18 +62,9 @@ export default {
         }
     },
 
-    components : {
-        ProfileSmall,
-        Guiding,
-        TravelList,
-    },
-
     fetch({ store, params }){
-        store.dispatch( "user/loadOther", {
-            userId : params.id
-        });
-
-        return store.dispatch( "user/loadGuiding", {
+        console.log( "Fetch" );
+        return store.dispatch( "user/loadOther", {
             userId : params.id
         });
     },
@@ -124,21 +77,18 @@ export default {
         other(){
             return this.$store.state.user.other;
         },
+    },
 
-        guidings(){
-            return this.$store.state.user.Guidings;
-        }
+    async mounted(){
+        await this.$store.dispatch( "user/loadOther", {
+            userId : this.$route.params.id
+        });
     },
 
     methods : {
         menuClick( $index ){
-            this.links.forEach( v => v.isActive = false );
-            this.links[ $index ].isActive = true;
-        }
-    },
 
-    mounted(){
-        console.log( this.other );
+        }
     }
 }
 </script>

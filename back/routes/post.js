@@ -109,7 +109,13 @@ router.get( "/all", async ( req, res, next ) => {
                 ]
             }],
 
-            attributes : [ "id", "src", "title", "content", "createdAt" ]
+            attributes : [ 
+                "id", 
+                "src", 
+                "title", 
+                "content", 
+                "createdAt" 
+            ]
         });
 
         res.json( allPost );
@@ -296,6 +302,10 @@ router.get( "/:id", async ( req, res, next ) => {
                 model : db.User,
                 as : "Likers",
                 attributes : [ "id" ]
+            }, {
+                model : db.User,
+                as : "Shares",
+                attributes : [ "id" ]
             }],
 
             attributes : [ "id", "src", "title", "content" ]
@@ -421,6 +431,52 @@ router.delete( "/:id/remove", async ( req, res, next ) => {
         await post.destroy();
 
         res.status( 201 ).send( "성공적으로 삭제 하였습니다." );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.post( "/:id/share", async ( req, res, next ) => {
+    try{
+        const post = await db.Post.findOne({
+            where : {
+                id : req.params.id
+            }
+        });
+
+        if( !post ){
+            return res.status( 404 ).send( "포스트가 존재하지 않습니다." );
+        }
+
+        await post.addShare( req.user.id );
+        res.json({
+            userId : req.user.id 
+        });
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+router.delete( "/:id/share", async ( req, res, next ) => {
+    try{
+        const post = await db.Post.findOne({
+            where : {
+                id : req.params.id
+            }
+        });
+
+        if( !post ){
+            return res.status( 404 ).send( "포스트가 존재하지 않습니다." );
+        }
+
+        await post.removeShare( req.user.id );
+        res.json({
+            userId : req.user.id 
+        });
 
     }catch( error ){
         console.error( error );

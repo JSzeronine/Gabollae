@@ -56,6 +56,17 @@ export const mutations = {
         var index = state.content.Likers.findIndex( v => v.id === $data );
         state.content.Likers.splice( index, 1 );
     },
+
+    addShare( state, $data ){
+        state.content.Shares.push({
+            id : $data.userId
+        });
+    },
+
+    removeShare( state, $data ){
+        var index = state.content.Shares.findIndex( v => v.id === $data );
+        state.content.Shares.splice( index, 1 );
+    }
 }
 
 export const actions = {
@@ -144,6 +155,24 @@ export const actions = {
         });
 
         commit( "removeLike", like.data );
+    },
+
+    async share({ commit }, $data ){
+        const share = await this.$axios.post( `/post/${ $data.postId }/share`, {
+
+        }, {
+            withCredentials : true,
+        });
+
+        commit( "addShare", share.data );
+    },
+
+    async unshare({ commit }, $data ){
+        const share = await this.$axios.delete( `/post/${ $data.postId }/share`, {
+            withCredentials : true   
+        });
+
+        commit( "removeShare", share.data );
     },
 
     revision({ commit }, $data ){

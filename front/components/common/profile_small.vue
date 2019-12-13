@@ -1,5 +1,5 @@
 <template>
-    <div class="profile">
+    <div class="profile" v-if="other">
         <div class="photo">
             <a v-if="other.photo" href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })` }"></a>
             <a v-else href="javascript:;"></a>

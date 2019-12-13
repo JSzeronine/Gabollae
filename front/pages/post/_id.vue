@@ -34,14 +34,14 @@
                         <p>{{ post.title }}</p>
                     </div>
 
-                    <div>
+                    <div class="like-bx">
                         <a class="btn" @click="clickLike" href="javascript:;">
-                            {{ likeText }}
+                            {{ likeText }} {{  getTotalLikes }}
                         </a>
-                        <span>
-                            좋아요
-                            <span>{{ getTotalLikes }}</span>
-                        </span>
+
+                        <a v-if="me.id !== other.id" class="btn" @click="clickShare" href="javascript:;">
+                            {{ share }} {{ getTotalShare }}
+                        </a>
                     </div>
 
                     <div class="post-description">

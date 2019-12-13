@@ -55,6 +55,8 @@ module.exports = ( sequelize, DataTypes ) => {
         db.User.hasMany( db.Post );
         db.User.hasMany( db.Comment );
         db.User.belongsToMany( db.Post, { through : "Like", as : "Liked" });
+        db.User.belongsToMany( db.Post, { through : "Share", as : "Shared" });
+
         db.User.belongsToMany( db.User, { through : "Guide", as : "Guider", foreignKey : "GuidingId" });
         db.User.belongsToMany( db.User, { through : "Guide", as : "Guiding", foreignKey : "GuiderId" });
     };

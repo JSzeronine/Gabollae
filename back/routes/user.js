@@ -44,13 +44,28 @@ router.get( "/:id", async ( req, res, next ) => {
                 model : db.User,
                 as : "Guider",
                 attributes : [ "id" ]
+            }, {
+                model : db.Post,
+                as : "Shared",
+                attributes : [
+                    "id",
+                    "title",
+                    "content",
+                    "src"
+                ],
+
+                include : [{
+                    model : db.User,
+                    as : "Likers",
+                    attributes : [ "id" ]
+                }]
             }],
 
             attributes : [
                 "nickname",
                 "intro",
                 "photo",
-                "id"
+                "id",
             ]
         });
 

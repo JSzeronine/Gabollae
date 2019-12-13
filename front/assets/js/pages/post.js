@@ -68,6 +68,10 @@ export default {
             return ( this.post.Likers || []).find( v => v.id === this.me.id );
         },
 
+        shared(){
+            return ( this.post.Shares || [] ).find( v => v.id === this.me.id );
+        },
+
         likeText(){
             let txt = "좋아요";
             if( this.liked ) txt = "좋아요 취소";
@@ -77,13 +81,23 @@ export default {
 
         getTotalLikes(){
             return this.post.Likers.length || 0;
-        }
+        },
+
+        share(){
+            let txt = "퍼가기";
+            if( this.shared ) txt = "퍼가기 취소";
+            return txt;
+        },
+
+        getTotalShare(){
+            return this.post.Shares.length || 0;
+        },
     },
 
     mounted(){
         let vm = this;
         window.onload = async () => {
-
+            
         }
 
         this.$refs.mapRef.$mapPromise.then(( $map ) => {
@@ -98,6 +112,23 @@ export default {
     },
 
     methods : {
+        clickShare(){
+            if( !this.me ){
+                alert( "로그인 해주세요." );
+                return;
+            }
+
+            if( this.shared ){
+                this.$store.dispatch( "post/unshare", {
+                    postId : this.post.id
+                });
+            }else{
+                this.$store.dispatch( "post/share", {
+                    postId : this.post.id
+                });
+            }
+        },
+
         clickLike(){
             if( !this.me ){
                 alert( "로그인 해주세요." );

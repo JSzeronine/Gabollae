@@ -62,7 +62,7 @@ module.exports = {
     axios : {
         browserBaseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
         baseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
-        https : false,
+        https : true,
     },
     
     server : {

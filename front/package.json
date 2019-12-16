@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "prestart" : "npm run build",
+    "prestart": "npm run build",
     "start": "cross-env PORT=80 NODE_ENV=production pm2 start server",
     "generate": "nuxt generate"
   },

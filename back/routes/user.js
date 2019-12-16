@@ -7,7 +7,14 @@ const path = require( "path" );
 const multer = require( "multer" );
 const fs = require( "fs" );
 const router = express.Router();
+const AWS = require( "aws-sdk" );
+const multerS3 = require( "multer-s3" );
 
+AWS.config.update({
+    region : "ap-northeast-2",
+    accessKeyId : process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey : process.env.S3_SECRET_ACCESS_KEY
+})
 
 router.get( "/", ( req, res, next ) => {
     const user = req.user;
@@ -77,29 +84,39 @@ router.get( "/:id", async ( req, res, next ) => {
     }
 });
 
-const upload = multer({
-    storage : multer.diskStorage({
-        destination( req, file, done ){
-            done( null, "uploads" );
-        },
+// const upload = multer({
+//     storage : multer.diskStorage({
+//         destination( req, file, done ){
+//             done( null, "uploads" );
+//         },
 
-        filename( req, file, done ){
-            const ext = ".jpg";
-            const basename = path.basename( file.originalname, ext );
-            const filename = basename + Date.now() + ext;
-            done( null, filename );
+//         filename( req, file, done ){
+//             const ext = ".jpg";
+//             const basename = path.basename( file.originalname, ext );
+//             const filename = basename + Date.now() + ext;
+//             done( null, filename );
+//         }
+//     })
+// });
+
+const upload = multer({
+    storage : multerS3({
+        s3 : new AWS.S3(),
+        bucket : "gagoboja",
+        key( req, file, cb ){
+            cb( null, `original/${ Date.now()}${ path.basename( file.originalname)}`);
         }
     })
-});
+})
 
 router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) => {
     try{
-        if( req.user.photo ){
-            await fs.unlinkSync( `./uploads/${ req.user.photo }` );
-        }
+        // if( req.user.photo ){
+        //     await fs.unlinkSync( `./uploads/${ req.user.photo }` );
+        // }
 
         await db.User.update({
-            photo : req.file.filename,
+            photo : req.file.location,
         }, {
             where : {
                 id : req.user.id

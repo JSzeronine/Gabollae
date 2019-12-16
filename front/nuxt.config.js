@@ -60,15 +60,12 @@ module.exports = {
     },
 
     axios : {
-        // browserBaseURL : "http://10.105.157.58:3085",
-        // baseURL : "http://10.105.157.58:3085",
-        browserBaseURL : process.env.NODE_ENV === "production" ? "https://vue.gagoboja.com" : "http://localhost:3085",
-        baseURL : process.env.NODE_ENV === "production" ? "https://vue.gagoboja.com" : "http://localhost:3085",
+        browserBaseURL : process.env.NODE_ENV === "production" ? "https://gagoboja.com" : "http://localhost:3085",
+        baseURL : process.env.NODE_ENV === "production" ? "https://gagoboja.com" : "http://localhost:3085",
         https : false,
     },
     
     server : {
-        // host : '10.105.157.58',
         port : process.env.PORT || 3080,
     }
 }

@@ -27,7 +27,7 @@ if( prod ){
     app.use( hpp() );
     app.use( morgan( "combined" ) );
     app.use( cors({
-        origin : "http://3.133.211.47",
+        origin : "http://vue.gagoboja.com",
         credentials : true,
     }));
 }else{
@@ -49,7 +49,7 @@ app.use( session({
     cookie : {
         httpOnly : true,
         secure : false,
-        domain : prod && ".3.133.211.47",
+        domain : prod && ".gagoboja.com",
     }
 }));
 

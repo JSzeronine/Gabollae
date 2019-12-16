@@ -7,8 +7,7 @@ module.exports = {
     "password": process.env.DB_PASSWORD,
     "database": "gagoboja",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
+    "dialect": "mysql"
   },
 
   "test": {
@@ -16,8 +15,7 @@ module.exports = {
     "password": process.env.DB_PASSWORD,
     "database": "gagoboja",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
+    "dialect": "mysql"
   },
 
   "production": {
@@ -25,7 +23,6 @@ module.exports = {
     "password": process.env.DB_PASSWORD,
     "database": "gagoboja",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
+    "dialect": "mysql"
   }
 }

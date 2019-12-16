@@ -22,13 +22,12 @@ passportConfig();
 const userRouter = require( "./routes/user" );
 const postRouter = require( "./routes/post" );
 const otherRouter = require( "./routes/other" );
-
 if( prod ){
     app.use( helmet() );
     app.use( hpp() );
     app.use( morgan( "combined" ) );
     app.use( cors({
-        origin : "http://gagobojs.com",
+        origin : "http://3.133.211.47",
         credentials : true,
     }));
 }else{
@@ -50,7 +49,7 @@ app.use( session({
     cookie : {
         httpOnly : true,
         secure : false,
-        domain : prod && ".gagoboja.com",
+        domain : prod && ".3.133.211.47",
     }
 }));
 

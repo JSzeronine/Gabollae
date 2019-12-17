@@ -41,6 +41,7 @@ const upload = multer({
 })
 
 router.post( "/images", upload.array( "image" ), ( req, res ) => {
+    // res.json( req.files.map( v => v.filename ));
     res.json( req.files.map( v => v.location ));
 });
 

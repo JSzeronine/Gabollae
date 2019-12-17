@@ -84,30 +84,30 @@ router.get( "/:id", async ( req, res, next ) => {
     }
 });
 
-const upload = multer({
-    storage : multer.diskStorage({
-        destination( req, file, done ){
-            done( null, "uploads" );
-        },
-
-        filename( req, file, done ){
-            const ext = ".jpg";
-            const basename = path.basename( file.originalname, ext );
-            const filename = basename + Date.now() + ext;
-            done( null, filename );
-        }
-    })
-});
-
 // const upload = multer({
-//     storage : multerS3({
-//         s3 : new AWS.S3(),
-//         bucket : "gagoboja",
-//         key( req, file, cb ){
-//             cb( null, `original/${ Date.now()}${ path.basename( file.originalname)}`);
+//     storage : multer.diskStorage({
+//         destination( req, file, done ){
+//             done( null, "uploads" );
+//         },
+
+//         filename( req, file, done ){
+//             const ext = ".jpg";
+//             const basename = path.basename( file.originalname, ext );
+//             const filename = basename + Date.now() + ext;
+//             done( null, filename );
 //         }
 //     })
-// })
+// });
+
+const upload = multer({
+    storage : multerS3({
+        s3 : new AWS.S3(),
+        bucket : "gagoboja",
+        key( req, file, cb ){
+            cb( null, `original/${ Date.now()}${ path.basename( file.originalname)}`);
+        }
+    })
+})
 
 router.post( "/uploadPhoto", upload.single( "image" ), async ( req, res, next ) => {
     try{

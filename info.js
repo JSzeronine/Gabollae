@@ -16,8 +16,8 @@
 //     }
 // }
 
-
-
+// npm i vue@latest -s
+// npm i vue-template-compiler@latest --save
 
 
 

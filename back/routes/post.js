@@ -11,34 +11,34 @@ AWS.config.update({
     region : "ap-northeast-2",
     accessKeyId : process.env.S3_ACCESS_KEY_ID,
     secretAccessKey : process.env.S3_SECRET_ACCESS_KEY
-})
-
-// const upload = multer({
-//     storage : multer.diskStorage({
-//         destination( req, file, done ){
-//             console.log( "업로드 시작" );
-//             done( null, "uploads" );
-//         },
-
-//         filename( req, file, done ){
-//             // const ext = path.extname( file.originalname );  // 확장자
-//             const ext = ".jpg";
-//             const basename = path.basename( file.originalname, ext );
-//             const filename = basename + Date.now() + ext;
-//             done( null, filename );
-//         }
-//     })
-// });
+});
 
 const upload = multer({
-    storage : multerS3({
-        s3 : new AWS.S3(),
-        bucket : "gagoboja",
-        key( req, file, cb ){
-            cb( null, `original/${ Date.now()}${ path.basename( file.originalname)}`);
+    storage : multer.diskStorage({
+        destination( req, file, done ){
+            console.log( "업로드 시작" );
+            done( null, "uploads" );
+        },
+
+        filename( req, file, done ){
+            // const ext = path.extname( file.originalname );  // 확장자
+            const ext = ".jpg";
+            const basename = path.basename( file.originalname, ext );
+            const filename = basename + Date.now() + ext;
+            done( null, filename );
         }
     })
-})
+});
+
+// const upload = multer({
+//     storage : multerS3({
+//         s3 : new AWS.S3(),
+//         bucket : "gagoboja",
+//         key( req, file, cb ){
+//             cb( null, `original/${ Date.now()}${ path.basename( file.originalname)}`);
+//         }
+//     })
+// })
 
 router.post( "/images", upload.array( "image" ), ( req, res ) => {
     res.json( req.files.map( v => v.location ));

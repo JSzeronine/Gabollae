@@ -35,7 +35,7 @@ const upload = multer({
         s3 : new AWS.S3(),
         bucket : "gagoboja",
         key( req, file, cb ){
-            cb( null, `original/${ Date.now()}${ path.basename( file.originalname )}.jpg`);
+            cb( null, `original/${ path.basename( file.originalname )}${ Date.now() }.jpg`);
         }
     })
 })

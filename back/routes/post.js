@@ -436,10 +436,10 @@ router.delete( "/:id/remove", async ( req, res, next ) => {
         let len = post.Images.length;
         let image;
 
-        for( i; i<len; i++ ){
-            image = post.Images[ i ];
-            await fs.unlinkSync( `./uploads/${ image.src }` );
-        }
+        // for( i; i<len; i++ ){
+        //     image = post.Images[ i ];
+        //     await fs.unlinkSync( `./uploads/${ image.src }` );
+        // }
 
         await post.Images.map( v => v.destroy() );
         await post.Hashtags.map( v => v.PostHashtag.destroy() );

@@ -10,7 +10,7 @@
         <div class="user-btns">
             <ul>
                 <li v-for="( item, index ) in links" :key="index">
-                    <router-link @click.native="menuClick( index )" :class="{ btn_active : item.isActive }" class="btn" to="">
+                    <router-link :to="item.link" @click.native="menuClick( index )" :class="{ btn_active : item.isActive }" class="btn">
                         {{ item.menu }}
                     </router-link>
                 </li>
@@ -37,36 +37,33 @@ export default {
 
     data(){
         return{
+            obj : {
+                name : "guide"
+            },
+
             links : [
                 {
                     menu : "홈",
-                    link : "",
+                    link : `home`,
                     isActive : true,
                 },
                 {
                     menu : "여행지",
-                    link : "",
+                    link : `travel`,
                     isActive : false,
                 },
                 {
                     menu : "퍼온 여행지",
-                    link : "",
+                    link : `travelshare`,
                     isActive : false,
                 },
                 {
                     menu : "가이드",
-                    link : "",
+                    link : `guide`,
                     isActive : false,
                 }
             ]
         }
-    },
-
-    fetch({ store, params }){
-        console.log( "Fetch" );
-        return store.dispatch( "user/loadOther", {
-            userId : params.id
-        });
     },
 
     computed : {
@@ -83,6 +80,8 @@ export default {
         await this.$store.dispatch( "user/loadOther", {
             userId : this.$route.params.id
         });
+
+        console.log( this.other );
     },
 
     methods : {

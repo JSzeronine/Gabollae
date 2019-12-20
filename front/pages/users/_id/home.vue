@@ -1,12 +1,18 @@
 <template>
-    <div>
-        홈
+    <div v-if="other">
+        {{ other.intro }}
     </div>
 </template>
 
 <script>
 export default {
     layout : "userpage",
+
+    computed : {
+        other(){
+            return this.$store.state.user.other;
+        }
+    }
 }
 </script>
 

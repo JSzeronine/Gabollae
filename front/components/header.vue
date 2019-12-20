@@ -13,7 +13,7 @@
             <div class="menu-bx">
                 <ul>
                     <li v-if="me">
-                        <router-link :to="`/user/${ me.id }`">{{ me.nickname + " 님 안녕하세요" }}</router-link>
+                        <router-link :to="`/users/${ me.id }/home`">{{ me.nickname + " 님 안녕하세요" }}</router-link>
                     </li>
 
                     <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>

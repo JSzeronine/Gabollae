@@ -6,43 +6,51 @@ const db = require( "../models" );
 const fs = require( "fs" );
 const AWS = require( "aws-sdk" );
 const multerS3 = require( "multer-s3" );
+const prod = process.env.NODE_ENV === "production";
 
-AWS.config.update({
-    region : "ap-northeast-2",
-    accessKeyId : process.env.S3_ACCESS_KEY_ID,
-    secretAccessKey : process.env.S3_SECRET_ACCESS_KEY
-});
+let upload;
+if( prod ){
+    AWS.config.update({
+        region : "ap-northeast-2",
+        accessKeyId : process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey : process.env.S3_SECRET_ACCESS_KEY
+    });
 
-// const upload = multer({
-//     storage : multer.diskStorage({
-//         destination( req, file, done ){
-//             console.log( "업로드 시작" );
-//             done( null, "uploads" );
-//         },
-
-//         filename( req, file, done ){
-//             // const ext = path.extname( file.originalname );  // 확장자
-//             const ext = ".jpg";
-//             const basename = path.basename( file.originalname, ext );
-//             const filename = basename + Date.now() + ext;
-//             done( null, filename );
-//         }
-//     })
-// });
-
-const upload = multer({
-    storage : multerS3({
-        s3 : new AWS.S3(),
-        bucket : "gagoboja",
-        key( req, file, cb ){
-            cb( null, `original/${ path.basename( file.originalname )}${ Date.now() }.jpg`);
-        }
+    upload = multer({
+        storage : multerS3({
+            s3 : new AWS.S3(),
+            bucket : "gagoboja",
+            key( req, file, cb ){
+                cb( null, `original/${ path.basename( file.originalname )}${ Date.now() }.jpg`);
+            }
+        })
     })
-})
+}else{
+    // dev
+    upload = multer({
+        storage : multer.diskStorage({
+            destination( req, file, done ){
+                console.log( "업로드 시작" );
+                done( null, "uploads" );
+            },
+    
+            filename( req, file, done ){
+                // const ext = path.extname( file.originalname );  // 확장자
+                const ext = ".jpg";
+                const basename = path.basename( file.originalname, ext );
+                const filename = basename + Date.now() + ext;
+                done( null, filename );
+            }
+        })
+    });
+}
 
 router.post( "/images", upload.array( "image" ), ( req, res ) => {
-    // res.json( req.files.map( v => v.filename ));
-    res.json( req.files.map( v => v.location ));
+    if( prod ){
+        res.json( req.files.map( v => v.location ));
+    }else{
+        res.json( req.files.map( v => v.filename ));
+    }
 });
 
 router.post( "/write", async ( req, res, next ) => {
@@ -196,11 +204,6 @@ router.get( "/:id/comments", async ( req, res, next ) => {
                 model : db.User,
                 attributes : [ "id", "nickname", "photo" ],
             }],
-
-            // attributes : [
-                // "content",
-                // [ db.sequelize.fn( "left", db.sequelize.col( "createdAt" ), 10 ), "date" ]
-            // ],
 
             order : [[ "createdAt", "DESC" ]]
         });
@@ -436,11 +439,6 @@ router.delete( "/:id/remove", async ( req, res, next ) => {
         let i = 0;
         let len = post.Images.length;
         let image;
-
-        // for( i; i<len; i++ ){
-        //     image = post.Images[ i ];
-        //     await fs.unlinkSync( `./uploads/${ image.src }` );
-        // }
 
         await post.Images.map( v => v.destroy() );
         await post.Hashtags.map( v => v.PostHashtag.destroy() );

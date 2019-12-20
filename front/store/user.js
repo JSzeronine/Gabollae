@@ -84,7 +84,7 @@ export const actions = {
                 console.log( $result );
                 resolve();
             }).catch(( error ) => {
-                console.error( error.message );
+                console.error( error.response.data );
             });
         })
     },
@@ -101,8 +101,7 @@ export const actions = {
                 commit( "login", $result.data );
                 resolve();
             }).catch(( error ) => {
-                console.error( error );
-                reject();
+                reject( error.response.data );
             });
         });
     },

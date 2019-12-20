@@ -15,6 +15,8 @@ export default{
                 checked : this.checked,
             }).then(( $result ) => {
                 this.$router.push( "/" );
+            }).catch(( error ) => {
+                alert( error );
             });
         }
     }

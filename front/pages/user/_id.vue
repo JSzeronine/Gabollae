@@ -138,7 +138,7 @@ export default {
     },
 
     mounted(){
-        console.log( this.other );
+        console.log( this.guidings );
     }
 }
 </script>

@@ -26,7 +26,7 @@
 
                     <div class="intro-bx">
                         <div class="nickname">
-                            <router-link :to="`/user/${ item.User.id }`">{{ item.User.nickname }}</router-link>
+                            <router-link :to="`/users/${ item.User.id }/home`">{{ item.User.nickname }}</router-link>
                         </div>
 
                         <div class="intro" v-html="item.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"></div>

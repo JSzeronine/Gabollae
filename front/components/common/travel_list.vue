@@ -18,7 +18,7 @@
             </dl>
 
             <div class="info-bx">
-                <router-link class="user" :to="`/user/${ user.id }`">
+                <router-link class="user" :to="`/users/${ user.id }/home`">
                     {{ user.nickname }}
                 </router-link>
                 <span>|</span>

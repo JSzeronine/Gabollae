@@ -1,8 +1,8 @@
 <template>
     <div class="main">
-        <!-- <Visual /> -->
+        <Visual />
         <div class="main-content">
-            <!-- <Search /> -->
+            <Search />
 
             <div class="travel-list-bx">
                 <div class="travel-list-content">

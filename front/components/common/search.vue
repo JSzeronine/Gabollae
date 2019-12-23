@@ -7,7 +7,7 @@
             </a>
         </div>
 
-        <div class="search-tag">
+        <!-- <div class="search-tag">
             <ul>
                 <li><router-link to="">강릉</router-link></li>
                 <li><router-link to="">서울</router-link></li>
@@ -15,7 +15,7 @@
                 <li><router-link to="">강릉</router-link></li>
                 <li><router-link to="">서울</router-link></li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </template>
 

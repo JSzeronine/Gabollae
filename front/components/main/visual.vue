@@ -49,7 +49,7 @@ export default {
     .main-visual__list{
         ul{ position: relative; width: 100%; height: 350px;
             li{ 
-                a{ display: block; width: 100%; height: 350px; background-image: url( ~static/images/common/banner_sample.jpg ); background-size: cover; background-position: center; }
+                a{ display: block; width: 100%; height: 350px; background-image: url( ~static/images/common/list_sample.jpg ); background-size: cover; background-position: center; }
                 
             }
         }

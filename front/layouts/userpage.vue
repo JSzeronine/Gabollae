@@ -86,7 +86,13 @@ export default {
 
     methods : {
         menuClick( $index ){
+            this.links.forEach(( $item ) => {
+                $item.isActive = false;
+            });
 
+            this.links[ $index ].isActive = true;
+
+            console.log( this.link );
         }
     }
 }

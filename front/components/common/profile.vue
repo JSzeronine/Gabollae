@@ -5,7 +5,7 @@
         </div>
         <div class="intro-bx">
             <div class="nickname">
-                <router-link :to="`/user/${ other.id }`">
+                <router-link :to="`/users/${ other.id }/home`">
                     {{ other.nickname }}
                     <span class="follow-value">
                         가이드 <span class="follow-count">{{ totalGuider }}</span>

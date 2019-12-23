@@ -329,7 +329,7 @@ router.get( "/:id", async ( req, res, next ) => {
                 attributes : [ "id" ]
             }],
 
-            attributes : [ "id", "src", "title", "content" ]
+            attributes : [ "id", "src", "title", "content", "createdAt" ]
         });
 
         return res.json( post );

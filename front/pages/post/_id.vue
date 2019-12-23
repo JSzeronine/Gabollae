@@ -2,6 +2,7 @@
     <div class="post">
         <div class="post-bx">
             <div class="post-img-map-content">
+
                 <div class="img-content">
                     <div class="img-container">
                         <div ref="uploadImgSwiper" v-swiper:postSwiper="postSwiperOption" @slideChange="onSlide">
@@ -9,10 +10,10 @@
                                 <div class="swiper-slide image-view-list" @click="swiperSlideClick( index )" v-for="( image, index ) in post.Images" :key="index" :style="{ width:image.w + 'px' }">
                                     <div class="info-bx">
                                         <div class="option-bx" v-if="image.view">
-                                            <img v-if="image.emoticon" :src="'/images/emoticons/' + image.emoticon" alt="">
+                                            <img v-if="image.emoticon" :src="`/images/emoticons/${ image.emoticon }`" alt="">
                                         </div>
                                     </div>
-                                    <div class="img-view" :style="{ backgroundImage : `url(${ getResourceURL }${ image.src  })`}"></div>
+                                    <div class="img-view" :style="{ backgroundImage : `url( ${ getResourceURL }${ image.src } )`}"></div>
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -32,11 +33,12 @@
                 <div class="post-write-bx">
                     <div class="post-title">
                         <p>{{ post.title }}</p>
+                        <p>{{ $moment( post.createdAt ).fromNow() }}</p>
                     </div>
 
                     <div class="like-bx">
                         <a class="btn" @click="clickLike" href="javascript:;">
-                            {{ likeText }} {{  getTotalLikes }}
+                            {{ likeText }} {{ getTotalLikes }}
                         </a>
 
                         <a v-if="me.id !== other.id" class="btn" @click="clickShare" href="javascript:;">

@@ -31,7 +31,7 @@
 
                         <div class="intro" v-html="item.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"></div>
                         <div>
-                            {{ item.createdAt }}
+                            {{ $moment( item.createdAt ).fromNow() }}
                         </div>
                         <div class="btn-group">
                             <a class="btn" href="javascript:;">댓글 달기</a>

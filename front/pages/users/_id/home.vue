@@ -1,6 +1,8 @@
 <template>
-    <div v-if="other">
-        {{ other.intro }}
+    <div>
+        <div v-if="other" @click="clickHandler">
+            {{ other.intro || '소개글이 없습니다.' }}
+        </div>
     </div>
 </template>
 
@@ -11,6 +13,12 @@ export default {
     computed : {
         other(){
             return this.$store.state.user.other;
+        }
+    },
+
+    methods : {
+        clickHandler(){
+            
         }
     }
 }

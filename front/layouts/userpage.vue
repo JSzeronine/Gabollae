@@ -37,10 +37,6 @@ export default {
 
     data(){
         return{
-            obj : {
-                name : "guide"
-            },
-
             links : [
                 {
                     menu : "홈",
@@ -80,19 +76,12 @@ export default {
         await this.$store.dispatch( "user/loadOther", {
             userId : this.$route.params.id
         });
-
-        console.log( this.other );
     },
 
     methods : {
         menuClick( $index ){
-            this.links.forEach(( $item ) => {
-                $item.isActive = false;
-            });
-
+            this.links.forEach( $item => $item.isActive = false );
             this.links[ $index ].isActive = true;
-
-            console.log( this.link );
         }
     }
 }

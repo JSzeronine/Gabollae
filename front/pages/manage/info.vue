@@ -56,7 +56,7 @@ export default {
     computed : {
         me(){
             if( !this.$store.state.user.me ){
-                return this.$router.push( "/login" );
+                return this.goLink.LOGIN();
             }
 
             return this.$store.state.user.me;
@@ -93,10 +93,10 @@ export default {
                 intro : this.intro
             }).then(( result ) => {
                 console.log( "변경 완료" );
-                vm.$router.push( `/user/${ this.me.id }` );
+                this.goLink.USERPAGE( this.me.id );
             }).catch(( error ) => {
                 console.error( error );
-            })
+            });
         },
     }
 }

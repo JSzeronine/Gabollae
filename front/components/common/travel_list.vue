@@ -66,11 +66,11 @@ export default {
         postClick(){
             switch( this.mode ){
                 case this.REVISION : 
-                    this.$router.push( `/revision/${ this.info.id }` );
+                    this.goLink.REVISION( this.info.id );
                 break;
                 
                 default : 
-                    this.$router.push( `/post/${ this.info.id }` );
+                    this.goLink.POST( this.info.id );
             }
         },
 

@@ -332,7 +332,7 @@ export default {
                 });
 
                 alert( result.data );
-                this.$router.push( `/post/${ this.post.id }`);
+                this.goLink.POST( this.post.id );
             }catch( error ){
                 console.error( error );
             }
@@ -343,7 +343,7 @@ export default {
                 postId : this.post.id
             }).then(( $result ) => {
                 alert( $result.data );
-                this.$router.push( "/" );
+                this.goLink.HOME();
             }).catch(( error ) => {
                 console.error( error );
             })

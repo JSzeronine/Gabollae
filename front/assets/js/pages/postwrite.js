@@ -53,7 +53,7 @@ export default {
     computed : {
         me(){
             if( !this.$store.state.user.me ){
-                return this.$router.push( "/login" );
+                return this.goLink.LOGIN();
             }
 
             return { ...this.$store.state.user.me }
@@ -331,8 +331,7 @@ export default {
 
             this.$store.dispatch( "post/write", { title, images, content, hashTag })
                 .then(( $result ) => {
-                    console.log( "게시글 업로드 완료!" );
-                    vm.$router.push( "/post/" + $result.data.postId );
+                    vm.goLink.POST( $result.data.postId );
                 })
                 .catch(( error ) => {
                     console.error( error );

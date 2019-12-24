@@ -1,5 +1,4 @@
 import EXIF from "exif-js";
-import axios from "axios";
 import loadImage from "blueimp-load-image";
 
 export default class Find{

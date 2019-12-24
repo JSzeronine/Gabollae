@@ -5,13 +5,15 @@
                 <h2>최신 여행지</h2>
             </div>
 
-            <div class="list-bx">
+            <div v-if="other.Posts.length !== 0" class="list-bx">
                 <ul>
                     <li v-for="( item, index ) in other.Posts" :key="index">
                         <TravelList :info="item" :user="other" />
                     </li>
                 </ul>
             </div>
+
+            <div v-else>여행지가 없습니다.</div>
         </div>
     </div>
 </template>

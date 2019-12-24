@@ -28,7 +28,7 @@ export default {
     computed : {
         me(){
             if( !this.$store.state.user.me ){
-                return this.$router.push( "/login" );
+                return this.goLink.LOGIN();
             }
 
             return this.$store.state.user.me;
@@ -46,6 +46,7 @@ export default {
     },
 
     mounted(){
+        console.log( this.me );
     }
 }
 

@@ -1,5 +1,6 @@
 
 module.exports = {
+    loading :false,
     build : {
         vendor : [
             "gsap",

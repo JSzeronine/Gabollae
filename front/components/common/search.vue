@@ -1,8 +1,9 @@
 <template>
     <div class="search-bx">
         <div class="search-input">
-            <input type="text">
-            <a class="btn-search" href="javascript:;">
+            <span>#</span>
+            <input v-model="searchText" type="text" @keydown.enter="clickSearch">
+            <a class="btn-search" href="javascript:;" @click="clickSearch">
                 <img src="/images/common/btn_search.png" alt="">
             </a>
         </div>
@@ -21,15 +22,26 @@
 
 <script>
 export default {
-    
+    data(){
+        return{
+            searchText : null,
+        }
+    },
+
+    methods : {
+        clickSearch(){
+            this.goLink.HASHTAG( this.searchText );
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
     .search-bx{ position: relative; width: 500px; margin: 0 auto;  margin-bottom: 50px;
         .search-input{ margin-bottom: 5px;
-            input{ font-size: 18px; padding: 10px; border: 1px solid #cccccc; width: 100%; border-radius: 50px; }
-            .btn-search{ position: absolute; right: 0; width: 43px; height: 43px; box-sizing: border-box; padding: 8px;
+            span{ font-size: 18px; position: absolute; left: 10px; top: 11px; }
+            input{ font-size: 18px; padding: 10px; border: 1px solid #cccccc; width: 100%; border-radius: 50px; padding-left: 25px; }
+            .btn-search{ position: absolute; right: 0; width: 43px; height: 43px; box-sizing: border-box; padding: 8px; top: 2px;
                 img{ width: 100%; }
             }
         }

@@ -55,7 +55,7 @@ export default{
                 checked : this.checked,
             }).then(( $result ) => {
                 console.log( $result );
-                this.$router.push( "/login" );
+                this.goLink.LOGIN();
             }).catch(( error ) => {
                 console.error( error.message );
             })

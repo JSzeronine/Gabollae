@@ -45,7 +45,7 @@ export default {
             const vm = this;
             this.$store.dispatch( "user/logout" ).then(() => {
                 console.log( "로그아웃!" );
-                vm.$router.push( "/login" );
+                vm.goLink.LOGIN();
             });
         }
     }

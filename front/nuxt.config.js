@@ -32,7 +32,8 @@ module.exports = {
 
     modules : [
         '@nuxtjs/style-resources',
-        '@nuxtjs/axios'
+        '@nuxtjs/axios',
+        "@nuxtjs/pwa"
     ],
 
     css : [
@@ -67,6 +68,15 @@ module.exports = {
     },
     
     server : {
+        host : "10.105.157.58",
         port : process.env.PORT || 3080,
+    },
+
+    manifest : {
+        name : "gagoboja_pwa",
+        short_name : "Gagoboja",
+        start_url : "/",
+        display : "standalone",
+        background_color : "#000"
     }
 }

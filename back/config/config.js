@@ -7,6 +7,7 @@ module.exports = {
     "password": process.env.DB_PASSWORD,
     "database": "gagoboja",
     "host": "127.0.0.1",
+    // "host" : "10.105.157.58",
     "dialect": "mysql"
   },
 

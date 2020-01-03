@@ -3,6 +3,11 @@ module.exports = ( sequelize, DataTypes ) => {
         content : {
             type : DataTypes.STRING( 50 ),
             allowNull : true,
+        },
+
+        count : {
+            type : DataTypes.DOUBLE,
+            allowNull : true,
         }
     }, {
         charset : "utf8",
@@ -14,6 +19,4 @@ module.exports = ( sequelize, DataTypes ) => {
     }
 
     return Hashtag;
-
-
 }

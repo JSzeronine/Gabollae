@@ -12,7 +12,7 @@
                 <dt class="text-nowrap1">
                     {{ info.title }}
                 </dt>
-                <dd class="description text-nowrap2">
+                <dd class="description text-nowrap1">
                     {{ info.content }}
                 </dd>
             </dl>
@@ -92,19 +92,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .travel-list-item{ margin-bottom: 5px; width: 100%; display: block;
+    .travel-list-item{ margin-bottom: 5px; width: 100%; display: block; overflow: hidden; border-radius: 3px;
         .img-bx{ width: 100%; height: 200px; overflow: hidden;
             a{
                 > div{ width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover; background-position: center;
-                
+                    
                 }
             }
         }
 
-        .travel-list-content{ border: 1px solid #ccc; border-top: none; padding: 10px;
-            dl{ margin-bottom: 5px;
-                dt{ font-size: 18px; margin-bottom: 5px; color: black; }
-                dd{ font-size: 13px; line-height: 20px; color: #666; height: 36px; }
+        .travel-list-content{ border: 1px solid #ccc; padding: 10px;
+            dl{ margin-bottom: 5px; 
+                dt{ font-size: 16px; margin-bottom: 3px; color: black; }
+                dd{ font-size: 12px; line-height: 20px; color: #666; height: 20px; }
             }
 
             .info-bx{

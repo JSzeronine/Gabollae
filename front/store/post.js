@@ -5,6 +5,7 @@ export const state = () => ({
     all : [],
     hashtag : null,
     comments : [],
+    allHashtags : [],
 
     // id : null,
     // other : null,
@@ -66,6 +67,10 @@ export const mutations = {
     removeShare( state, $data ){
         var index = state.content.Shares.findIndex( v => v.id === $data );
         state.content.Shares.splice( index, 1 );
+    },
+
+    allHashTags( state, $data ){
+        state.allHashtags = $data;
     }
 }
 
@@ -97,6 +102,11 @@ export const actions = {
     async hashtag({ commit }, $data ){
         const posts = await this.$axios.get( `/post/hashtag/${ $data.hashtag }`);
         commit( "loadHashtagPost", posts.data );
+    },
+
+    async allHashtag({ commit }, $data ){
+        const allHashtags = await this.$axios.get( `/post/allhashtag`, { withCredentials : true });
+        commit( "allHashTags", allHashtags.data );
     },
 
     async loadPost({ commit }, $data ){

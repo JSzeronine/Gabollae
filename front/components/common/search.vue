@@ -2,7 +2,7 @@
     <div class="search-bx">
         <div class="search-input">
             <span>#</span>
-            <input v-model="searchText" type="text" @keydown.enter="clickSearch">
+            <input placeholder="검색" v-model="searchText" type="text" @keydown.enter="clickSearch">
             <a class="btn-search" href="javascript:;" @click="clickSearch">
                 <img src="/images/common/btn_search.png" alt="">
             </a>
@@ -37,11 +37,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .search-bx{ position: relative; width: 500px; margin: 0 auto;  margin-bottom: 50px;
+    .search-bx{ position: relative; width: 400px; margin: 0 auto; 
         .search-input{ margin-bottom: 5px;
-            span{ font-size: 18px; position: absolute; left: 10px; top: 11px; }
-            input{ font-size: 18px; padding: 10px; border: 1px solid #cccccc; width: 100%; border-radius: 50px; padding-left: 25px; }
-            .btn-search{ position: absolute; right: 0; width: 43px; height: 43px; box-sizing: border-box; padding: 8px; top: 2px;
+            span{ font-size: 14px; position: absolute; left: 10px; top: 7px; }
+            input{ font-size: 14px; padding: 6px; border: 1px solid #dddddd; width: 100%; border-radius: 50px; padding-left: 25px; }
+            .btn-search{ position: absolute; right: 0; box-sizing: border-box; padding: 8px; top: 1px;
                 img{ width: 100%; }
             }
         }

@@ -45,6 +45,51 @@ if( prod ){
     });
 }
 
+router.get( "/allhashtag", async ( req, res, next ) => {
+
+    try{
+        const hashtags = await db.Hashtag.findAll({
+            order : [
+                [ "count", "DESC" ]
+            ],
+
+            offset : 0,
+            limit : 6,
+        })
+
+        return res.json( hashtags );
+
+        // const hashtag = await db.Hashtag.findOne({
+        //     where : {
+        //         content : decodeURIComponent( req.params.tag ),
+        //     },
+
+        //     include:[{
+        //         model : db.Post,
+        //         attributes : [ "id", "title", "content", "src" ],
+
+        //         include : [{
+        //             model : db.User,
+        //             attributes : [
+        //                 "photo",
+        //                 "nickname",
+        //                 "id",
+        //             ]
+        //         }, {
+        //             model : db.User,
+        //             as : "Likers",
+        //         }]
+        //     }]
+        // });
+
+        // return res.status( 201 ).json( hashtag );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
 router.post( "/images", upload.array( "image" ), ( req, res ) => {
     if( prod ){
         res.json( req.files.map( v => v.location ));
@@ -64,12 +109,31 @@ router.post( "/write", async ( req, res, next ) => {
 
         const hashtags = req.body.hashTag.match( /#[^\s#]+/g );
         if( hashtags ){
-            const result = await Promise.all( hashtags.map(( $tag ) => {
-                return db.Hashtag.findOrCreate({
+            const result = await Promise.all( hashtags.map( async ( $tag ) => {
+
+                let tag = await db.Hashtag.findOne({
                     where : {
                         content : $tag.slice( 1 ).toLowerCase()
                     }
-                })
+                });
+
+                if( tag ){
+                    let tCount = tag.count + 1;
+                    await tag.update({
+                        count : tCount
+                    });
+                }
+
+                return db.Hashtag.findOrCreate({
+                    where : {
+                        content : $tag.slice( 1 ).toLowerCase(),
+                    },
+
+                    defaults : {
+                        content : $tag.slice( 1 ).toLowerCase(),
+                        count : 1
+                    }
+                });
             }));
 
             await newPost.addHashtags( result.map( r => r[ 0 ] ));
@@ -141,7 +205,11 @@ router.get( "/all", async ( req, res, next ) => {
                 "title", 
                 "content", 
                 "createdAt" 
-            ]
+            ],
+
+            order : [[ "createdAt", "DESC" ]],
+            offset : 0,
+            limit : 6
         });
 
         res.json( allPost );
@@ -342,10 +410,8 @@ router.get( "/:id", async ( req, res, next ) => {
 
 router.get( "/hashtag/:tag", async ( req, res, next ) => {
 
-    console.log( req.params.id );
-
     try{
-        hashtag = await db.Hashtag.findOne({
+        const hashtag = await db.Hashtag.findOne({
             where : {
                 content : decodeURIComponent( req.params.tag ),
             },

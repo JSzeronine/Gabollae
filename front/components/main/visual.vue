@@ -44,13 +44,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    // @import "visual.scss";
-    .main-visual{ margin-bottom: 10px;
+    .main-visual{ margin-bottom: 30px; 
     .main-visual__list{
         ul{ position: relative; width: 100%; height: 350px;
             li{ 
                 a{ display: block; width: 100%; height: 350px; background-image: url( ~static/images/common/list_sample.jpg ); background-size: cover; background-position: center; }
-                
             }
         }
     }

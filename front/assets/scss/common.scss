@@ -38,22 +38,34 @@
     -webkit-box-orient: vertical;
 }
 
-.travel-list-content{ 
-    .list-title{ margin-bottom: 10px;
-        h2{ font-size: 30px; color: #222; text-align: center; }
-        .btn_more{ text-align: right; padding-right: 10px;
-            a{ font-size: 13px; color: #000; }
-        }
-    }
+.text-nowrap3{
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
 
-    .list-bx{
-        > ul{ overflow: hidden; margin-left: -26px;
-            > li{ float: left; width: 300px; margin-left: 26px; margin-bottom: 25px;
-                
+.travel-list-bx{ width: 972px; margin: 0 auto; padding: 70px 0;
+    .travel-list-content{ 
+        .list-title{ margin-bottom: 10px;
+            h2{ font-size: 22px; color: #222; text-align: center; }
+            .btn_more{ text-align: right; padding-right: 10px;
+                a{ font-size: 13px; color: #000; }
+            }
+        }
+    
+        .list-bx{
+            > ul{ overflow: hidden; margin-left: -12px;
+                > li{ float: left; width: 316px; margin-left: 12px; margin-bottom: 25px;
+                    
+                }
             }
         }
     }
 }
+
 
 .agree-check{ margin-bottom: 10px;
     label{ overflow: hidden;

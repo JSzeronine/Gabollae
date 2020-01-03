@@ -3,17 +3,19 @@
         <div class="header-content">
             <div class="logo-bx">
                 <router-link to="/">
-                    <img src="/images/common/btn_hamburger.png" alt="">
+                    <!-- <img src="/images/common/btn_hamburger.png" alt=""> -->
+                    <img src="/images/logo.png" alt="">
                 </router-link>
-                <!-- <router-link class="logo" to="/">
-                    <img src="/logo.jpg" alt="">
-                </router-link> -->
             </div>
 
             <div class="menu-bx">
                 <ul>
                     <li v-if="me">
-                        <router-link :to="`/users/${ me.id }/home`">{{ me.nickname + " 님 안녕하세요" }}</router-link>
+                        <router-link :to="`/users/${ me.id }/home`">{{ `...hi ${ me.nickname }` }}</router-link>
+                    </li>
+
+                    <li v-if="me">
+                        <router-link :to="`/users/${ me.id }/home`">{{ `내 페이지` }}</router-link>
                     </li>
 
                     <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>
@@ -44,7 +46,6 @@ export default {
         logout(){
             const vm = this;
             this.$store.dispatch( "user/logout" ).then(() => {
-                console.log( "로그아웃!" );
                 vm.goLink.LOGIN();
             });
         }
@@ -54,19 +55,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .header{ border-bottom: 1px solid #ccc;
-        .header-content{ padding: 20px; overflow: hidden;
-            .logo-bx{ float: left;
-                .btn-hamburger{ position: relative; top: 5px; margin-right: 10px; }
-                .logo{ display: inline-block; width: 95px;
+    .header{ width: 1280px; margin: 0 auto;
+        .header-content{ overflow: hidden; padding: 0 10px;
+            .logo-bx{ float: left; 
+                a{ display: inline-block; padding: 10px 0; 
                     img{ width: 100%; }
                 }
             }
 
-            .menu-bx{ float: right; position: relative; top: 4px;
+            .menu-bx{ float: right; position: relative; top: 2px;
                 ul{ font-size: 0;
-                    li{ display: inline-block; margin-right: 15px;
-                        a{ font-size: 20px; font-size: 14px; }
+                    li{ display: inline-block; margin-right: 15px; padding: 15px 0;
+                        a{ font-size: 15px; color: #000; }
 
                         &:last-child{ margin-right: 0px; }
                     }

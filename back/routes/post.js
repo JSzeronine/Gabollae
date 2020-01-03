@@ -595,8 +595,13 @@ router.post( "/:id/revision", async ( req, res, next ) => {
                 return db.Hashtag.findOrCreate({
                     where : {
                         content : $tag.slice( 1 ).toLowerCase()
+                    },
+
+                    defaults : {
+                        content : $tag.slice( 1 ).toLowerCase(),
+                        count : 1
                     }
-                })
+                });
             }));
 
             await post.addHashtags( result.map( r => r[ 0 ] ));

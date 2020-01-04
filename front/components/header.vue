@@ -15,7 +15,7 @@
                     </li>
 
                     <li v-if="me">
-                        <router-link :to="`/users/${ me.id }/home`">{{ `내 페이지` }}</router-link>
+                        <router-link :to="`/users/${ me.id }/home`">{{ `바로가기` }}</router-link>
                     </li>
 
                     <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>

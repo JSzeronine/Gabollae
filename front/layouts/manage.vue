@@ -1,6 +1,8 @@
 <template>
-    <div>
+    <div class="manage">
         <Header />
+        <UserVisual />
+
         <div class="config">
             <div class="config-bx">
                 <h2>설정</h2>
@@ -26,12 +28,14 @@
     import Vue from 'vue';
     import Header from '@/components/header';
     import Global from '@/plugins/global';
+    import UserVisual from "@/components/common/uservisual";
 
     Vue.use( Global );
 
     export default {
         components: {
             Header,
+            UserVisual,
         },
 
         data() {
@@ -74,25 +78,29 @@
 </script>
 
 <style lang="scss" scoped>
-    .config{
-        .config-bx{ width: 100%; max-width: 1280px; margin: 0 auto; overflow: hidden;
-            h2{ font-size: 21px; text-align: center; font-weight: bold; margin-bottom: 50px; }
+    .manage{ padding-bottom: 70px;
+        .config{
+            .config-bx{ width: 1242px; margin: 0 auto; overflow: hidden;
+                h2{ font-size: 21px; text-align: center; font-weight: bold; margin-bottom: 50px; }
 
-            .config-menu{ width: 18%; float: left; margin-right: 2%;
-                ul{ overflow: hidden;
-                    li{ text-align: center;
-                        a{ display: inline-block; width: 100%; padding: 10px 0; border: 1px solid #e0e5ee; font-size: 16px; }
+                .config-menu{ float: left; width: 200px; margin-right: 20px;
+                    ul{ overflow: hidden; border-top: 1px solid #e0e5ee;
+                        li{ text-align: center;
+                            a{ display: inline-block; width: 100%; padding: 10px 0; border: 1px solid #e0e5ee; font-size: 13px; border-top: none;
+                            }
 
-                        &.active{
-                            a{ background-color: #e0e5ee; }
+                            &.active{
+                                a{ background-color: #e0e5ee; }
+                            }
                         }
                     }
                 }
-            }
 
-            .config-content{
-                width: 80%; float: left;
+                .config-content{
+                    width: 972px; float: left;
+                }
             }
         }
     }
+
 </style>

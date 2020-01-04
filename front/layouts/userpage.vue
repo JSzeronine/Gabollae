@@ -1,24 +1,26 @@
 <template>
     <div class="user-bx">
         <Header/>
+        <UserVisual />
 
-        <div class="user-visual">
-            <div class="visual-bg" :style="{ backgroundImage : 'url( /images/common/list_sample.jpg )' }"></div>
-            <ProfileSmall :other="other" />
-        </div>
+        <div class="user-info">
+            <div class="profile">
+                <ProfileSmall :other="other" />
+            </div>
 
-        <div class="user-btns">
-            <ul>
-                <li v-for="( item, index ) in links" :key="index">
-                    <router-link :to="item.link" @click.native="menuClick( index )" :class="{ btn_active : item.isActive }" class="btn">
-                        {{ item.menu }}
-                    </router-link>
-                </li>
+            <div class="user-btns">
+                <ul>
+                    <li v-for="( item, index ) in links" :key="index">
+                        <router-link :to="item.link" @click.native="menuClick( index )" :class="{ btn_active : item.isActive }" class="btn">
+                            {{ item.menu }}
+                        </router-link>
+                    </li>
 
-                <li v-if="me && other && me.id == other.id">
-                    <router-link to="/manage/info/" class="btn">설정</router-link>
-                </li>
-            </ul>
+                    <li v-if="me && other && me.id == other.id">
+                        <router-link to="/manage/info/" class="btn">설정</router-link>
+                    </li>
+                </ul>
+            </div>            
         </div>
 
         <nuxt />
@@ -28,11 +30,13 @@
 <script>
 import Header from "@/components/header";
 import ProfileSmall from "@/components/common/profile_small";
+import UserVisual from "@/components/common/uservisual";
 
 export default {
     components : {
         Header,
-        ProfileSmall
+        ProfileSmall,
+        UserVisual
     },
 
     data(){
@@ -88,16 +92,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .user-bx{ max-width: 1280px; width: 100%; margin: 0 auto; 
-        .user-visual{ margin-bottom: 20px;
-            .visual-bg{ width: 1280px; height: 240px; background-repeat: no-repeat; background-size: cover; background-position: center; 
-                margin-bottom: 10px;
+    .user-bx{ width: 100%; margin: 0 auto; 
+        .user-info{ width: 972px; margin: 0 auto; margin-bottom: 20px;
+            .profile{ 
+                margin-bottom: 20px;
             }
-        }
 
-        .user-btns{
-            ul{ overflow: hidden;
-                li{ float: left; margin-right: 5px; }
+            .user-btns{ 
+                ul{ overflow: hidden;
+                    li{ float: left; margin-right: 5px; }
+                }
             }
         }
     }

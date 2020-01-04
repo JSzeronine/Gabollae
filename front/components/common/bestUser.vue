@@ -27,6 +27,7 @@
 
 <script>
 import Find from "@/plugins/find.js";
+import TweenMax from "gsap";
 export default {
     data(){
         return{

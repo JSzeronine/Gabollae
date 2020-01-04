@@ -104,7 +104,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .manage-bx{ text-align: center; padding-top: 100px;
+    .manage-bx{ text-align: center; width: 972px; margin-top: 70px;
         .manage-info{ width: 480px; display: inline-block;
             .profile-photo-bx{ margin-bottom: 50px;
                 .profile-photo{ display: inline-block; width: 100px; height: 100px; background-repeat: no-repeat; background-size: cover; background-position: center; 

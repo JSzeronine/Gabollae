@@ -30,7 +30,7 @@
             <div class="travel-list-bx">
                 <div class="travel-list-content">
                     <div class="list-title">
-                        <h2>인기 태그</h2>
+                        <h2>인기 여행</h2>
                         <div class="btn_more">
                             <router-link to="">더보기</router-link>
                         </div>
@@ -107,7 +107,7 @@ export default {
 
         allHashtags(){
             return this.$store.state.post.allHashtags
-        }
+        },
     },
 
     mounted(){
@@ -129,6 +129,7 @@ export default {
     },
 
     methods : {
+        
     },
 
     head(){

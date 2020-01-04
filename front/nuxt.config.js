@@ -51,7 +51,7 @@ module.exports = {
     },
 
     head: {
-        title: 'TEST',
+        title: '가고보자',
         meta: [
             { charset: 'utf-8' },
             // { name: 'viewport', content: 'width=device-width, initial-scale=1' },

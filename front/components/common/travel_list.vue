@@ -1,7 +1,14 @@
 <template>
-    <div class="travel-list-item" @mouseenter="mOver" @mouseleave="mOut">
+    <div class="travel-list-item" @mouseenter="travelOver" @mouseleave="travelOut">
+        <div class="user-photo" @mouseenter="photoOver" @mouseleave="photoOut">
+            <router-link :to="`/users/${ user.id }/home`">
+                <span v-if="user.photo" class="photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ user.photo })` }"></span>
+                <span v-else class="photo" :style="{ backgroundImage : `url( /images/common/default.jpg )` }"></span>
+            </router-link>
+        </div>
+
         <div class="img-bx">
-            <router-link @click.native="postClick" to="">
+            <router-link class="travel-photo" @click.native="postClick" to="">
                 <div class="photo_travel" :style="{ backgroundImage:`url( ${ getResourceURL }${ info.src })` }"></div>
                 <div class="photo_map" style="background-image:url( /images/common/map_sample.jpg );"></div>
             </router-link>
@@ -10,10 +17,10 @@
         <div class="travel-list-content">
             <dl>
                 <dt class="text-nowrap1">
-                    {{ info.title }}
+                    <router-link @click.native="postClick" to="">{{ info.title }}</router-link>
                 </dt>
                 <dd class="description text-nowrap1">
-                    {{ info.content }}
+                    <router-link @click.native="postClick" to="">{{ info.content }}</router-link>
                 </dd>
             </dl>
 
@@ -75,24 +82,51 @@ export default {
         },
 
         mOver( $e ){
-            let item = $e.target;
-            let map = Find.get( item, ".photo_map" );
+            // let item = $e.target;
+            // let map = Find.get( item, ".photo_map" );
 
-            TweenMax.to( map, 0.3, { y:-200, ease:Cubic.easeInOut });
+            // TweenMax.to( map, 0.3, { y:-200, ease:Cubic.easeInOut });
         },
 
         mOut( $e ){
-            let item = $e.target;
-            let map = Find.get( item, ".photo_map" );
+            // let item = $e.target;
+            // let map = Find.get( item, ".photo_map" );
 
-            TweenMax.to( map, 0.3, { y:0, ease:Cubic.easeInOut });
+            // TweenMax.to( map, 0.3, { y:0, ease:Cubic.easeInOut });
+        },
+
+        photoOver( $e ){
+            let photo = Find.get( $e.target, ".photo" );
+            TweenMax.to( photo, 0.5, { scale:1.3, ease:Expo.easeOut });
+        },
+
+        photoOut( $e ){
+            let photo = Find.get( $e.target, ".photo" );
+            TweenMax.to( photo, 0.5, { scale:1, ease:Expo.easeOut });
+        },
+
+        travelOver( $e ){
+            let photo = Find.get( $e.target, ".photo_travel" );
+            TweenMax.to( photo, 0.5, { scale:1.3, ease:Expo.easeOut });
+        },
+
+        travelOut( $e ){
+            let photo = Find.get( $e.target, ".photo_travel" );
+            TweenMax.to( photo, 0.5, { scale:1, ease:Expo.easeOut });
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .travel-list-item{ margin-bottom: 5px; width: 100%; display: block; overflow: hidden; border-radius: 3px;
+    .travel-list-item{ margin-bottom: 5px; width: 100%; display: block; overflow: hidden; border-radius: 3px; position: relative;
+        .user-photo{ position: absolute; left: 5px; top: 5px; width: 50px; height:50px; z-index: 100; border-radius: 100%; overflow: hidden;
+            border: 1px solid #d3d3d3;
+            a{
+                span{ display:block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover; background-position: center; }
+            }
+        }
+
         .img-bx{ width: 100%; height: 200px; overflow: hidden;
             a{
                 > div{ width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover; background-position: center;
@@ -102,13 +136,17 @@ export default {
         }
 
         .travel-list-content{ border: 1px solid #ccc; padding: 10px;
+            a{ color: #666; }
             dl{ margin-bottom: 5px; 
                 dt{ font-size: 16px; margin-bottom: 3px; color: black; }
                 dd{ font-size: 12px; line-height: 20px; color: #666; height: 20px; }
             }
 
             .info-bx{
-                .user{ font-size: 13px; color: black; }
+                .user{ font-size: 13px; color: black; 
+                    &:hover{ text-decoration: underline; }
+                }
+
                 span{ font-size: 13px; color: black; }
                 .gabollae{ font-size: 13px; color: black;
                     span{ font-size: 12px; color: red; }

@@ -1,7 +1,8 @@
 <template>
     <div class="follower-bx">
         <div class="photo">
-            <a href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })`}"></a>
+            <a v-if="other.photo" href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })`}"></a>
+            <a v-else href="javascript:;" :style="{ backgroundImage : `url( /images/common/default.jpg )`}"></a>
         </div>
 
         <div class="intro-bx">

@@ -122,10 +122,6 @@ export default {
             index = count % vm.metaTitleList.length;
             this.metaTitle = this.metaTitleList[ index ];
         }, 250 );
-
-        this.allHashtags.forEach(( $item ) => {
-            console.log( $item );
-        });
     },
 
     methods : {

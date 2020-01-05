@@ -1,11 +1,14 @@
 <template>
     <div class="follow">
-        <div class="follower-list-bx">
-            <ul>
+        <div class="following-list-bx">
+            <h2>나를 등록한 사람들</h2>
+            <ul v-if="guiders.length !== 0">
                 <li v-for="( item, index ) in guiders" :key="index">
                     <Guider :other="item" />
                 </li>
             </ul>
+
+            <div v-else class="error">나를 등록한 사람이 없습니다.</div>
         </div>
     </div>
 </template>

@@ -65,11 +65,11 @@ export default {
         },
 
         liked(){
-            return ( this.post.Likers || []).find( v => v.id === this.me.id );
+            return this.me && ( this.post.Likers || []).find( v => v.id === this.me.id );
         },
 
         shared(){
-            return ( this.post.Shares || [] ).find( v => v.id === this.me.id );
+            return this.me && ( this.post.Shares || [] ).find( v => v.id === this.me.id );
         },
 
         likeText(){

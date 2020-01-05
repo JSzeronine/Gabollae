@@ -1,11 +1,14 @@
 <template>
     <div class="follow">
         <div class="following-list-bx">
-            <ul>
+            <h2>나의 가이드</h2>
+            <ul v-if="guidings.length !== 0">
                 <li v-for="( item, index ) in guidings" :key="index">
                     <Guiding :other="item" />
                 </li>
             </ul>
+
+            <div v-else class="error">나의 가이드가 없습니다.</div>
         </div>
     </div>
 </template>
@@ -53,18 +56,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .follow{ 
-        .follow-bx{
-            ul{ overflow: hidden;
-                li{ width: 50%; float: left; text-align: center;
-                    a{ display: inline-block; width: 100%; padding: 10px 0; border: 1px solid #e0e5ee; font-size: 16px; }
-
-                    &.active{
-                        a{ background-color: #e0e5ee; }
-                    }
-                }
-            }
-        }
-    }
-
 </style>

@@ -2,7 +2,7 @@
     <div class="profile" v-if="other">
         <div class="photo">
             <a v-if="other.photo" href="javascript:;" :style="{ backgroundImage : `url( ${ getResourceURL }${ other.photo })` }"></a>
-            <a v-else href="javascript:;"></a>
+            <a v-else href="javascript:;" :style="{ backgroundImage : `url( /images/common/default.jpg )` }"></a>
         </div>
         <div class="intro-bx">
             <div class="nickname">

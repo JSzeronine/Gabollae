@@ -4,7 +4,7 @@
             <div class="profile-photo-bx">
 
                 <div v-if="photo" class="profile-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ photo })` }"></div>
-                <div v-else class="profile-photo"></div>
+                <div v-else class="profile-photo" :style="{ backgroundImage : `url( /images/common/default.jpg )` }"></div>
 
                 <div class="profile-nickname">{{ me.nickname }}</div>
                 <div class="profile-photo-btn">

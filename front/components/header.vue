@@ -10,12 +10,12 @@
 
             <div class="menu-bx">
                 <ul>
-                    <li v-if="me">
+                    <li v-if="me" class="nickname">
                         <router-link :to="`/users/${ me.id }/home`">{{ `...hi ${ me.nickname }` }}</router-link>
                     </li>
 
                     <li v-if="me">
-                        <router-link :to="`/users/${ me.id }/home`">{{ `바로가기` }}</router-link>
+                        <router-link :to="`/users/${ me.id }/home`">{{ `My Page` }}</router-link>
                     </li>
 
                     <li v-if="!me"><router-link v-if="!me" to="/login">로그인</router-link></li>
@@ -67,8 +67,10 @@ export default {
                 ul{ font-size: 0;
                     li{ display: inline-block; margin-right: 15px; padding: 15px 0;
                         a{ font-size: 15px; color: #000; }
-
                         &:last-child{ margin-right: 0px; }
+                        &.nickname{ 
+                            a{ font-size: 14px; color: #725898; }
+                        }
                     }
                 }
             }

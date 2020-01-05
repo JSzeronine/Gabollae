@@ -41,7 +41,7 @@
                             {{ likeText }} {{ getTotalLikes }}
                         </a>
 
-                        <a v-if="me.id !== other.id" class="btn" @click="clickShare" href="javascript:;">
+                        <a v-if="me && me.id !== other.id" class="btn" @click="clickShare" href="javascript:;">
                             {{ share }} {{ getTotalShare }}
                         </a>
                     </div>

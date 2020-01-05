@@ -15,7 +15,7 @@ export const mutations = {
     },
 
     logout( state, $data ){
-        state.me = $data;
+        state.me = null;
     },
 
     loadUser( state, $data ){

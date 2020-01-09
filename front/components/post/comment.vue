@@ -2,7 +2,7 @@
     <div class="comment">
         <div class="comment-bx">
             <div v-if="me" class="comment-input-bx">
-                <p class="comment-title">댓글을 달아주세요.</p>
+                <p class="comment-title">댓글을 남겨주세요.</p>
                 <textarea v-model="content"></textarea>
                 <div class="btn-group">
                     <a class="btn" @click="addComment" href="javascript:;">댓글 달기</a>
@@ -20,8 +20,8 @@
             <ul class="comment-list">
                 <li v-for="( item, index ) in comments" :key="index">
                     <div class="photo">
-                        <a v-if="item.User.photo" href="javascript:;" :style="{ backgroundImage : `url(${ getResourceURL }${ item.User.photo })`}"></a>
-                        <a v-else href="javascript:;"></a>
+                        <router-link :to="`/users/${ item.User.id }/home`" v-if="item.User.photo":style="{ backgroundImage : `url(${ getResourceURL }${ item.User.photo })`}"></router-link>
+                        <router-link :to="`/users/${ item.User.id }/home`" v-else :style="{ backgroundImage : `url( /images/common/default.jpg )`}"></router-link>
                     </div>
 
                     <div class="intro-bx">
@@ -34,7 +34,7 @@
                             {{ $moment( item.createdAt ).fromNow() }}
                         </div>
                         <div class="btn-group">
-                            <a class="btn" href="javascript:;">댓글 달기</a>
+                            <!-- <a class="btn" href="javascript:;">댓글 달기</a> -->
                             <a v-if="me.id == other.id || me.id == item.User.id" @click="removeComment( item )" class="btn" href="javascript:;">삭제</a>
                         </div>
                     </div>
@@ -99,9 +99,9 @@ export default {
 <style lang="scss" scoped>
     .comment{
         .comment-bx{ overflow: hidden; 
-            .comment-input-bx{ width: 100%; margin-bottom: 10px;
+            .comment-input-bx{ width: 100%; margin-bottom: 30px;
                 .comment-title{ font-size: 12px; color: #0d0d0d; margin-bottom: 5px; }
-                textarea{ border: 1px solid #0d0d0d; font-size: 14px; padding: 8px; width: 100%; }
+                textarea{ font-size: 14px; padding: 8px; width: 100%; background-color: #f5f6f7; border: 1px solid #ededed; }
             }
 
             .comment-list{
@@ -109,7 +109,7 @@ export default {
                     .photo{ position: absolute; margin-right: 10px; 
                         a{ 
                             display: inline-block; width: 50px; height: 50px; background-color: #d3d3d3; border: 1px solid #d3d3d3; border-radius: 100%; overflow: hidden; 
-                            background-repeat: no-repeat; background-size: cover; background-position: center;
+                            background-repeat: no-repeat; background-size: cover; background-position: center; 
                         }
                     }
 

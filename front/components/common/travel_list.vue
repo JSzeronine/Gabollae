@@ -97,7 +97,7 @@ export default {
 
         photoOver( $e ){
             let photo = Find.get( $e.target, ".photo" );
-            TweenMax.to( photo, 0.5, { scale:1.3, ease:Expo.easeOut });
+            TweenMax.to( photo, 0.5, { scale:1.1, ease:Expo.easeOut });
         },
 
         photoOut( $e ){
@@ -107,12 +107,16 @@ export default {
 
         travelOver( $e ){
             let photo = Find.get( $e.target, ".photo_travel" );
-            TweenMax.to( photo, 0.5, { scale:1.3, ease:Expo.easeOut });
+            TweenMax.to( photo, 0.5, { scale:1.1, ease:Expo.easeOut });
+
+            TweenMax.to( $e.target, 0.5, { boxShadow : "2px 2px 10px gray", top:-3, ease:Expo.easeOut });
         },
 
         travelOut( $e ){
             let photo = Find.get( $e.target, ".photo_travel" );
             TweenMax.to( photo, 0.5, { scale:1, ease:Expo.easeOut });
+
+            TweenMax.to( $e.target, 0.5, { boxShadow : "0px 0px 0px gray", top:0, ease:Expo.easeOut });
         }
     }
 }
@@ -136,10 +140,10 @@ export default {
         }
 
         .travel-list-content{ border: 1px solid #ccc; padding: 10px;
-            a{ color: #666; }
+            a{ color: black; }
             dl{ margin-bottom: 5px; 
                 dt{ font-size: 16px; margin-bottom: 3px; color: black; }
-                dd{ font-size: 12px; line-height: 20px; color: #666; height: 20px; }
+                dd{ font-size: 12px; line-height: 20px; color: black; height: 20px; }
             }
 
             .info-bx{

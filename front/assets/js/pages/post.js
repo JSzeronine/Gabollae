@@ -14,11 +14,23 @@ export default {
     data(){
         return{
             postSwiperOption : {
+                effect: 'coverflow',
                 slidesPerView: "auto",
                 spaceBetween: 10,
                 centeredSlides : true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 50,
+                    modifier: 1,
+                    slideShadows : true,
+                  },
                 pagination : {
-                    el : ".swiper-pagination"
+                    el : ".swiper-pagination",
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
                 }
             },
 

@@ -220,7 +220,7 @@ export default {
                     vm.images.push({
                         src : $src,
                         w : ws[ $index ],
-                        emoticon : "default.png",
+                        emoticon : "1_03.gif",
                         lat : positions[ $index ].lat,
                         lng : positions[ $index ].lng,
                         message : null,

@@ -147,11 +147,12 @@ export default class Find{
 
     static getLoadImage( $file ){
         return new Promise(( resolve, reject ) => {
+            let w = 600;
             loadImage( $file, ( img ) => {
                 resolve( img );
             }, {
-                maxWidth : 690,
-                maxHeight : 690,
+                // maxWidth : w,
+                maxHeight : w,
                 orientation : true
             });
         });

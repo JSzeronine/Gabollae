@@ -171,7 +171,7 @@ export default {
             if( !imageData.view || !imageData.marker ){
                 this.infoWindow.close();
                 this.markersList.forEach(( $item ) => {
-                    $item.setOpacity( 0.3 );
+                    $item.setOpacity( 0.5 );
                 });
 
                 return;
@@ -189,7 +189,7 @@ export default {
                             $item.setAnimation( google.maps.Animation.BOUNCE );
                         }else{
                             $item.setZIndex( 100 );
-                            $item.setOpacity( 0.2 );
+                            $item.setOpacity( 0.5 );
                             if( $item.getAnimation() !== null ) $item.setAnimation( null );
                         }
                     }

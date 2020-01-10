@@ -26,7 +26,7 @@
         </div>
         <div v-if="other.intro" class="btn-view">
             <a href="javascript:;" @click="clickView">
-                {{ ( isView ) ? "간략히 보기" : "..펼쳐보기" }}
+                {{ ( isView ) ? "..간략히 보기" : "..더보기" }}
             </a>
         </div>
             

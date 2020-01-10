@@ -27,11 +27,23 @@ export default {
             ],
 
             postwriteSwiperOption : {
+                effect: 'coverflow',
                 slidesPerView: "auto",
                 spaceBetween: 10,
                 centeredSlides : true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 50,
+                    modifier: 1,
+                    slideShadows : true,
+                  },
                 pagination : {
-                    el : ".swiper-pagination"
+                    el : ".swiper-pagination",
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
                 }
             },
 
@@ -94,6 +106,8 @@ export default {
         viewChange( $index ){
             let data = this.post.Images[ $index ];
             let marker = this.markersList[ $index ];
+
+            data.view = !data.view;
             
             if( data.view ){
                 marker.setVisible( true );

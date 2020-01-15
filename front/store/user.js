@@ -1,8 +1,13 @@
 export const state = () => ({
     me : null,
     other : null,
+
+
+    bestUser : {},
     Guidings : [],
     Guiders : []
+
+
 });
 
 export const mutations = {
@@ -65,6 +70,10 @@ export const mutations = {
     removeGuiders( state, $data ){
         const index = state.Guiders.findIndex( v => v.id === $data );
         state.Guiders.splice( index, 1 );
+    },
+
+    bestUser( state, $data ){
+        state.bestUser = $data;
     }
 }
 
@@ -233,6 +242,16 @@ export const actions = {
             });
 
             commit( "setGuiders", guiders.data );
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async loadBestUser({ commit }){
+
+        try{
+            const bestUser = await this.$axios.get( `/user/best`, { withCredentials : true });
+            commit( "bestUser", bestUser.data );
         }catch( error ){
             console.error( error );
         }

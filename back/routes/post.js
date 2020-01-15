@@ -7,6 +7,7 @@ const fs = require( "fs" );
 const AWS = require( "aws-sdk" );
 const multerS3 = require( "multer-s3" );
 const prod = process.env.NODE_ENV === "production";
+const sequelize = require( "sequelize" );
 
 let upload;
 if( prod ){
@@ -58,31 +59,6 @@ router.get( "/allhashtag", async ( req, res, next ) => {
         })
 
         return res.json( hashtags );
-
-        // const hashtag = await db.Hashtag.findOne({
-        //     where : {
-        //         content : decodeURIComponent( req.params.tag ),
-        //     },
-
-        //     include:[{
-        //         model : db.Post,
-        //         attributes : [ "id", "title", "content", "src" ],
-
-        //         include : [{
-        //             model : db.User,
-        //             attributes : [
-        //                 "photo",
-        //                 "nickname",
-        //                 "id",
-        //             ]
-        //         }, {
-        //             model : db.User,
-        //             as : "Likers",
-        //         }]
-        //     }]
-        // });
-
-        // return res.status( 201 ).json( hashtag );
 
     }catch( error ){
         console.error( error );
@@ -179,6 +155,199 @@ router.post( "/write", async ( req, res, next ) => {
     }
 });
 
+router.get( "/hit", async( req, res, next ) => {
+
+    // SELECT *
+    // FROM (
+    //     SELECT PostId, COUNT(1) AS CNT
+    //     FROM gagoboja.like
+    //     GROUP BY PostId
+    // ) AS A
+    // ORDER BY A.CNT DESC
+
+    try{
+
+        const hitPost = await db.Post.findAll({
+            include : [{ 
+                model : db.User, 
+                as : "Likers", 
+                duplicating: false,
+                required: true,
+                attributes : [
+                    "id",
+                ],
+
+                through : {
+                    attributes : [
+                        "PostId",
+                        "UserId"
+                    ]
+                }
+            }, {
+                model : db.User
+            }],
+
+            attributes : {
+                include : [
+                    [ sequelize.fn( "COUNT", sequelize.col( "Likers.Like.PostId" )), "count" ]
+                ],
+            },
+
+            group : [ "Likers.Like.PostId" ],
+            order : [
+                [ sequelize.literal( "count DESC" )],
+                [ "createdAt", "DESC" ]
+            ],
+
+            offset : 0,
+            limit : 6,
+        });
+
+        let i = 0;
+        let len = hitPost.length;
+        let posts = [];
+
+        for( i; i<len; i++ )
+        {
+            let post = await db.Post.findOne({
+                where : {
+                    id : hitPost[ i ].id,
+                },
+
+                include : [{
+                    model : db.User,
+                }, {
+                    model : db.User,
+                    as : "Likers"
+                }]
+            });
+
+            posts.push( post );
+        }
+
+        res.json( posts );
+        
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+
+});
+router.get( "/allhit", async ( req, res, next ) => {
+    try{
+        const hitPost = await db.Post.findAll({
+            include : [{ 
+                model : db.User, 
+                as : "Likers", 
+                required: true,
+                attributes : [ "id", ],
+                through : {
+                    attributes : [
+                        "PostId",
+                        "UserId"
+                    ]
+                }
+            }, {
+                model : db.User
+            }],
+
+            attributes : {
+                include : [
+                    [ sequelize.fn( "COUNT", sequelize.col( "Likers.Like.PostId" )), "count" ]
+                ],
+            },
+
+            group : [ "Likers.Like.PostId" ],
+            order : [
+                [ sequelize.literal( "count DESC" )],
+                [ "createdAt", "DESC" ]
+            ],
+        });
+
+        let i = 0;
+        let len = hitPost.length;
+        let posts = [];
+
+        for( i; i<len; i++ )
+        {
+            let post = await db.Post.findOne({
+                where : {
+                    id : hitPost[ i ].id,
+                },
+
+                include : [{
+                    model : db.User,
+                }, {
+                    model : db.User,
+                    as : "Likers"
+                }]
+            });
+
+            posts.push( post );
+        }
+
+        res.json( posts );
+        
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get( "/new", async ( req, res, next ) => {
+    try{
+        const allPost = await db.Post.findAll({
+            include : [{
+                model : db.User,
+                attributes : [
+                    "id",
+                    "nickname",
+                    "intro",
+                    "photo",
+                ]
+            }, {
+                model : db.User,
+                as : "Likers",
+                attributes : [
+                    "id"
+                ]
+            }],
+
+            attributes : [ 
+                "id", 
+                "src", 
+                "title", 
+                "content", 
+                "createdAt" 
+            ],
+
+            order : [[ "createdAt", "DESC" ]],
+            offset : 0,
+            limit : 6
+        });
+
+        res.json( allPost );
+
+    }catch( error ){
+
+    }
+});
+
 router.get( "/all", async ( req, res, next ) => {
     try{
         
@@ -208,8 +377,8 @@ router.get( "/all", async ( req, res, next ) => {
             ],
 
             order : [[ "createdAt", "DESC" ]],
-            offset : 0,
-            limit : 6
+            // offset : 0,
+            // limit : 6
         });
 
         res.json( allPost );

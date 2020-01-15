@@ -1,19 +1,13 @@
 export const state = () => ({
     content : null,
-
     list : [],
     all : [],
+    hitPost : [],
+    hitAllPost : [],
+    newPost : [],
     hashtag : null,
     comments : [],
     allHashtags : [],
-
-    // id : null,
-    // other : null,
-    // title : null,
-    // content : null,
-    // images : [],
-    // hashtags : [],
-    // likers : [],
 });
 
 export const mutations = {
@@ -36,6 +30,14 @@ export const mutations = {
 
     loadAllUserPost( state, $data ){
         state.list = $data;
+    },
+
+    loadHitPost( state, $data ){
+        state.hitPost = $data;
+    },
+
+    loadNewPost( state, $data ){
+        state.newPost = $data;
     },
 
     loadAllPost( state, $data ){
@@ -122,6 +124,21 @@ export const actions = {
     async loadAllMyPost({ commit, state }, $data ){
         const allUserPost = await this.$axios.get( `/post/user/${ $data.userId }`, { withCredentials : true });
         commit( "loadAllUserPost", allUserPost.data );
+    },
+
+    async hitPost({ commit }){
+        const hitPost = await this.$axios.get( `/post/hit`, { withCredentials : true });
+        commit( "loadHitPost", hitPost.data );
+    },
+
+    async hitAll({ commit }){
+        const hitAllPost = await this.$axios.get( `/post/allhit`, { withCredentials : true });
+        commit( "loadAllPost", hitAllPost.data );
+    },
+
+    async newPost({ commit }){
+        const newPost = await this.$axios.get( `/post/new`, { withCredentials : true });
+        commit( "loadNewPost", newPost.data );
     },
 
     async allPost({ commit }){

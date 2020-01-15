@@ -3,7 +3,7 @@
         <div class="travel-list-bx">
             <div class="travel-list-content">
                 <div class="list-title">
-                    <h2>최신 여행</h2>
+                    <h2>인기 여행</h2>
                 </div>
 
                 <div class="list-bx">
@@ -26,7 +26,7 @@ export default {
     },
 
     fetch({ store }){
-        return store.dispatch( "post/allPost" );
+        return store.dispatch( "post/hitAll" );
     },
 
     computed : {

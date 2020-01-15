@@ -9,6 +9,7 @@ const fs = require( "fs" );
 const router = express.Router();
 const AWS = require( "aws-sdk" );
 const multerS3 = require( "multer-s3" );
+const sequelize = require( "sequelize" );
 
 const prod = process.env.NODE_ENV === "production";
 let upload;
@@ -49,6 +50,60 @@ if( prod ){
 router.get( "/", ( req, res, next ) => {
     const user = req.user;
     res.json( user );
+});
+
+router.get( "/best", async ( req, res, next ) => {
+
+    try{
+        const bestUser = await db.Post.findAll({
+            include : [{
+                model : db.User,
+                attributes : [
+                    "id",
+                    "nickname",
+                    "intro",
+                    "photo",
+                ]
+            }],
+
+            attributes : [
+                "id",
+                "title",
+                [ sequelize.fn( "COUNT", sequelize.col( "UserId" )), "count" ]
+            ],
+
+            group : [ "UserId" ],
+            order : [[ sequelize.literal( "count DESC" )]],
+
+            offset : 0,
+            limit : 6
+        });
+
+        let users = JSON.parse( JSON.stringify( bestUser ));
+        let posts = [];
+        let i = 0;
+        let len = users.length;
+        for( i; i<len; i++ )
+        {
+            let post = await db.Post.findAll({
+                where : {
+                    UserId : users[ i ].User.id
+                }
+            });
+
+            posts.push( post );
+        }
+
+        return res.json({
+            post : posts,
+            best : bestUser
+        });
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+
 });
 
 router.get( "/:id", async ( req, res, next ) => {

@@ -6,17 +6,21 @@
             </div>
 
             <ul class="best-user-list">
-                <li v-for="( item, index ) in list" @mouseenter="mOver" @mouseleave="mOut" :key="index">
-                    <router-link to="">
+                <li v-for="( item, index ) in bestUser.best" @mouseenter="mOver" @mouseleave="mOut" :key="index">
+                    <router-link :to="`/users/${ item.User.id }/home`">
                         <div class="best-user-bx">
                             <div class="intro">
-                                <p class="text-nowrap2">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</p>
+                                <p class="text-nowrap2">
+                                    {{ item.User.intro || item.User.nickname }}
+                                </p>
                             </div>
-                            <div class="user-photo" :style="{ backgroundImage : `url( images/common/profile.png )`}"></div>
+
+                            <div v-if="item.User.photo" class="user-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ item.User.photo })` }"></div>
+                            <div v-else class="user-photo" :style="{ backgroundImage : `url( images/common/default.jpg )`}"></div>
                         </div>
 
                         <div class="best-user-name">
-                            <p>zeronine</p>
+                            <p>{{ item.User.nickname }} </p>
                         </div>
                     </router-link>
                 </li>
@@ -31,10 +35,18 @@ import TweenMax from "gsap";
 export default {
     data(){
         return{
-            list : [
-                1, 2, 3, 4, 5, 6
-            ]
+            
         }
+    },
+
+    computed : {
+        bestUser(){
+            return this.$store.state.user.bestUser;
+        }
+    },
+
+    mounted(){
+        // console.log( this.bestUser );
     },
 
     methods : {
@@ -74,7 +86,7 @@ export default {
                     .best-user-bx{ width: 130px; height: 130px; 
                         background-color: #000; border-radius: 100%; overflow: hidden; margin-bottom: 10px; border: 5px solid #fff; position: relative;
 
-                        .intro{ font-size: 14px; color: #fff; display: table-cell; vertical-align: middle; width: 130px; height: 130px; 
+                        .intro{ font-size: 14px; color: #fff; display: table-cell; vertical-align: middle; width: 130px; height: 130px;  text-align: center;
                             text-shadow: 2px 2px 2px #000; position: relative; z-index: 100; opacity: 0;
                             p{ padding: 0 15px; }
                         }

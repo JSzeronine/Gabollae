@@ -9,13 +9,13 @@
                     <div class="list-title">
                         <h2>최신 여행지</h2>
                         <div class="btn_more">
-                            <router-link to="">더보기</router-link>
+                            <router-link to="/posts">더보기</router-link>
                         </div>
                     </div>
 
                     <div class="list-bx">
                         <ul>
-                            <li v-for="( post, index ) in all" :key="index">
+                            <li v-for="( post, index ) in newPost" :key="index">
                                 <TravelList :info="post" :user="post.User" />
                             </li>
                         </ul>
@@ -32,13 +32,13 @@
                     <div class="list-title">
                         <h2>인기 여행</h2>
                         <div class="btn_more">
-                            <router-link to="">더보기</router-link>
+                            <router-link to="/hitposts">더보기</router-link>
                         </div>
                     </div>
 
                     <div class="list-bx">
                         <ul>
-                            <li v-for="( post, index ) in all" :key="index">
+                            <li v-for="( post, index ) in hitPost" :key="index">
                                 <TravelList :info="post" :user="post.User" />
                             </li>
                         </ul>
@@ -54,8 +54,6 @@ import Visual from '@/components/main/visual';
 import Search from '@/components/common/search';
 import TravelList from "@/components/common/travel_list";
 import BestUser from "@/components/common/bestUser";
-
-import { mapState } from "vuex";
 
 export default {
     components : {
@@ -96,14 +94,22 @@ export default {
     },
 
     fetch({ store }){
-        store.dispatch( "post/allHashtag" );
-        return store.dispatch( "post/allPost" );
+        return Promise.all([
+            store.dispatch( "post/allHashtag" ),
+            store.dispatch( "post/hitPost" ),
+            store.dispatch( "user/loadBestUser" ),
+            store.dispatch( "post/newPost" )
+        ]);
     },
 
     computed : {
-        ...mapState( "post", [
-            "all"
-        ]),
+        hitPost(){
+            return this.$store.state.post.hitPost;
+        },
+
+        newPost(){
+            return this.$store.state.post.newPost;
+        },
 
         allHashtags(){
             return this.$store.state.post.allHashtags

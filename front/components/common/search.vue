@@ -38,7 +38,7 @@ export default {
         clickSearch(){
             this.goLink.HASHTAG( this.searchText );
         }
-    }
+    },
 }
 </script>
 

@@ -17,7 +17,7 @@
         <div class="travel-list-content">
             <dl>
                 <dt class="text-nowrap1">
-                    <router-link @click.native="postClick" to="">{{ info.title }}</router-link>
+                    <router-link @click.native="postClick" to="">{{ info.title }}{{ info.id }}</router-link>
                 </dt>
                 <dd class="description text-nowrap1">
                     <router-link @click.native="postClick" to="">{{ info.content }}</router-link>

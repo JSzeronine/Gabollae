@@ -24,7 +24,7 @@
             </div>
 
             <div class="best_user">
-                <BestUser />
+                <BestUser :user="bestUser" />
             </div>
 
             <div class="travel-list-bx">
@@ -67,6 +67,8 @@ export default {
         return {
             metaTitle : "가고보자",
             metaTitleList : [
+                ".......................🚗 가고보자",
+                "......................🚗 가고보자",
                 ".....................🚗 가고보자",
                 "....................🚗 가고보자.",
                 "...................🚗 가고보자..",
@@ -98,7 +100,7 @@ export default {
             store.dispatch( "post/allHashtag" ),
             store.dispatch( "post/hitPost" ),
             store.dispatch( "user/loadBestUser" ),
-            store.dispatch( "post/newPost" )
+            store.dispatch( "post/newPost" ),
         ]);
     },
 
@@ -114,6 +116,10 @@ export default {
         allHashtags(){
             return this.$store.state.post.allHashtags
         },
+
+        bestUser(){
+            return this.$store.state.user.bestUser;
+        }
     },
 
     mounted(){

@@ -52,52 +52,53 @@ router.get( "/", ( req, res, next ) => {
     res.json( user );
 });
 
-router.get( "/best", async ( req, res, next ) => {
-
+router.get( "/grouptest", async ( req, res, next ) => {
     try{
-        const bestUser = await db.Post.findAll({
+        const bestUser = await db.User.findAll({
             include : [{
-                model : db.User,
-                attributes : [
-                    "id",
-                    "nickname",
-                    "intro",
-                    "photo",
-                ]
+                model : db.Post,
+                attributes : [ "id" ]
             }],
 
             attributes : [
-                "id",
-                "title",
-                [ sequelize.fn( "COUNT", sequelize.col( "UserId" )), "count" ]
+                // include : [
+                    "id", "nickname", "photo",
+                    [ sequelize.fn( "COUNT", sequelize.col( "Posts.UserId" )), "count" ]
+                // ]
             ],
 
-            group : [ "UserId" ],
-            order : [[ sequelize.literal( "count DESC" )]],
-
-            offset : 0,
-            limit : 6
+            group : [ "Posts.UserId" ],
+            order : [[ sequelize.literal( "count DESC" )]]
         });
 
-        let users = JSON.parse( JSON.stringify( bestUser ));
-        let posts = [];
-        let i = 0;
-        let len = users.length;
-        for( i; i<len; i++ )
-        {
-            let post = await db.Post.findAll({
-                where : {
-                    UserId : users[ i ].User.id
-                }
-            });
+        res.json( bestUser );
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+})
 
-            posts.push( post );
-        }
+router.get( "/best", async ( req, res, next ) => {
 
-        return res.json({
-            post : posts,
-            best : bestUser
+    try{
+        const bestUser = await db.User.findAll({
+            include : [{
+                model : db.Post,
+                attributes : [ "id" ]
+            }],
+
+            attributes : [
+                // include : [
+                    "id", "nickname", "photo",
+                    [ sequelize.fn( "COUNT", sequelize.col( "Posts.UserId" )), "count" ]
+                // ]
+            ],
+
+            group : [ "Posts.UserId" ],
+            order : [[ sequelize.literal( "count DESC" )]]
         });
+
+        res.json( bestUser );
 
     }catch( error ){
         console.error( error );

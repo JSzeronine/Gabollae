@@ -3,10 +3,10 @@ export const state = () => ({
     other : null,
 
 
-    bestUser : {},
+    bestUser : [],
     Guidings : [],
-    Guiders : []
-
+    Guiders : [],
+    grouptest : {},
 
 });
 
@@ -73,7 +73,12 @@ export const mutations = {
     },
 
     bestUser( state, $data ){
+        console.log( $data );
         state.bestUser = $data;
+    },
+
+    grouptest( state, $data ){
+        state.grouptest = $data;
     }
 }
 
@@ -252,6 +257,15 @@ export const actions = {
         try{
             const bestUser = await this.$axios.get( `/user/best`, { withCredentials : true });
             commit( "bestUser", bestUser.data );
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async grouptest({ commit }){
+        try{
+            const testUser = await this.$axios.get( "/user/grouptest", { withCredentials : true });
+            commit( "grouptest", testUser.data );
         }catch( error ){
             console.error( error );
         }

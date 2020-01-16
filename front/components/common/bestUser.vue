@@ -6,21 +6,21 @@
             </div>
 
             <ul class="best-user-list">
-                <li v-for="( item, index ) in bestUser.best" @mouseenter="mOver" @mouseleave="mOut" :key="index">
-                    <router-link :to="`/users/${ item.User.id }/home`">
+                <li v-for="( item, index ) in user" @mouseenter="mOver" @mouseleave="mOut" :key="index">
+                    <router-link :to="`/users/${ item.id }/home`">
                         <div class="best-user-bx">
                             <div class="intro">
                                 <p class="text-nowrap2">
-                                    {{ item.User.intro || item.User.nickname }}
+                                    {{ item.intro || item.nickname }}
                                 </p>
                             </div>
 
-                            <div v-if="item.User.photo" class="user-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ item.User.photo })` }"></div>
+                            <div v-if="item.photo" class="user-photo" :style="{ backgroundImage : `url( ${ getResourceURL }${ item.photo })` }"></div>
                             <div v-else class="user-photo" :style="{ backgroundImage : `url( images/common/default.jpg )`}"></div>
                         </div>
 
                         <div class="best-user-name">
-                            <p>{{ item.User.nickname }} </p>
+                            <p>{{ item.nickname }} </p>
                         </div>
                     </router-link>
                 </li>
@@ -35,14 +35,18 @@ import TweenMax from "gsap";
 export default {
     data(){
         return{
-            
+
         }
     },
 
+    props : {
+        user : Array
+    },
+
     computed : {
-        bestUser(){
-            return this.$store.state.user.bestUser;
-        }
+        // bestUser(){
+        //     return this.$store.state.user.bestUser;
+        // }
     },
 
     mounted(){

@@ -587,7 +587,7 @@ router.get( "/hashtag/:tag", async ( req, res, next ) => {
 
             include:[{
                 model : db.Post,
-                attributes : [ "id", "title", "content", "src" ],
+                attributes : [ "id", "title", "content", "src", "createdAt" ],
 
                 include : [{
                     model : db.User,

@@ -17,12 +17,20 @@ export default {
 
     computed : {
         groupTest(){
-            return this.$store.state.user.grouptest;
+            return this.$store.state.user.grouptest.bestUser;
+        },
+
+        hitPost(){
+            return this.$store.state.user.grouptest.hitPost;
         }
     },
 
     mounted(){
         this.groupTest.forEach(( $item ) => {
+            // console.log( $item );
+        });
+
+        this.hitPost.forEach(( $item ) => {
             console.log( $item );
         })
     }

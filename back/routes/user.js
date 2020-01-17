@@ -71,12 +71,26 @@ router.get( "/grouptest", async ( req, res, next ) => {
             order : [[ sequelize.literal( "count DESC" )]]
         });
 
-        res.json( bestUser );
+        const hitPost = await db.Post.findAll({
+            include : [{
+                model : db.User,
+                as : "Likers"
+            }],
+
+            attributes : [
+                "id", "title",
+            ]
+        });
+
+        res.json({
+            bestUser : bestUser,
+            hitPost : hitPost
+        });
     }catch( error ){
         console.error( error );
         next( error );
     }
-})
+});
 
 router.get( "/best", async ( req, res, next ) => {
 

@@ -22,6 +22,7 @@ passportConfig();
 const userRouter = require( "./routes/user" );
 const postRouter = require( "./routes/post" );
 const otherRouter = require( "./routes/other" );
+const testRouter = require( "./routes/test" );
 if( prod ){
     app.use( helmet() );
     app.use( hpp() );
@@ -64,6 +65,7 @@ app.get( "/", ( req, res ) => {
 app.use( "/user", userRouter );
 app.use( "/post", postRouter );
 app.use( "/other", otherRouter );
+app.use( "/test", testRouter );
 
 app.listen( prod ? process.env.PORT : 3085, () => {
     console.log( `백엔드 서버 ${ prod ? process.env.PORT : 3085 }번 포트에서 작동중.` );

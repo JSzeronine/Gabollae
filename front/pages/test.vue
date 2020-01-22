@@ -27,7 +27,7 @@ export default {
 
     mounted(){
         this.groupTest.forEach(( $item ) => {
-            // console.log( $item );
+            console.log( $item );
         });
 
         this.hitPost.forEach(( $item ) => {

@@ -264,7 +264,7 @@ export const actions = {
 
     async grouptest({ commit }){
         try{
-            const testUser = await this.$axios.get( "/user/grouptest", { withCredentials : true });
+            const testUser = await this.$axios.get( "/test/grouptest", { withCredentials : true });
             commit( "grouptest", testUser.data );
         }catch( error ){
             console.error( error );

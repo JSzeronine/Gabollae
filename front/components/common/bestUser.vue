@@ -2,7 +2,9 @@
     <div class="best-user">
         <div class="best-user-bx">
             <div class="best-user-title">
-                <h2>BEST USER</h2>
+                <h2>
+                    {{ tit }}
+                </h2>
             </div>
 
             <ul class="best-user-list">
@@ -20,7 +22,8 @@
                         </div>
 
                         <div class="best-user-name">
-                            <p>{{ item.nickname }} </p>
+                            <p class="nickname text-nowrap1">{{ item.nickname }}</p>
+                            <p>{{ item.count }}</p>
                         </div>
                     </router-link>
                 </li>
@@ -40,17 +43,16 @@ export default {
     },
 
     props : {
+        tit : String,
         user : Array
     },
 
     computed : {
-        // bestUser(){
-        //     return this.$store.state.user.bestUser;
-        // }
+
     },
 
     mounted(){
-        // console.log( this.bestUser );
+
     },
 
     methods : {
@@ -86,8 +88,8 @@ export default {
             }
 
             .best-user-list{ overflow: hidden; margin-left: -38px;
-                li{ float: left; margin-left: 38px; 
-                    .best-user-bx{ width: 130px; height: 130px; 
+                li{ float: left; margin-left: 38px; width: 130px;  
+                    .best-user-bx{ width: 100%; height: 130px; 
                         background-color: #000; border-radius: 100%; overflow: hidden; margin-bottom: 10px; border: 5px solid #fff; position: relative;
 
                         .intro{ font-size: 14px; color: #fff; display: table-cell; vertical-align: middle; width: 130px; height: 130px;  text-align: center;
@@ -100,7 +102,9 @@ export default {
                         }
                     }
 
-                    .best-user-name{ text-align: center; font-size: 16px; }
+                    .best-user-name{ text-align: center; font-size: 16px; 
+
+                    }
                 }
             }
         }

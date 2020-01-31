@@ -24,7 +24,7 @@
             </div>
 
             <div class="best_user">
-                <BestUser :user="bestUser" />
+                <BestUser :tit="`BEST USER`" :user="bestUser" />
             </div>
 
             <div class="travel-list-bx">
@@ -44,6 +44,10 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+
+            <div class="best_user">
+                <BestUser :tit="`LIKE USER`" :user="likeUser" />
             </div>
         </div>
     </div>
@@ -101,6 +105,7 @@ export default {
             store.dispatch( "post/hitPost" ),
             store.dispatch( "user/loadBestUser" ),
             store.dispatch( "post/newPost" ),
+            store.dispatch( "user/loadLikeUser" ),
         ]);
     },
 
@@ -119,10 +124,16 @@ export default {
 
         bestUser(){
             return this.$store.state.user.bestUser;
+        },
+
+        likeUser(){
+            return this.$store.state.user.likeUser;
         }
     },
 
     mounted(){
+        console.log( this.likeUser );
+
         let vm = this;
         let count = 0;
         let index = 0;

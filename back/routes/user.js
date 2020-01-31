@@ -52,6 +52,43 @@ router.get( "/", ( req, res, next ) => {
     res.json( user );
 });
 
+router.get( "/likeuser", async ( req, res, next ) => {
+
+    try{
+
+        const likeUser = await db.User.findAll({
+            include : [{
+                model : db.Post,
+                as : "Liked",
+                duplicating: false,
+                required: true,
+                attributes : [
+                    "id",
+                ],
+            }],
+
+            attributes : [
+                "id", "nickname", "photo",
+                [ sequelize.fn( "COUNT", sequelize.col( "Liked.Like.PostId" )), "count" ]
+            ],
+
+            group : [ "Liked.Like.PostId" ],
+            order : [
+                [ sequelize.literal( "count DESC" )],
+                [ "createdAt", "DESC" ]
+            ],
+
+            offset : 0,
+            limit : 6,
+        });
+
+        res.json( likeUser );
+
+    }catch( error ){
+        console.error( error );
+        next( error );
+    }
+});
 
 router.get( "/best", async ( req, res, next ) => {
 

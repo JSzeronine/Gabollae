@@ -2,8 +2,8 @@ export const state = () => ({
     me : null,
     other : null,
 
-
     bestUser : [],
+    likeUser : [],
     Guidings : [],
     Guiders : [],
     grouptest : {},
@@ -73,8 +73,11 @@ export const mutations = {
     },
 
     bestUser( state, $data ){
-        console.log( $data );
         state.bestUser = $data;
+    },
+
+    likeUser( state, $data ){
+        state.likeUser = $data;
     },
 
     grouptest( state, $data ){
@@ -257,6 +260,15 @@ export const actions = {
         try{
             const bestUser = await this.$axios.get( `/user/best`, { withCredentials : true });
             commit( "bestUser", bestUser.data );
+        }catch( error ){
+            console.error( error );
+        }
+    },
+
+    async loadLikeUser({ commit }){
+        try{
+            const likeUser = await this.$axios.get( `/user/likeuser`, { withCredentials : true });
+            commit( "likeUser", likeUser.data );
         }catch( error ){
             console.error( error );
         }

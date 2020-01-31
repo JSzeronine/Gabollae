@@ -6,7 +6,7 @@
         </div>
 
         <div class="intro-bx">
-            <div class="nickname">
+            <div class="nickname text-nowrap1">
                 <a href="javascript:;">
                     {{ other.nickname }}
                 </a>

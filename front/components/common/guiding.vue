@@ -6,7 +6,7 @@
         </div>
 
         <div class="intro-bx">
-            <div class="nickname">
+            <div class="nickname text-nowrap1">
                 <router-link :to="`/user/${ other.id }`">
                     {{ other.nickname }}
                 </router-link>

@@ -58,7 +58,6 @@ import Visual from '@/components/main/visual';
 import Search from '@/components/common/search';
 import TravelList from "@/components/common/travel_list";
 import BestUser from "@/components/common/bestUser";
-
 export default {
     components : {
         Visual,
@@ -131,8 +130,6 @@ export default {
     },
 
     mounted(){
-        console.log( this.likeUser );
-
         let vm = this;
         let count = 0;
         let index = 0;
@@ -154,7 +151,10 @@ export default {
         return{
             title : this.metaTitle
         }
-    }
+    },
+
+
+
 }
 
 </script>

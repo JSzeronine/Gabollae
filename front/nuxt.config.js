@@ -39,7 +39,8 @@ module.exports = {
     css : [
         { src : "@/assets/scss/layout.scss", lang : 'scss' },
         { src : "@/assets/scss/common.scss", lang : 'scss' },
-        { src : "swiper/dist/css/swiper.css" },
+        // { src : "swiper/dist/css/swiper.scss", lang: 'scss' },
+        { src : "swiper/swiper.scss", lang: 'scss' },
         { src : "@/assets/scss/reset.scss", lang : 'scss' },
     ],
 
@@ -52,6 +53,9 @@ module.exports = {
 
     head: {
         title: '가고보자',
+        htmlAttrs: {
+            lang: 'ko'
+        },
         meta: [
             { charset: 'utf-8' },
             // { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -62,13 +66,15 @@ module.exports = {
     },
 
     axios : {
-        browserBaseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
-        baseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
+        // browserBaseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
+        // baseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://localhost:3085",
+        browserBaseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://192.168.100.90:3085",
+        baseURL : process.env.NODE_ENV === "production" ? "http://api.gagoboja.com" : "http://192.168.100.90:3085",
         https : false,
     },
     
     server : {
-        // host : "10.105.157.58",
+        host : "192.168.100.90",
         port : process.env.PORT || 3080,
     },
 

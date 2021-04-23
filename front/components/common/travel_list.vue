@@ -66,7 +66,7 @@ export default {
     },
 
     mounted(){
-        
+
     },
 
     methods : {
@@ -76,7 +76,7 @@ export default {
                     this.goLink.REVISION( this.info.id );
                 break;
                 
-                default : 
+                default :
                     this.goLink.POST( this.info.id );
             }
         },

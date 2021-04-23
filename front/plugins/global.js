@@ -6,7 +6,7 @@ export default{
         if( process.env.NODE_ENV === "production" ){
             Vue.prototype.getResourceURL = "";
         }else{
-            Vue.prototype.getResourceURL = "http://localhost:3085/";
+            Vue.prototype.getResourceURL = "http://192.168.100.90:3085/";
         }
 
         Vue.prototype.goLink = {

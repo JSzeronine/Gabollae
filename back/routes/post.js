@@ -11,7 +11,7 @@ const sequelize = require( "sequelize" );
 
 let upload;
 if( prod ){
-    console.log( "다시 넣어보자" );
+    console.log( "1" );
     AWS.config.update({
         region : "ap-northeast-2",
         accessKeyId : process.env.S3_ACCESS_KEY_ID,
@@ -28,6 +28,7 @@ if( prod ){
         })
     })
 }else{
+    console.log( "2" );
     // dev
     upload = multer({
         storage : multer.diskStorage({

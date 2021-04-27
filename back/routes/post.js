@@ -11,7 +11,6 @@ const sequelize = require( "sequelize" );
 
 let upload;
 if( prod ){
-    console.log( "여기 태우니?" );
     AWS.config.update({
         region : "ap-northeast-2",
         accessKeyId : process.env.S3_ACCESS_KEY_ID,

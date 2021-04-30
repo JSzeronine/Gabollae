@@ -30,7 +30,7 @@
 
                 <div class="map-content">
                     <div class="map-container">
-                        <GmapMap class="gmap-container" ref="mapRef" :center="mapCenter" :zoom="17" style="width:100%; height:720px"></GmapMap>
+                        <GmapMap class="gmap-container" ref="mapRef" :center="mapCenter" :zoom="18" style="width:100%; height:720px"></GmapMap>
                     </div>
                 </div>
 

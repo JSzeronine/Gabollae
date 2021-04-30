@@ -23,7 +23,7 @@
 
                         <div class="best-user-name">
                             <p class="nickname text-nowrap1">{{ item.nickname }}</p>
-                            <p>{{ item.count }}</p>
+                            <p>{{ countTitle }} : {{ item.count }}</p>
                         </div>
                     </router-link>
                 </li>
@@ -44,7 +44,8 @@ export default {
 
     props : {
         tit : String,
-        user : Array
+        countTitle : String,
+        user : Array,
     },
 
     computed : {

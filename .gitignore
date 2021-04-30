@@ -5,4 +5,4 @@ dist
 maps3
 uploads
 gagoboja.pem
-.env
+back/.env

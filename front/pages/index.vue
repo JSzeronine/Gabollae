@@ -24,7 +24,7 @@
             </div>
 
             <div class="best_user">
-                <BestUser :tit="`BEST USER`" :user="bestUser" />
+                <BestUser :tit="`BEST USER`" :countTitle="`게시글`" :user="bestUser" />
             </div>
 
             <div class="travel-list-bx">
@@ -47,7 +47,7 @@
             </div>
 
             <div class="best_user">
-                <BestUser :tit="`LIKE USER`" :user="likeUser" />
+                <BestUser :tit="`LIKE USER`" :countTitle="`좋아요`" :user="likeUser" />
             </div>
         </div>
     </div>

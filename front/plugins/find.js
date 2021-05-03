@@ -153,7 +153,7 @@ export default class Find{
             }, {
                 // maxWidth : w,
                 maxHeight : w,
-                orientation : 2,
+                orientation : true,
             });
         });
     }

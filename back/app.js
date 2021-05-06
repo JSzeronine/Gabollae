@@ -28,7 +28,7 @@ if( prod ){
     app.use( hpp() );
     app.use( morgan( "combined" ) );
     app.use( cors({
-        origin : "https://gagoboja.com",
+        origin : "http://gagoboja.com",
         credentials : true,
     }));
 }else{

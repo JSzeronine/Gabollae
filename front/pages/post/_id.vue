@@ -94,5 +94,6 @@
     </div>
 </template>
 
+
 <script src="@/assets/js/pages/post.js"></script>
 <style lang="scss" src="@/assets/scss/pages/post.scss"></style>

@@ -120,10 +120,78 @@ export default {
 
             vm.isMapLoad = true;
             vm.dragMapComplete();
+            vm.onComplete();
         });
     },
 
     methods : {
+        onComplete(){
+            let vm = this;
+            function calculateAndDisplayRoute( start, destination) {
+                let service = new google.maps.DirectionsService({
+                    suppressMarkers: false
+                });
+
+                let display = new google.maps.DirectionsRenderer;
+
+                display.setMap( vm.$refs.mapRef.$mapObject );
+
+                // BICYCLING: "BICYCLING"
+                // DRIVING: "DRIVING"
+                // TRANSIT: "TRANSIT"
+                // TWO_WHEELER: "TWO_WHEELER"
+                // WALKING: "WALKING"
+
+                service.route({
+                    origin: start,
+                    destination: destination,
+                    travelMode: google.maps.DirectionsTravelMode.TRANSIT,
+                    transitOptions : {
+                        modes : [ "BUS" ],
+                        routingPreference: 'FEWER_TRANSFERS'
+                    },
+
+                    optimizeWaypoints: false,
+                    provideRouteAlternatives: false,
+                    avoidFerries: true,
+                    avoidHighways: true,
+                    avoidTolls: true,
+                }, function(response, status) {
+                    if (status === 'OK') {
+                        display.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            }
+
+            let i = 0;
+            let len = this.post.Images.length;
+            let list = [];
+
+            for( i; i<len; i++ )
+            {
+                // calculateAndDisplayRoute( service, display, this.markers[ i ], this.markers[ i + 1 ]);
+                // calculateAndDisplayRoute( this.markers[ i ], this.markers[ i + 1 ]);
+                // calculateAndDisplayRoute({ "lat" : this.post.Images[ i ].lat, "lng" : this.post.Images[ i ].lng }, { "lat" : this.post.Images[ i + 1 ].lat, "lng" : this.post.Images[ i + 1 ].lng });
+
+                list.push({
+                    lat : this.post.Images[ i ].lat,
+                    lng : this.post.Images[ i ].lng
+                });
+            }
+
+            const flightPath = new google.maps.Polyline({
+                path: list,
+                geodesic: true,
+                strokeColor: "#000000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+
+            flightPath.setMap( vm.map );
+        },
+
         clickShare(){
             if( !this.me ){
                 alert( "로그인 해주세요." );

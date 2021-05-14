@@ -302,6 +302,7 @@ export default {
 
                 vm.postwriteSwiper.update();
                 vm.dragMapComplete();
+                // vm.onComplete();
             }
         },
 
@@ -477,13 +478,30 @@ export default {
             }
 
             let i = 0;
-            let len = this.images.length - 1;
+            let len = this.images.length;
+            let list = [];
 
             for( i; i<len; i++ )
             {
                 // calculateAndDisplayRoute( service, display, this.markers[ i ], this.markers[ i + 1 ]);
-                calculateAndDisplayRoute( this.markers[ i ], this.markers[ i + 1 ]);
+                // calculateAndDisplayRoute( this.markers[ i ], this.markers[ i + 1 ]);
+                // calculateAndDisplayRoute({ "lat" : this.images[ i ].lat, "lng" : this.images[ i ].lng }, { "lat" : this.images[ i + 1 ].lat, "lng" : this.images[ i + 1 ].lng });
+
+                list.push({
+                    lat : this.images[ i ].lat,
+                    lng : this.images[ i ].lng
+                });
             }
+
+            const flightPath = new google.maps.Polyline({
+                path: list,
+                geodesic: true,
+                strokeColor: "#000000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+
+            flightPath.setMap( vm.map );
         },
     }
 }
